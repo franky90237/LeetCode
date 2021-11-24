@@ -37,6 +37,44 @@ public:
     }
 };
 
+//
+class MinStack 
+{
+private:
+    vector<int> s;
+    vector<int> min_s;    
+
+public:
+    MinStack() 
+    {
+        
+    }
+    
+    void push(int val) 
+    {
+        s.push_back(val);
+        if(min_s.empty() || val<=getMin()) min_s.push_back(val);       
+    }
+    
+    void pop() 
+    {                
+        if(top()==getMin()) min_s.pop_back();
+        s.pop_back();        
+    }
+    
+    int top() 
+    {
+        return s.back();
+    }
+    
+    int getMin()
+    {            
+        //for(int i=0;i<min_s.size();++i) cout<<min_s[i]<<" ";
+        //cout<<endl;
+        return min_s.back();
+    }
+};
+
 /**
  * Your MinStack object will be instantiated and called as such:
  * MinStack* obj = new MinStack();
