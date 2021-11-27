@@ -47,5 +47,27 @@ public:
         }
         
         return result;
+    }
+    
+    //monotonic stack (end to begin)
+    vector<int> dailyTemperatures(vector<int>& temperatures) 
+    {
+        int size=temperatures.size();
+        vector<int> result(size,0);
+        stack<int> temperatures_index;
+        
+        for(int curr=size-1;curr>=0;--curr)
+        {
+            while(!temperatures_index.empty() && temperatures[curr]>=temperatures[temperatures_index.top()])
+            {                
+                temperatures_index.pop();                                
+            }
+            
+            if(!temperatures_index.empty()) result[curr]= temperatures_index.top()-curr;
+            
+            temperatures_index.push(curr);
+        }
+        
+        return result;
     }    
 };
