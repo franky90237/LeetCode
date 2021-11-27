@@ -26,4 +26,26 @@ public:
         
         return result;
     }
+    
+    //monotonic stack (begin to end)
+    vector<int> dailyTemperatures(vector<int>& temperatures) 
+    {
+        int size=temperatures.size();
+        vector<int> result(size,0);
+        stack<int> temperatures_index;
+        
+        for(int curr=0;curr<size;++curr)
+        {
+            while(!temperatures_index.empty() && temperatures[curr]>temperatures[temperatures_index.top()])
+            {
+                int index=temperatures_index.top();
+                temperatures_index.pop();
+                
+                result[index]=curr-index;
+            }
+            temperatures_index.push(curr);
+        }
+        
+        return result;
+    }    
 };
