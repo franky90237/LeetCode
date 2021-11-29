@@ -69,6 +69,8 @@ public:
 };
 
 //DFS iterative
+//DFS recursive
+//BFS
 class Solution {
 public:
     int numIslands(vector<vector<char>>& grid) 
@@ -83,8 +85,10 @@ public:
             {                
                 if(grid[r][c]=='1')
                 {
-                    cout<<r<<" "<<c<<endl;
-                    dfs(grid,r,c,row_size,col_size);
+                    //cout<<r<<" "<<c<<endl;
+                    dfs_iterative(grid,r,c);
+                    //dfs_recursive(grid,r,c);
+                    //bfs(grid,r,c);
                     ++islands;
                 }
             }
@@ -93,7 +97,7 @@ public:
         return islands;                
     }
     
-    void dfs(vector<vector<char>>& grid, int r, int c, int row_size, int col_size)        
+    void dfs_iterative(vector<vector<char>>& grid, int r, int c)        
     {
         stack<pair<int,int>> s;
         int direction[]={1,0,-1,0,1};
@@ -111,11 +115,57 @@ public:
                 int r_next=r+direction[i];
                 int c_next=c+direction[i+1];
                 
-                if(r_next>=0 && c_next>=0 && r_next<row_size && c_next<col_size && grid[r_next][c_next]=='1')
+                if(r_next>=0 && c_next>=0 && r_next<grid.size() && c_next<grid[0].size() && \
+                   grid[r_next][c_next]=='1')
                 {                    
-                    s.push(pair<int,int>(r_next,c_next));                    
+                    s.push(pair<int,int>(r_next,c_next));
+                    //grid[r][c]='X';
                 }
             }
         }
+    }
+    
+    void dfs_recursive(vector<vector<char>>& grid, int r, int c)
+    {
+        if(r<0 || c<0 || r>=grid.size() || c>=grid[0].size() || grid[r][c]!='1')
+        {
+            return;
+        }
+        
+        grid[r][c]='X';
+        
+        dfs_recursive(grid,r+1,c);
+        dfs_recursive(grid,r-1,c);
+        dfs_recursive(grid,r,c+1);
+        dfs_recursive(grid,r,c-1);
+    }
+    
+    void bfs(vector<vector<char>>& grid, int r, int c)
+    {
+        queue<pair<int,int>> q;
+        int direction[]={1,0,-1,0,1};
+        
+        q.push(pair<int,int>(r,c));
+        grid[r][c]='X';
+        while(!q.empty())
+        {
+            r=q.front().first;
+            c=q.front().second;
+            q.pop();
+            //grid[r][c]='X';
+            
+            for(int i=0;i<4;++i)
+            {
+                int r_next=r+direction[i];
+                int c_next=c+direction[i+1];
+                
+                if(r_next>=0 && c_next>=0 && r_next<grid.size() && c_next<grid[0].size() && \
+                   grid[r_next][c_next]=='1')
+                {                    
+                    q.push(pair<int,int>(r_next,c_next));
+                    grid[r_next][c_next]='X';
+                }
+            }
+        }        
     }
 };
