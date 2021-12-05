@@ -118,3 +118,46 @@ public:
         return visited[step][sum+nums_sum];
     }    
 };
+
+/*
+2021/12/05
+bottom up dp
+*/
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int target) 
+    {
+        int size=nums.size()+1;
+        int sum=accumulate(nums.begin(),nums.end(),0);
+        
+        if(target>sum || target<-sum) return 0;
+        
+        int dp[size][2*sum+1];
+        memset(dp,0,sizeof(int)*size*(2*sum+1));        
+        
+        dp[0][0+sum]=1;
+        for(int i=1;i<size;++i)
+        {
+            for(int j=-sum;j<=sum;++j)
+            {
+                if(j-nums[i-1]>=-sum) dp[i][j+sum]+=dp[i-1][j+sum-nums[i-1]];
+                if(j+nums[i-1]<=sum) dp[i][j+sum]+=dp[i-1][j+sum+nums[i-1]];
+            }
+        }
+        
+        //print(size,2*sum+1,(int *)dp);
+        return dp[size-1][target+sum];
+    }
+    
+    void print(int r, int c, int *dp)
+    {
+        for(int i=0;i<r;++i)
+        {
+            for(int j=0;j<c;++j)
+            {
+                cout<<*((dp+i*c)+j)<<"  ";
+            }
+            cout<<endl;
+        }
+    }
+};
