@@ -1,3 +1,4 @@
+//two queue
 class MyStack {
 private:
     queue<int> main;
@@ -86,6 +87,76 @@ public:
         queue_number=(queue_number+1)%2;
         
         return pop_val;
+    }
+    
+    bool empty() 
+    {
+        return size==0;
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
+
+
+//one queue
+class MyStack {
+private:
+    queue<int> q;    
+    int size=0;    
+    
+public:
+    MyStack() 
+    {
+        size=0;        
+    }
+    
+    void push(int x) 
+    {
+        q.push(x);
+        ++size;
+    }
+    
+    int pop() 
+    {        
+        int cnt=size;
+        
+        while(cnt>1)
+        {
+            q.push(q.front());
+            q.pop();            
+            
+            --cnt;
+        }
+        
+        int top=q.front();
+        q.pop();
+        --size;
+        
+        return top;      
+    }
+    
+    int top() 
+    {
+        int top;
+        int cnt=size;
+        
+        while(cnt>0)
+        {
+            top=q.front();
+            q.pop();
+            q.push(top);
+            
+            --cnt;
+        }        
+        
+        return top;
     }
     
     bool empty() 
