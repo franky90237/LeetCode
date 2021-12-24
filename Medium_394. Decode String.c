@@ -1,3 +1,4 @@
+//two stack
 class Solution {
 public:
     string decodeString(string s) 
@@ -67,5 +68,52 @@ public:
         }
         
         return result;
+    }
+};
+
+//recursive similar to dfs
+class Solution {
+public:
+    string decodeString(string s) 
+    {
+        int begin=0;
+        return handler(s,begin);
+    }
+    
+    string handler(string& s, int& begin)
+    {
+        //cout<<begin<<endl;
+        string result;
+        int number=0;
+        
+        while(begin<s.size())
+        {
+            if(s[begin]==']') break;
+            else if('a'<=s[begin] && s[begin]<='z')
+            {
+                result+=s[begin];
+                ++begin;
+            }
+            else if('0'<=s[begin] && s[begin]<='9') 
+            {
+                number=number*10+s[begin]-'0';
+                ++begin;
+            }
+            else // if(s[begin]=='[')
+            {
+                ++begin;
+                string sub_result=handler(s,begin);
+                
+                for(int i=0;i<number;++i)
+                {
+                    result+=sub_result;
+                }
+                
+                number=0;
+                ++begin;                
+            }
+        }
+        
+        return result;        
     }
 };
