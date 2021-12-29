@@ -1,5 +1,5 @@
 //dfs recursive
-//space complexity O(row_size*column_size)
+//space complexity without system stack O(row_size*column_size)
 class Solution {
 public:
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor)  
@@ -34,7 +34,7 @@ public:
 };
 
 //dfs recursive
-//space complexity O(1)
+//space complexity without system stack O(1)
 class Solution {
 public:
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor)  
