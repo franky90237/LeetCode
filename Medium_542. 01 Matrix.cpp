@@ -76,3 +76,51 @@ public:
         mat[r][c]=step;
     }
 };
+
+//bfs from zero
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) 
+    {
+        int m=mat.size(), n=mat[0].size();
+        vector<vector<int>> res(m,vector<int>(n,-1));
+        queue<pair<int,int>> q;
+        
+        for(int i=0;i<mat.size();++i)
+        {
+            for(int j=0;j<mat[0].size();++j)
+            {
+                if(mat[i][j]==0) 
+                {
+                    res[i][j]=0;
+                    q.emplace(i,j);
+                }
+            }
+        }
+        
+        int dir[]={0,1,0,-1,0};
+        while(!q.empty())
+        {
+            int r=q.front().first;
+            int c=q.front().second;
+            q.pop();
+            
+            for(int i=0; i<4; ++i)
+            {
+                int n_r=r+dir[i];
+                int n_c=c+dir[i+1];
+                
+                if(n_r>=0 && n_r<m && n_c>=0 && n_c<n)
+                {
+                    if(res[n_r][n_c]==-1 || res[n_r][n_c]>res[r][c]+1)
+                    {
+                        res[n_r][n_c]=res[r][c]+1;
+                        q.emplace(n_r,n_c);
+                    }
+                }
+            }
+        }
+        
+        return res;
+    }
+};
