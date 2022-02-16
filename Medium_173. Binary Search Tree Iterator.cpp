@@ -123,4 +123,39 @@ public:
     }
 };
 
-
+class BSTIterator
+{
+private:
+    stack<TreeNode*> s;
+    
+public:
+    BSTIterator(TreeNode* root) 
+    {
+        while(root)
+        {
+            s.push(root);
+            root=root->left;
+        }
+    }
+    
+    int next() 
+    {
+        TreeNode* temp=s.top();
+        s.pop();
+        int result=temp->val;
+        
+        temp=temp->right;
+        while(temp)
+        {
+            s.push(temp);
+            temp=temp->left;
+        }
+        
+        return result;
+    }
+    
+    bool hasNext() 
+    {
+        return !s.empty();
+    }
+};
