@@ -118,3 +118,63 @@ public:
         }
     }
 };
+
+class Solution {
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) 
+    {
+        if(!root) return NULL;
+        
+        TreeNode* cur=root;
+        TreeNode* pre=NULL;
+        
+        while(cur && cur->val!=key)
+        {
+            pre=cur;
+            
+            if(cur->val > key) cur=cur->left;
+            else if(cur->val < key) cur=cur->right;
+        }
+        
+        if(!cur) return root;
+        if(cur==root) return deleteTarget(cur);
+                
+        if(pre->left==cur) pre->left=deleteTarget(cur);
+        else pre->right=deleteTarget(cur);
+        
+        return root;
+    }
+    
+    TreeNode* deleteTarget(TreeNode* target)
+    {
+        TreeNode* root=NULL;
+        
+        if(!target->left && !target->right) root=NULL;
+        else if(target->left && !target->right) root=target->left;
+        else if(!target->left && target->right) root=target->right;
+        else
+        {
+            TreeNode* cur=target;
+            TreeNode* pre=NULL;
+            
+            cur=cur->right;
+            while(cur->left) 
+            {
+                pre=cur;
+                cur=cur->left;
+            }
+            
+            cur->left=target->left;
+            if(pre) 
+            {
+                pre->left=cur->right;
+                cur->right=target->right;
+            }
+            
+            root=cur;
+        }
+        
+        delete target;
+        return root;
+    }
+};
