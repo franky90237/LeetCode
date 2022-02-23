@@ -160,3 +160,34 @@ public:
         BSTinorder(n->right);
     }
 };
+
+//min heap
+class KthLargest 
+{
+private:
+    priority_queue<int, vector<int>, greater<int> > q;
+    int k;
+    
+public:
+    KthLargest(int k, vector<int>& nums) 
+    {
+        this->k=k;
+        for(auto i:nums) add(i);
+    }
+    
+    int add(int val) 
+    {
+        if(q.size()<k) q.push(val);
+        else 
+        {
+            if(val>q.top())
+            {
+                q.pop();
+                q.push(val);
+            }
+        }
+        
+        //cout<<"---"<<q.top()<<endl;
+        return q.top();
+    }
+};
