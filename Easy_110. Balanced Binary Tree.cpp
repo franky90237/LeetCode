@@ -10,6 +10,8 @@
  * };
  */
 
+//top down
+//time = O(n*log(n))
 class Solution {
 public:
     bool isBalanced(TreeNode* root) 
@@ -26,6 +28,33 @@ public:
         
         int left_hight=treeHeight(root->left);
         int right_hight=treeHeight(root->right);
+        
+        return max(left_hight, right_hight)+1;
+    }
+};
+
+//bottom up
+//time = O(n)
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) 
+    {
+        if(!root) return true;                       
+        
+        return treeHeight(root)!=-1;               
+    }
+    
+    int treeHeight(TreeNode* root)
+    {
+        if(!root) return 0;
+        
+        int left_hight=treeHeight(root->left);
+        if(left_hight==-1) return -1; 
+            
+        int right_hight=treeHeight(root->right);
+        if(right_hight==-1) return -1; 
+        
+        if(abs(left_hight-right_hight) > 1) return -1;
         
         return max(left_hight, right_hight)+1;
     }
