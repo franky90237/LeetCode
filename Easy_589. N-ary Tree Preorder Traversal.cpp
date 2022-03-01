@@ -39,3 +39,41 @@ public:
         
     }
 };
+
+class Solution {
+public:
+    vector<int> preorder(Node* root) 
+    {
+        if(!root) return {};
+        
+        vector<int> res;
+        stack<pair<Node*,int>> s;
+        Node* cur=root;
+                
+        while(!s.empty() || cur!=NULL)
+        {
+            while(cur)
+            {
+                s.push(pair<Node*,int>(cur,0));
+                res.push_back(cur->val);
+                
+                if(cur->children.size()==0) {cur=NULL; break;}
+                cur=cur->children.at(0);
+            }
+            
+            pair<Node*,int> tmp=s.top();
+            s.pop();
+            //s.push(pair<Node*,int>(tmp.first,tmp.second+1));
+            
+            if(tmp.second+1 >= (tmp.first)->children.size()) cur=NULL;
+            else 
+            {
+                s.push(pair<Node*,int>(tmp.first,tmp.second+1));
+                cur=cur->children.at(tmp.second+1);
+            }
+        }
+        
+        
+        return res;
+    }    
+};
