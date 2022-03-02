@@ -18,6 +18,7 @@ public:
 };
 */
 
+//recursive
 class Solution {
 public:
     vector<int> preorder(Node* root) 
@@ -40,6 +41,7 @@ public:
     }
 };
 
+//iterative
 class Solution {
 public:
     vector<int> preorder(Node* root) 
@@ -63,13 +65,13 @@ public:
             
             pair<Node*,int> tmp=s.top();
             s.pop();
-            //s.push(pair<Node*,int>(tmp.first,tmp.second+1));
+            //cout<<tmp.first->val<<" "<<tmp.second<<endl;
             
             if(tmp.second+1 >= (tmp.first)->children.size()) cur=NULL;
             else 
             {
                 s.push(pair<Node*,int>(tmp.first,tmp.second+1));
-                cur=cur->children.at(tmp.second+1);
+                cur=(tmp.first->children).at(tmp.second+1);
             }
         }
         
