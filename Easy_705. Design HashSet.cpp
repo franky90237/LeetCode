@@ -60,29 +60,16 @@ class MyHashSet
 private:
     vector<list<int>> buckets;    
     
-public:
-    MyHashSet() : buckets(1000)
-    {        
-        //buckets.resize(1000);        
-    }
-    
     int hash(int key)
     {
         return key % buckets.size();
     }
     
-    list<int>::iterator search(int key)
+public:
+    MyHashSet() : buckets(1000)
     {
-        int bucket=hash(key);
         
-        auto it=buckets[bucket].begin();
-        for(; it!=buckets[bucket].end(); ++it)
-        {
-            if(*it==key) break;
-        }
-        
-        return it;
-    }
+    }       
     
     void add(int key) 
     {
@@ -95,47 +82,27 @@ public:
     
     void remove(int key) 
     {
-        list<int>::iterator it=search(key);
-        int bucket=hash(key);
-        if(it==buckets[bucket].end()) return;
-        
-        buckets[bucket].erase(it);
-        
-        
-        /*int bucket=key % buckets.size();
-        int size=buckets[bucket].size();
-        
-        for(int i=0;i<size;++i)
-        {
-            if(buckets[bucket][i]==key) 
-            {
-                for(int j=i+1;j<size;++j)
-                {
-                    buckets[bucket][j-1]=buckets[bucket][j];
-                }
-                
-                buckets[bucket].resize(size-1);
-            }
-        }*/
-    }
-    
-    bool contains(int key) 
-    {
-        return search(key)!=buckets[hash(key)].end();
-        
-        /*
         int bucket=hash(key);
         
-        bool duplicate=false;
-        for(int i=0;i<buckets[bucket].size();++i)
+        for(auto it=buckets[bucket].begin(); it!=buckets[bucket].end(); ++it)
         {
-            if(buckets[bucket][i]==key) 
+            if(*it==key) 
             {
-                duplicate=true;
-                break;
+                buckets[bucket].erase(it);
+                return;
             }
         }
+    }
+    
+    bool contains(int key)
+    {
+        int bucket=hash(key);
+                        
+        for(int i:buckets[bucket])
+        {
+            if(i==key) return true;
+        }
         
-        return duplicate;*/
+        return false;
     }
 };
