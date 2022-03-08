@@ -45,3 +45,25 @@ public:
         return {-1,-1};
     }
 };
+
+//simplified hash map
+//time :  O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) 
+    {
+        unordered_multimap<int,int> m;
+        
+        int n=nums.size();
+        for(int i=0; i<n; ++i)
+        {
+            int dif=target-nums[i];
+            if(m.find(dif)!=m.end()) return {m.find(dif)->second,i};
+            
+            m.insert(make_pair(nums[i],i));
+        }
+        
+        return {-1,-1};
+    }
+};
