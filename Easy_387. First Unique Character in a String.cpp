@@ -1,3 +1,5 @@
+//time  : O(n+n)
+//space : O(n)
 class Solution {
 public:
     int firstUniqChar(string s) 
@@ -15,5 +17,28 @@ public:
         }
         
         return -1;
+    }
+};
+
+//time  : O(n+26)
+//space : O(n)
+class Solution {
+public:
+    int firstUniqChar(string s) 
+    {
+        unordered_map<char,int> m;
+        for(int i=0; i<s.size(); ++i)
+        {
+            if(m.find(s[i])==m.end()) m[s[i]]=i;
+            else m[s[i]]=INT_MAX;
+        }
+        
+        int min_index=INT_MAX;
+        for(const auto& i:m)
+        {
+            if(i.second!=INT_MAX) min_index=min(min_index,i.second);
+        }
+        
+        return min_index==INT_MAX ? -1 : min_index;
     }
 };
