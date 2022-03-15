@@ -41,3 +41,42 @@ public:
         return res;
     }
 };
+
+//build hash map with "key as num" and "value as frequency"
+//create a vector as buckts with index as frequency and each bucket storing the num in that frequency
+//iterate the vector from back(most freq.) to front(less freq.) to get the top k num
+//time  : O(n)+O(n)+O(n)
+//space : O(n)+O(n)
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) 
+    {
+        //O(n)
+        unordered_map<int,int> m;
+        for(auto& i:nums) ++m[i];        
+        
+        //O(n)
+        vector<vector<int>> buckets(nums.size()+1,vector<int>());
+        for(auto it=m.begin(); it!=m.end(); ++it)
+        {
+            int freq=it->second;
+            buckets[freq].push_back(it->first);
+        }
+        
+        //O(n)
+        vector<int> res;
+        int freq=buckets.size()-1;
+        while(k!=0 && freq!=0)
+        {
+            if(buckets[freq].size()!=0)
+            {
+                res.insert(res.end(),buckets[freq].begin(),buckets[freq].end());
+                k-=buckets[freq].size();
+            }
+            
+            --freq;            
+        }
+        
+        return res;
+    }
+};
