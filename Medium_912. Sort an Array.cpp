@@ -1,4 +1,4 @@
-//merge sort
+//merge sort recursive
 class Solution {
 public:
     vector<int> sortArray(vector<int>& nums) 
@@ -54,5 +54,71 @@ public:
         }
         
         return sorted_list;
+    }
+};
+
+//merge sort iterative
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) 
+    {
+        merge_sort(nums);
+        return nums;
+    }
+    
+    void merge_sort(vector<int>& nums)
+    {
+        int n=nums.size();
+        int merge_size=1;
+        while(merge_size<n)
+        {
+            int cnt=ceil(n/(2*merge_size));
+            for(int i=0; i<n; i+=2*merge_size)
+            {
+                merge(nums,merge_size,i,i+merge_size);
+            }
+            
+            merge_size*=2;
+        }
+    }
+    
+    void merge(vector<int>& nums, int merge_size, int left, int right)
+    {
+        vector<int> tmp;
+        
+        //cout<<left<<" "<<right<<endl;
+        int l=left,r=right;
+        while(l<left+merge_size && r<nums.size() && r<right+merge_size)
+        {
+            if(nums[l]<nums[r])
+            {
+                tmp.push_back(nums[l]);
+                ++l;
+            }
+            else
+            {
+                tmp.push_back(nums[r]);
+                ++r;
+            }
+        }
+        
+        while(l<left+merge_size)
+        {
+            tmp.push_back(nums[l]);
+            ++l;
+        }
+        
+        while(r<nums.size() && r<right+merge_size)
+        {
+            tmp.push_back(nums[r]);
+            ++r;
+        }
+        
+        int i=left;
+        for(auto& j:tmp) 
+        {
+            nums[i]=j;
+            ++i;
+        }
     }
 };
