@@ -62,3 +62,45 @@ public:
         return isValidBST(root->left,min,root->val) && isValidBST(root->right,root->val,max);
     }
 };
+
+
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) 
+    {
+        if(!root) return true;
+        
+        TreeNode* pre=find_predecessor(root);
+        TreeNode* suc=find_successsor(root);
+        
+        if((pre && root->val<=pre->val) || (suc && root->val>=suc->val))  return false;
+        
+        return isValidBST(root->left) && isValidBST(root->right);
+    }
+    
+    TreeNode* find_successsor(TreeNode* root)
+    {
+        root=root->right;
+        if(!root) return root;
+        
+        while(root->left)
+        {
+            root=root->left;
+        }
+        
+        return root;
+    }
+    
+    TreeNode* find_predecessor(TreeNode* root)
+    {
+        root=root->left;
+        if(!root) return root;
+        
+        while(root->right)
+        {
+            root=root->right;
+        }
+        
+        return root;
+    }    
+};
