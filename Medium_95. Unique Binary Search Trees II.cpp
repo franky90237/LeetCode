@@ -157,3 +157,43 @@ public:
         return res;
     }
 };
+
+//more clever without dp
+class Solution 
+{
+public:
+    vector<TreeNode*> generateTrees(int n)
+    {
+        return buildBST(1,n);
+    }
+    
+    vector<TreeNode*> buildBST(int start, int end)
+    {
+        //cout<<start<<" : "<<end<<endl;
+        if(start>end) return {NULL};
+        if(start==end) return {new TreeNode(start)};
+        
+        vector<TreeNode*> res;
+        
+        for(int mid=start; mid<=end; ++mid)
+        {
+            //cout<<"mid : "<<mid<<endl;
+            vector<TreeNode*> left_subtree=buildBST(start,mid-1);
+            vector<TreeNode*> right_subtree=buildBST(mid+1,end);
+            
+            for(auto& l:left_subtree)
+            {
+                for(auto& r: right_subtree)
+                {
+                    TreeNode* root=new TreeNode(mid);
+                    root->left=l;
+                    root->right=r;
+                    
+                    res.push_back(root);
+                }
+            }
+        }
+        
+        return res;
+    }
+};
