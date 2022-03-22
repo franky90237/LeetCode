@@ -1,76 +1,58 @@
 class Solution {
-private:
-    //enum {
 public:
-    int totalNQueens(int n)
+    int totalNQueens(int n) 
     {
         int res=0;
-        
-        for(int c=0; c<n; ++c)
-        {
-            unordered_set<int> visited[4];
-            visited[0].insert(0);
-            visited[1].insert(c);
-            visited[2].insert(0+c);
-            visited[3].insert(0-c);
-            
-            countNQueues(c,n,res,visited);
-        }
+        unordered_set<int> v[4];
+        number_of_NQueens(0,n,res,v);
         
         return res;
     }
     
-    void countNQueues(int col, int n, int& res, unordered_set<int> visited[])
+    void number_of_NQueens(int r, int n, int& res, unordered_set<int> v[])
     {
-        if(col<0 || col>=n) return;
+        if(r>=n) ++res;
         
-        int tmpr;
-        //for(int c=0; c<n && c!=col; ++c)
-        //{
-
-        for(int r=0; r<n; ++r)
+        for(int c=0; c<n; ++c)
         {
-            cout<<r<<" : "<<col<<endl;
-            if(visited[0].find(r)!=visited[0].end() ||
-               visited[1].find(col)!=visited[1].end() ||
-               visited[2].find(r-col)!=visited[2].end() ||
-               visited[3].find(r+col)!=visited[3].end()) 
+            if(is_save(r,c,v))
             {
-                if(r+1>=n) 
-                {
-                    //countNQueues(col-1,n,res,visited);
-                    countNQueues(col+1,n,res,visited);
-                }
-                continue;
+                update_constraint(r,c,v);
+                
+                number_of_NQueens(r+1,n,res,v);
+                
+                remove_constraint(r,c,v);
             }
-            else 
-            {
-                visited[0].insert(r);
-                visited[1].insert(col);
-                visited[2].insert(r-col);
-                visited[3].insert(r+col);
-            }
-            
-            //cout<<r<<" : "<<col<<endl;
-            
-            tmpr=r;
-            if(visited[0].size()>=n) ++res;
-            //countNQueues(col-1,n,res,visited);
-            countNQueues(col+1,n,res,visited);
-            //break;
         }
-            
-        visited[0].erase(tmpr);
-        visited[1].erase(col);
-        visited[2].erase(tmpr-col);
-        visited[3].erase(tmpr+col);
-        
-        cout<<endl;
-            
-        //}
+    }
+    
+    bool is_save(int r, int c, unordered_set<int> v[])
+    {
+        if(v[0].count(r)!=0 || v[1].count(c)!=0 || v[2].count(r+c)!=0 || v[3].count(r-c)!=0)
+        {
+            return false;
+        }
+        return true;
+    }
+    
+    void update_constraint(int r, int c, unordered_set<int> v[])
+    {
+        v[0].insert(r);
+        v[1].insert(c);
+        v[2].insert(r+c);
+        v[3].insert(r-c);
+    }
+    
+    void remove_constraint(int r, int c, unordered_set<int> v[])
+    {
+        v[0].erase(r);
+        v[1].erase(c);
+        v[2].erase(r+c);
+        v[3].erase(r-c);
     }
 };
 
+/*
 class Solution {
 private:
     //enum {
@@ -142,3 +124,4 @@ public:
         }
     }
 };
+*/
