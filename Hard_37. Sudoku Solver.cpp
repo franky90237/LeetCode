@@ -1,4 +1,114 @@
+//backtracking
 class Solution {
+private:
+    void print_vector(vector<vector<char>>& v)
+    {
+        int n=8;
+        for(int i=0; i<=n; ++i)
+        {
+            for(int j=0; j<=n; ++j)
+            {
+                printf("%c ",v[i][j]);
+            }
+            cout<<endl;
+        }
+    }
+    
+public:
+    void solveSudoku(vector<vector<char>>& board) 
+    {        
+        int n=9;
+        
+        vector<vector<int>> row(n,vector<int>(n+1,0));
+        vector<vector<int>> column(n,vector<int>(n+1,0));
+        vector<vector<int>> block(n,vector<int>(n+1,0));        
+        for(int i=0; i<n; ++i)
+        {
+           for(int j=0; j<n; ++j)
+           {               
+               if(board[i][j]!='.')
+               {                   
+                   int num=board[i][j]-'0';
+                   row[i][num]=1;
+                   column[j][num]=1;
+                   block[(i/3)*3+j/3][num]=1;                   
+               }
+           }
+        }
+        
+        solve(0,0,board,row,column,block);
+        //print_vector(board);
+    }
+    
+    bool solve(int r, int c, vector<vector<char>>& board, vector<vector<int>>& row, vector<vector<int>>& column, vector<vector<int>>& block)
+    {
+        int n=9;
+        
+        if(r>=n) return true;
+        
+        while(board[r][c]!='.')
+        {
+            if(c+1<n) ++c;
+            else
+            {
+                ++r;
+                c=0;
+            }
+            
+            if(r>=n) return true;
+        }                
+        
+        for(int i=1; i<=n; ++i)
+        {
+            if(is_valid(i,r,c,board,row,column,block))
+            {
+                //cout<<r<<" " <<c<<" - "<<i<<endl;
+                place(i,r,c,board,row,column,block);
+
+                bool res=false;
+                if(c+1<n) res=solve(r,c+1,board,row,column,block);
+                else      res=solve(r+1,0,board,row,column,block);
+                if(res==true) return res;
+                
+                remove(i,r,c,board,row,column,block);
+            }
+        }
+                
+        return false;
+    }
+    
+    bool is_valid(int num, int r, int c, vector<vector<char>>& board, vector<vector<int>>& row, vector<vector<int>>& column, vector<vector<int>>& block)
+    {                
+        int n=9;
+        
+        int b=(r/3)*3+c/3;
+        if(row[r][num]!=0 || column[c][num]!=0 || block[b][num]!=0)
+        {
+            return false;
+        }
+        return true;
+    }
+    
+    void place(int num, int r, int c, vector<vector<char>>& board, vector<vector<int>>& row, vector<vector<int>>& column, vector<vector<int>>& block)
+    {
+        board[r][c]=num+'0';
+        
+        row[r][num]=1;
+        column[c][num]=1;
+        block[(r/3)*3+c/3][num]=1;
+    }
+    
+    void remove(int num, int r, int c, vector<vector<char>>& board, vector<vector<int>>& row, vector<vector<int>>& column, vector<vector<int>>& block)
+    {
+        board[r][c]='.';
+        
+        row[r][num]=0;
+        column[c][num]=0;
+        block[(r/3)*3+c/3][num]=0;
+    }
+};
+
+/*class Solution {
 public:
     void solveSudoku(vector<vector<char>>& board) 
     {
@@ -99,4 +209,4 @@ public:
         column[c].erase(num-'0');
         block[(r*3)/3+c/3].erase(num-'0');
     }
-};
+};*/
