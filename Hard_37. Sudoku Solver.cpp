@@ -13,7 +13,7 @@ public:
     {
         int n=9;
         
-        if(board[r][c]!='.')
+        while(board[r][c]!='.')
         {
             if(c+1<n) ++c;
             else
@@ -25,35 +25,30 @@ public:
         
         if(r>=n) return true;
         
-        //for(int c=0; c<n; ++c)
+        for(int i=0; i<=n; ++i)
         {
-            for(int i=0; i<=n; ++i)
+            //cout<<r<<" " <<c<<endl;
+
+            if(is_valid(i,r,c,board,row,column,block))
             {
                 //cout<<r<<" " <<c<<endl;
-                
-                if(is_valid(i,r,c,board,row,column,block))
-                {
-                    //cout<<r<<" " <<c<<endl;
-                    place(i,r,c,board,row,column,block);
-                    
-                    bool res=false;
-                    if(c+1<n) res=solve(r,c+1,board,row,column,block);
-                    else res=solve(r+1,0,board,row,column,block);
-                    //cout<<res<<endl;
-                    if(res==true) return res;
-                    
-                    remove(i,r,c,board,row,column,block);
-                }
+                place(i,r,c,board,row,column,block);
+
+                bool res=false;
+                if(c+1<n) res=solve(r,c+1,board,row,column,block);
+                else res=solve(r+1,0,board,row,column,block);
+                if(res==true) return res;
+
+                remove(i,r,c,board,row,column,block);
             }
         }
+        
         
         return false;
     }
     
     bool is_valid(int num, int r, int c, vector<vector<char>>& board, unordered_set<int> row[], unordered_set<int> column[], unordered_set<int> block[])
-    {
-        //if(board[r][c]!='.') return false;
-        
+    {                
         int n=9;
         
         if(row[r].empty())
@@ -91,17 +86,17 @@ public:
     {
         board[r][c]=num+'0';
         
-        row[r].insert(num);
-        column[c].insert(num);
-        block[(r*3)/3+c/3].insert(num);
+        row[r].insert(num+'0');
+        column[c].insert(num+'0');
+        block[(r*3)/3+c/3].insert(num+'0');
     }
     
     void remove(int num, int r, int c, vector<vector<char>>& board, unordered_set<int> row[], unordered_set<int> column[], unordered_set<int> block[])
     {
         board[r][c]='.';
         
-        row[r].erase(num);
-        column[c].erase(num);
-        block[(r*3)/3+c/3].erase(num);
+        row[r].erase(num-'0');
+        column[c].erase(num-'0');
+        block[(r*3)/3+c/3].erase(num-'0');
     }
 };
