@@ -3,28 +3,28 @@ public:
     vector<vector<int>> combine(int n, int k) 
     {
         vector<vector<int>> res;
-        solve(res,1,n,k,k);
+        vector<int> tmp;
+        solve(1,n,k,res,tmp);
         
         return res;
     }
     
-    void solve(vector<vector<int>>& res, int begin, int end, int cnt, int max)
+    void solve(int begin, int n, int k, vector<vector<int>>& res, vector<int>& tmp)
     {
-        if(cnt==0) return;
-        
-        //if(cnt==max) res.push_back({});
-        
-        for(int i=begin; i<=end; ++i)
+        if(tmp.size()==k)
         {
-            if(cnt==max) res.push_back({});
-            
-            int seq=res.size()-1;
-            res[seq].push_back(begin);
-            
-            solve(res,begin+1,end,cnt-1,max);
-            
-            res.push_back(res[seq]);
-            res[seq+1].pop_back();
+            res.emplace_back(tmp);
+            return; 
         }
+        
+        for(int i=begin; i<=n; ++i)
+        {
+            //cout<<i<<endl;
+            tmp.emplace_back(i);
+            solve(i+1,n,k,res,tmp);
+            tmp.pop_back();
+        }
+        
+        //cout<<endl;
     }
 };
