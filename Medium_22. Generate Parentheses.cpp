@@ -38,3 +38,39 @@ public:
         }
     }
 };
+
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) 
+    {
+        vector<string> res;
+        string tmp;
+        solve(n,n,tmp,res);
+        
+        return res;
+    }
+    
+    void solve(int open, int close, string& tmp, vector<string>& res)
+    {
+        //cout<<tmp<<endl;
+        if(open==0 && close==0)
+        {
+            res.emplace_back(tmp);
+            return;
+        }                
+        
+        if(open<=close && open>0)
+        {
+            tmp.push_back('(');
+            solve(open-1,close,tmp,res);
+            tmp.pop_back();
+        }
+        
+        if(close>0)
+        {
+            tmp.push_back(')');
+            solve(open,close-1,tmp,res);
+            tmp.pop_back();
+        }
+    }
+};
