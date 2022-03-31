@@ -93,3 +93,52 @@ public:
         return l;
     }
 };
+
+
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) 
+    {
+        int m=nums1.size();
+        int n=nums2.size();
+        int k=(m+n+1)/2;
+        
+        int ans1=get_kth(nums1,0,m-1,nums2,0,n-1,k);
+        if((m+n)%2==1) return ans1;
+        //cout<<endl;
+        
+        int ans2=get_kth(nums1,0,m-1,nums2,0,n-1,k+1);
+        //cout<<ans1<<" "<<ans2<<endl;
+        return (ans1+ans2)/2.0;
+    }
+    
+    int get_kth(vector<int>& nums1, int l1, int r1,vector<int>& nums2, int l2, int r2, int k)
+    {
+        int m1=(l1+r1)/2;
+        int m2=(l2+r2)/2;
+        
+        //printf("%d,%d,%d - %d,%d,%d - k=%d \n",l1,m1,r1,l2,m2,r2,k);
+        
+        if(l1>r1) return nums2[(k-1)+l2];
+        if(l2>r2) return nums1[(k-1)+l1];
+        
+        if(k==1) return min(nums1[l1],nums2[l2]);
+        
+        //we can't use (m1-l1)+(m2-l2)+1<=k
+        //because it'll lead to remove the smaller number
+        if((m1-l1)+(m2-l2)+1<k)
+        {
+            if(nums1[m1]<=nums2[m2])
+                return get_kth(nums1,m1+1,r1,nums2,l2,r2,k-(m1-l1+1));
+            else
+                return get_kth(nums1,l1,r1,nums2,m2+1,r2,k-(m2-l2+1));
+        }
+        else
+        {
+            if(nums1[m1]<=nums2[m2])
+                return get_kth(nums1,l1,r1,nums2,l2,m2-1,k);
+            else
+                return get_kth(nums1,l1,m1-1,nums2,l2,r2,k);
+        }
+    }
+};
