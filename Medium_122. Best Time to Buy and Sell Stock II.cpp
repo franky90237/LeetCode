@@ -50,3 +50,31 @@ public:
         return profit;
     }
 };
+
+//finate state machine
+//reference : https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/discuss/75928/Share-my-DP-solution-(By-State-Machine-Thinking)
+//time  : O(n)
+//space : O(n) (can be reduced to 1)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) 
+    {
+        int n=prices.size();
+        int s0[n];
+        int s1[n];
+        
+        s0[0]=0;
+        s1[0]=-prices[0];        
+        for(int i=1; i<n; ++i)
+        {
+            s0[i]=max(s0[i-1],s1[i-1]+prices[i]);
+            s1[i]=max(s1[i-1],s0[i-1]-prices[i]);
+        }
+        
+        /*for(auto& i:s0) cout<<i<<"  ";
+        cout<<endl;
+        for(auto& i:s1) cout<<i<<" ";*/
+        
+        return s0[n-1];
+    }
+};
