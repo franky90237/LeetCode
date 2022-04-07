@@ -99,3 +99,36 @@ public:
         return dp[k-1][n-1];
     }
 };
+
+//time  : O(k*n)
+//space : O(k)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices)
+    {
+        const int n=prices.size();
+        const int k=2+1;
+        
+        int dp[k];
+        int max_diff[k];       
+        for(int t=0; t<k; ++t) 
+        {
+            dp[t]=0;
+            max_diff[t]=-prices[0];
+        }
+        
+        for(int i=1; i<n; ++i)
+        {
+            for(int t=1; t<k; ++t)
+            {
+                max_diff[t]=max(max_diff[t],-prices[i]+dp[t-1]);
+                dp[t]=max(dp[t],prices[i]+max_diff[t]);
+                
+                //cout<<dp[t]<<" ";
+            }
+            //cout<<endl;
+        }
+        
+        return dp[k-1];
+    }
+};
