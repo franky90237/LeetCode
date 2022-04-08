@@ -55,7 +55,7 @@ public:
     }
 };
 
-//time  : O(1)
+//time  : O(logn)
 class Solution {
 public:
     uint32_t reverseBits(uint32_t n) 
