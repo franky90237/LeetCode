@@ -25,3 +25,25 @@ public:
         return sign*res;
     }
 };
+
+class Solution {
+public:
+    int reverse(int x) 
+    {
+        int res=0;
+        //cout<<22/-10<<" "<<22%-10<<endl;
+        
+        while(x!=0)
+        {
+            int num=x%10;
+            if( (x>0 && (res>INT_MAX/10 || (res>INT_MAX/10 && num>7))) ||
+                (x<0 && (-res>INT_MAX/10 || (-res>INT_MAX/10 && num>8))) )
+                return 0;
+            
+            res=res*10+num;
+            x=x/10;
+        }
+        
+        return res;
+    }
+};
