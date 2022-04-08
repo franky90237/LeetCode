@@ -1,3 +1,4 @@
+//time  : O(n*n)
 class Solution {
 public:
     uint32_t reverseBits(uint32_t n) 
@@ -30,6 +31,25 @@ public:
         }
         
         cout<<res;
+        
+        return res;
+    }
+};
+
+//bit manipulation
+//time  : O(n)
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) 
+    {
+        uint32_t res=0;
+        int bit=31;
+        while(bit>=0)
+        {
+            res=(res<<1) | (n&1);
+            n=n>>1;
+            --bit;
+        }
         
         return res;
     }
