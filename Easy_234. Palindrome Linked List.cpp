@@ -41,3 +41,36 @@ public:
         return source;
     }
 };
+
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) 
+    {
+        ListNode* prev=NULL;
+        ListNode* slow=head;
+        ListNode* fast=head;
+        
+        while(fast && fast->next)
+        {            
+            fast=fast->next->next;
+            
+            ListNode* next=slow->next;
+            slow->next=prev;
+            prev=slow;
+            slow=next;
+        }
+        
+        if(fast) slow=slow->next;
+        
+        while(slow && prev->val==slow->val)
+        {
+            prev=prev->next;
+            slow=slow->next;
+        }
+        
+        return !prev;
+    }
+
+};
