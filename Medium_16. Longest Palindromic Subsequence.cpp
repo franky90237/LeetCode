@@ -74,3 +74,50 @@ public:
         return max(solve(s,i+1,n),solve(s,i,n-1));
     }
 };
+
+//2022-04-12
+//TLE
+//dp
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) 
+    {
+        int n=s.size();
+        
+        if(n==1) return 1;
+        
+        unordered_map<string,int> m;
+        return solve(m,s,0,n-1);
+    }
+    
+    int solve(unordered_map<string,int>& m, string& s, int i, int n)
+    {
+        string sub=s.substr(i,n-i+1);
+        if(m.find(sub)!=m.end()) return m[sub];
+        
+        if(i==n) return 1;
+        if(i>n) return 0;
+        
+        if(s[i]==s[n])
+        {
+            int len=solve(m,s,i+1,n-1);
+            string sub_lr=s.substr(i+1,n-i-1);
+            m[sub_lr]=len;
+            
+            m[sub]=2+len;
+            return 2+len;
+        }
+        
+        int l_len=solve(m,s,i+1,n);
+        string l_sub=s.substr(i+1,n-i);
+        m[l_sub]=l_len;
+        
+        int r_len=solve(m,s,i,n-1);
+        string r_sub=s.substr(i,n-i);
+        m[r_sub]=r_len;
+        
+        int max_len=max(l_len,r_len);
+        m[sub]=max_len;
+        return max_len;
+    }
+};
