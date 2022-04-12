@@ -123,7 +123,7 @@ public:
 };
 
 //2022-04-12
-//dp
+//dp recursive
 //time  : O(n*n)
 //space : O(n*n)
 class Solution {
@@ -155,5 +155,35 @@ public:
         dp[i][n-1]=solve(dp,s,i,n-1);
         
         return max(dp[i+1][n],dp[i][n-1]);
+    }
+};
+
+//2022-04-12
+//dp iterative
+//time  : O(n*n)
+//space : O(n*n)
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) 
+    {
+        int n=s.size();
+        int dp[n][n];
+        
+        for(int j=0; j<n; ++j)
+        {
+            dp[j][j]=1;
+            for(int i=j-1; i>=0; --i)
+            {
+                if(s[i]==s[j]) 
+                {
+                    if(i+1<=j-1) dp[i][j]=2+dp[i+1][j-1];
+                    else dp[i][j]=2;
+                }
+                else dp[i][j]=max(dp[i+1][j],dp[i][j-1]);
+                //cout<<i<<"-"<<j<<" "<<dp[i][j]<<endl;
+            }
+        }
+        
+        return dp[0][n-1];
     }
 };
