@@ -85,3 +85,45 @@ public:
         return dp[n][m];
     }
 };
+
+//2022-04-12
+//dp iterative
+//time  : O(n*m)
+//space : O(min(n,m))
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) 
+    {
+        if(text2.size()>text1.size()) swap(text2,text1);
+        
+        int n=text1.size();
+        int m=text2.size();
+        int *dp_pre=new int[m+1];
+        int *dp_cur=new int[m+1];
+        
+        for(int i=0; i<=m; ++i) dp_pre[i]=0;
+                
+        for(int i=1; i<=n; ++i)
+        {
+            dp_cur[0]=0;
+            for(int j=1; j<=m; ++j)
+            {                
+                if(text1[i-1]==text2[j-1]) dp_cur[j]=1+dp_pre[j-1];
+                else dp_cur[j]=max(dp_pre[j],dp_cur[j-1]);
+                //cout<<dp_cur[j]<<" ";
+            }
+            //cout<<endl;
+            
+            swap(dp_pre,dp_cur);            
+        }
+        
+        return dp_pre[m];
+    }
+    
+    /*void print_dp(int dp[], int m)
+    {
+        cout<<endl;
+        for(int i=1; i<=m; ++i) cout<<dp[i]<<" ";
+        cout<<endl;
+    }*/
+};
