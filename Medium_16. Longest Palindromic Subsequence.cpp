@@ -121,3 +121,39 @@ public:
         return max_len;
     }
 };
+
+//2022-04-12
+//dp
+//time  : O(n*n)
+//space : O(n*n)
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) 
+    {
+        int n=s.size();
+        
+        if(n==1) return 1;
+        
+        vector<vector<int>> dp(n,vector<int>(n,0));
+        return solve(dp,s,0,n-1);
+    }
+    
+    int solve(vector<vector<int>>& dp, string& s, int i, int n)
+    {
+        if(dp[i][n]!=0) return dp[i][n];
+        
+        if(i==n) return 1;
+        if(i>n) return 0;
+        
+        if(s[i]==s[n])
+        {
+            dp[i+1][n-1]=solve(dp,s,i+1,n-1);
+            return 2+dp[i+1][n-1];
+        }
+        
+        dp[i+1][n]=solve(dp,s,i+1,n);
+        dp[i][n-1]=solve(dp,s,i,n-1);
+        
+        return max(dp[i+1][n],dp[i][n-1]);
+    }
+};
