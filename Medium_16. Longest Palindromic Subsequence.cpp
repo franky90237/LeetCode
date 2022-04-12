@@ -50,3 +50,27 @@ public:
         return true;
     }
 };
+
+//2022-04-12
+//TLE
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) 
+    {
+        int n=s.size();
+        
+        if(n==1) return 1;
+        
+        return solve(s,0,n-1);
+    }
+    
+    int solve(string& s, int i, int n)
+    {
+        if(i==n) return 1;
+        if(i>n) return 0;
+        
+        if(s[i]==s[n]) return 2+solve(s,i+1,n-1);
+        
+        return max(solve(s,i+1,n),solve(s,i,n-1));
+    }
+};
