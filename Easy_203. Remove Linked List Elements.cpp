@@ -8,6 +8,7 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+//2022-04-14
 class Solution {
 public:
     ListNode* removeElements(ListNode* head, int val) 
@@ -43,5 +44,32 @@ public:
         }
         
         return head;
+    }
+};
+
+//2022-04-14
+//using dummy node
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) 
+    {
+        ListNode* dummy=new ListNode(-1,head);        
+        ListNode* cur=dummy;
+        
+        while(cur && cur->next)
+        {            
+            if(cur->next->val==val)
+            {
+                ListNode* removed=cur->next;
+                cur->next=cur->next->next;
+                delete removed;
+            }            
+            else 
+            {
+                cur=cur->next;
+            }
+        }
+        
+        return dummy->next;
     }
 };
