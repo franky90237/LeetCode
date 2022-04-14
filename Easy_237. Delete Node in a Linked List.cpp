@@ -24,3 +24,13 @@ public:
         pre->next=NULL;                        
     }
 };
+
+class Solution {
+public:
+    void deleteNode(ListNode* node) 
+    {        
+        ListNode* next_node=node->next;
+        *node=*next_node;
+        delete next_node;
+    }
+};
