@@ -6,6 +6,8 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+
+//2022-04-14
 class Solution {
 public:
     void deleteNode(ListNode* node) 
@@ -25,6 +27,7 @@ public:
     }
 };
 
+//2022-04-14
 class Solution {
 public:
     void deleteNode(ListNode* node) 
