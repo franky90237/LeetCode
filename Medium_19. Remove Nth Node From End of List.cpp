@@ -80,3 +80,39 @@ public:
         return head;
     }
 };
+
+//2022-04-15
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) 
+    {
+        ListNode* slow=head;
+        ListNode* fast=head;
+        
+        for(int cnt=1; cnt<n; ++cnt)
+        {
+            fast=fast->next;
+        }
+                
+        ListNode* pre=NULL;
+        while(fast->next)
+        {
+            pre=slow;
+            slow=slow->next;
+            fast=fast->next;
+        }
+        
+        if(slow==head)
+        {
+            head=head->next;
+            delete slow;
+        }
+        else
+        {
+            pre->next=slow->next;
+            delete slow;
+        }
+        
+        return head;
+    }
+};
