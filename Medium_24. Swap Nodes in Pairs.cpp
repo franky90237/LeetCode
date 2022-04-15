@@ -34,3 +34,19 @@ public:
         return first;
     }
 };
+
+//2022-04-15
+//recursive
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) 
+    {
+        if(!head || !head->next) return head;
+        
+        ListNode* tmp=head->next;
+        head->next=swapPairs(head->next->next);
+        tmp->next=head;
+        
+        return tmp;
+    }
+};
