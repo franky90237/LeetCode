@@ -61,3 +61,26 @@ public:
         return dp[0];
     }
 };
+
+//2022-04-15
+//dp iterative
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int rob(vector<int>& nums) 
+    {
+        int n=nums.size();
+        
+        int money2=0;
+        int money1=nums[n-1];
+        for(int i=n-2; i>=0; --i)
+        {
+            int tmp=money1;
+            money1=max(nums[i]+money2,money1);
+            money2=tmp;
+        }    
+        
+        return money1;
+    }
+};
