@@ -83,3 +83,39 @@ public:
         return head;
     }
 };
+
+//2022-04-15
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* deleteMiddle(ListNode* head) 
+    {
+        if(!head->next)
+        {
+            delete head;
+            return NULL;
+        }
+        if(!head->next->next)
+        {
+            delete head->next;
+            head->next=NULL;
+            return head;
+        }
+        
+        ListNode* slow=head;
+        ListNode* fast=head;
+        
+        while(fast && fast->next)
+        {
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+            
+        ListNode* removed=slow->next;
+        *slow=*(slow->next);
+        delete removed;
+        
+        return head;
+    }
+};
