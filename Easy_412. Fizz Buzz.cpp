@@ -39,3 +39,32 @@ public:
         return answer;
     }
 };
+
+//2022-04-16
+//using mapping
+class Solution {
+public:
+    vector<string> fizzBuzz(int n) 
+    {
+        map<int,string> m;
+        m[3]="Fizz";
+        m[5]="Buzz";
+        
+        vector<string> answer;
+        for(int i=1; i<=n; ++i)
+        {
+            string s="";
+            
+            for(auto& it:m)
+            {
+                if(i%it.first==0) s+=it.second;
+            }
+            
+            if(s=="") s=to_string(i);
+            
+            answer.push_back(s);
+        }
+        
+        return answer;
+    }
+};
