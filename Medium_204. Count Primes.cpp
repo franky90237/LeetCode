@@ -120,6 +120,39 @@ public:
     {
         if(n==0 || n==1) return 0;
         
+        bool is_prime[n];
+        for(int i=2; i<n; ++i) is_prime[i]=true;
+                
+        int cnt=0;
+        for(int i=2; i<n; ++i)
+        {
+            if(is_prime[i]) 
+            {
+                //cout<<i<<endl;
+                ++cnt;
+            }            
+            
+            if(i>n/i) continue;
+            
+            for(int j=i*i; j<n; j=j+i)
+            {
+                is_prime[j]=false;
+            }
+        }                        
+        
+        return cnt;
+    }
+};
+
+//2022-04-18
+//time  : O(?)
+//space : O(n)
+class Solution {
+public:
+    int countPrimes(int n) 
+    {
+        if(n==0 || n==1) return 0;
+        
         int num[n];
         memset(num,0,sizeof(int)*n);
         
