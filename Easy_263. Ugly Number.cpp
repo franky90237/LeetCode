@@ -27,3 +27,42 @@ public:
         return true;
     }
 };
+
+//2022-04-18
+//time  : O(n^{1.25})
+//space : O(1)
+class Solution {
+public:
+    bool isUgly(int n) 
+    {
+        if(n<=0) return false;
+        if(n==1) return true;        
+                
+        for(int i=1; i<=n/i; ++i)
+        {
+            //cout<<i<<endl;
+            if(n%i==0) 
+            {
+                int quotient=n/i;                
+                if((i>5 && is_prime(i)) || (quotient>5 && is_prime(quotient)))
+                {
+                    return false;
+                }                
+            }
+        }
+        
+        return true;
+    }
+    
+    bool is_prime(int n)
+    {
+        if(n==1) return false;
+        
+        for(int i=2; i<=n/i; ++i)
+        {
+            if(n%i==0) return false;
+        }
+        
+        return true;
+    }
+};
