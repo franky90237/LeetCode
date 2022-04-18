@@ -87,3 +87,34 @@ public:
         return true;
     }    
 };
+
+//2022-04-18
+//time  : O(log(n))
+//space : O(1)
+class Solution {
+public:
+    bool isUgly(int n) 
+    {
+        if(n<=0) return false;        
+        
+        unordered_set<int> prime;
+        prime.insert(2);
+        prime.insert(3);
+        prime.insert(5);
+        
+        while(n>1)
+        {
+            
+            for(auto& p:prime)
+            {
+                
+            }
+            if(n%2==0) n/=2;
+            else if(n%3==0) n/=3;
+            else if(n%5==0) n/=5;
+            else return false;
+        }        
+        
+        return true;
+    }    
+};
