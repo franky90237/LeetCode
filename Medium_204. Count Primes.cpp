@@ -1,4 +1,5 @@
 //2022-04-18
+//TLE
 //time  : O(n*n)
 //space : O(1)
 class Solution {
@@ -27,6 +28,7 @@ public:
 };
 
 //2022-04-18
+//TLE
 //time  : O(n^(1.5))
 //space : O(1)
 class Solution {
@@ -55,6 +57,7 @@ public:
 };
 
 //2022-04-18
+//TLE
 //time  : O(?)
 //space : O(n)
 class Solution {
@@ -83,6 +86,54 @@ public:
                 else num[i]=0;
             }
         }
+        
+        int cnt=0;
+        for(int i=2; i<n; ++i)
+        {
+            if(num[i]!=1) 
+            {
+                //cout<<i<<endl;
+                ++cnt;
+            }
+        }
+        
+        return cnt;
+    }
+    
+    bool is_prime(int n)
+    {
+        for(int i=2; i*i<=n; ++i)
+        {
+            if(n%i==0) return false;
+        }
+        
+        return true;
+    }
+};
+
+//2022-04-18
+//time  : O(?)
+//space : O(n)
+class Solution {
+public:
+    int countPrimes(int n) 
+    {
+        if(n==0 || n==1) return 0;
+        
+        int num[n];
+        memset(num,0,sizeof(int)*n);
+        
+        int root=sqrt(n);
+        for(int i=2; i<=root; ++i)
+        {
+            if(is_prime(i))
+            {                          
+                for(int j=i*i; j<n; j=j+i)
+                {
+                    num[j]=1;
+                }                
+            }
+        }                        
         
         int cnt=0;
         for(int i=2; i<n; ++i)
