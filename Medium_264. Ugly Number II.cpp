@@ -31,3 +31,32 @@ public:
         return n==1;
      }   
 };
+
+//2022-04-19
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int nthUglyNumber(int n) 
+    {
+        if(n==1) return n;
+        
+        int num[n];
+        num[0]=1;
+        int p2=0, p3=0, p5=0;
+        
+        int cnt=1;
+        while(cnt<n)
+        {
+            num[cnt]=min(num[p2]*2,min(num[p3]*3,num[p5]*5));
+            
+            if(num[cnt]==num[p2]*2) ++p2;
+            if(num[cnt]==num[p3]*3) ++p3;
+            if(num[cnt]==num[p5]*5) ++p5;
+            
+            ++cnt;
+        }
+        
+        return num[n-1];
+    }
+};
