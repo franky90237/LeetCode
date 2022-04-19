@@ -97,22 +97,29 @@ public:
     {
         if(n<=0) return false;        
         
-        unordered_set<int> prime;
-        prime.insert(2);
-        prime.insert(3);
-        prime.insert(5);
+        vector<int> prime;
+        prime.push_back(2);
+        prime.push_back(3);
+        prime.push_back(5);
+        //unordered_set<int> prime;
+        //prime.insert(2);
+        //prime.insert(3);
+        //prime.insert(5);
         
         while(n>1)
         {
+            bool is_divisible=false;
             
             for(auto& p:prime)
             {
-                
+                if(n%p==0) 
+                {
+                    n=n/p;
+                    is_divisible=true;
+                }
             }
-            if(n%2==0) n/=2;
-            else if(n%3==0) n/=3;
-            else if(n%5==0) n/=5;
-            else return false;
+            
+            if(!is_divisible) return false;
         }        
         
         return true;
