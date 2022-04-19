@@ -1,4 +1,5 @@
 //2022-04-19
+//TLE
 //time  : O(k), k is the nthUglyNumber
 //space : O(1)
 class Solution {
@@ -49,5 +50,65 @@ public:
         }
         
         return num-1;
+    }
+};
+
+//2022-04-19
+//TLE
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int nthUglyNumber(int n, int a, int b, int c) 
+    {
+        vector<int> divisor({a,b,c});
+        sort(divisor.begin(),divisor.end());
+        
+        int size=1;
+        for(int i=1; i<3; ++i)
+        {
+            if(divisor[i]!=divisor[i-1]) 
+            {
+                divisor[size]=divisor[i];
+                ++size;
+            }
+        }
+        divisor.resize(size);
+                        
+        for(int i=size-1; i>0; --i)
+        {
+            for(int j=i-1; j>=0; --j)
+            {
+                if(divisor[i]%divisor[j]==0) 
+                {
+                    divisor.erase(divisor.begin()+i);
+                    break;
+                }
+            }
+        }
+        
+        //for(auto& i:divisor) cout<<i<<" ";
+        
+        int mul[size];
+        for(int i=0 ; i<size; ++i) mul[i]=1;
+        
+        int num;
+        while(n!=0)
+        {
+            num=divisor[0]*mul[0];
+            for(int i=1; i<size; ++i)
+            {
+                num=min(num,divisor[i]*mul[i]);
+            }
+            
+            for(int i=0; i<size; ++i)
+            {
+                if(num==divisor[i]*mul[i]) ++mul[i];
+            }
+            
+            --n;
+        }
+        
+        return num;
     }
 };
