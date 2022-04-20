@@ -35,3 +35,21 @@ public:
         return false;
     }
 };
+
+//2022-04-20
+//cahange base10 of n to base3 of n
+//if the base3 of n has any digit that is 2, it means there are two 3^k
+//so n can't be the power of three
+class Solution {
+public:
+    bool checkPowersOfThree(int n) 
+    {
+        while(n>0)
+        {
+            if(n%3==2) return false;
+            n=n/3;
+        }
+        
+        return true;
+    }
+};
