@@ -149,25 +149,30 @@ public:
         }
         
         //for(auto& i:divisor) cout<<i<<" ";
-        vector<int> lcm({})
+        
+        vector<long> lcm;
+        divisor_lcm(lcm,divisor);
+        //for(auto& i:lcm) cout<<i<<" ";
+        //cout<<endl;
+            
         int cnt=0;
         int low=1;
         int high=2000000000;
         while(low<high)
         {
             int mid=low+(high-low)/2;
-            cnt=divisible_cnt(divisor,mid);
+            cnt=divisible_cnt(divisor,lcm,mid);
             
             //cout<<cnt<<" - "<<low<<" "<<mid<<" "<<high<<endl;
             
-            if(cnt<=n) low=mid+1;
+            if(cnt<n) low=mid+1;
             else       high=mid;
         }
         
         return high;
     }
     
-    int divisible_cnt(vector<int>& divisor, int num)
+    int divisible_cnt(vector<int>& divisor, vector<long>& lcm, int num)
     {
         int n=divisor.size();        
         int cnt=0;
@@ -176,7 +181,7 @@ public:
             cnt+=num/divisor[0];
             cnt+=num/divisor[1];
             
-            cnt-=num/divisor[0]/divisor[1];
+            cnt-=num/lcm[0];
         }
         else 
         {
@@ -184,13 +189,45 @@ public:
             cnt+=num/divisor[1];
             cnt+=num/divisor[2];
             
-            cnt-=num/divisor[0]/divisor[1];
-            cnt-=num/divisor[0]/divisor[2];
-            cnt-=num/divisor[1]/divisor[2];
+            cnt-=num/lcm[0];
+            cnt-=num/lcm[1];
+            cnt-=num/lcm[2];
             
-            cnt+=num/divisor[0]/divisor[1]/divisor[2];
+            cnt+=num/lcm[3];
         }
         
         return cnt;
+    }
+    
+    void divisor_lcm(vector<long>& lcm, vector<int>& divisor)
+    {
+        int n=divisor.size();
+        if(n==2)
+        {
+            lcm.push_back(calculate_lcm(divisor[0],divisor[1]));
+        }
+        else
+        {
+            lcm.push_back(calculate_lcm(divisor[0],divisor[1]));
+            lcm.push_back(calculate_lcm(divisor[0],divisor[2]));
+            lcm.push_back(calculate_lcm(divisor[1],divisor[2]));
+            
+            lcm.push_back(calculate_lcm(calculate_lcm(divisor[0],divisor[1]),divisor[2]));
+        }
+    }
+    
+    long calculate_lcm(long a, long b)
+    {
+        long gcd_a=a;
+        long gcd_b=b;
+        
+        while(gcd_b!=0)
+        {
+            int tmp=gcd_a;
+            gcd_a=gcd_b;
+            gcd_b=tmp%gcd_b;
+        }
+        
+        return a*b/gcd_a;
     }
 };
