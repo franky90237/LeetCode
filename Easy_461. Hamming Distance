@@ -1,0 +1,19 @@
+//2022-04-21
+//time  : O(k), k is the number of different bits
+//space : O(1)
+class Solution {
+public:
+    int hammingDistance(int x, int y) 
+    {
+        int z=x^y;
+        
+        int number_of_1=0;
+        while(z>0)
+        {
+            ++number_of_1;
+            z=z&(z-1);
+        }
+        
+        return number_of_1;
+    }
+};
