@@ -96,3 +96,31 @@ public:
         return res;
     }
 };
+
+//2022-04-22
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) 
+    {        
+        int slow=0;
+        int fast=0;
+        
+        do
+        {
+            slow=nums[slow];
+            fast=nums[fast];
+            fast=nums[fast];
+        } while(slow!=fast);
+        
+        slow=0;
+        while(slow!=fast)
+        {
+            slow=nums[slow];
+            fast=nums[fast]; 
+        }
+                    
+        return slow;
+    }
+};
