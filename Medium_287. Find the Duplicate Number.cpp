@@ -70,3 +70,29 @@ public:
         return low;
     }
 };
+
+//2022-04-22
+//bit manipulation
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) 
+    {
+        int n=nums.size();
+        int bits=log(n-1)/log(2);
+        int res=0;
+        for(int bit=0; bit<=bits; ++bit)
+        {
+            int sum1=0;
+            for(int i=1; i<n; ++i) sum1+=(i>>bit)&1;
+            
+            int sum2=0;
+            for(auto& i:nums) sum2+=(i>>bit)&1;
+            
+            if(sum2>sum1) res+=(1<<bit);
+        }
+        
+        return res;
+    }
+};
