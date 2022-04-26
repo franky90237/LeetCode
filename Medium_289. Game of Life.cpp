@@ -82,3 +82,79 @@ public:
         }
     }
 };
+
+//2022-04-26
+//if 1 will change to 0, we change 1 to 2
+//if 0 will change to 1, we change 0 to -1
+//time  : O(m*n)
+//space : O(1)
+class Solution {
+public:
+    void gameOfLife(vector<vector<int>>& board)
+    {
+        int m=board.size();
+        int n=board[0].size();        
+        
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                int ones=neighbor_ones(board,i,j);
+                next_state(board[i][j],ones);
+            }
+        }
+        
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                if(board[i][j]==-1) board[i][j]=0;
+                else if(board[i][j]==2) board[i][j]=1;
+            }
+        }
+    }
+    
+    int neighbor_ones(vector<vector<int>>& board, int r, int c)
+    {
+        int m=board.size();
+        int n=board[0].size();
+        
+        int ones=0;
+        
+        if(c-1>=0 && (board[r][c-1]==1 || board[r][c-1]==-1)) ++ones;
+        
+        if(r-1>=0)
+        {
+            for(int i=c-1; i<=c+1 && i<n; ++i)
+            {
+                if(i<0) continue;
+                if(board[r-1][i]==1 || board[r-1][i]==-1) ++ones;
+            }
+        }
+        
+        if(c+1<n && (board[r][c+1]==1 || board[r][c+1]==-1)) ++ones;
+        
+        if(r+1<m)
+        {
+            for(int i=c-1; i<=c+1 && i<n; ++i)
+            {
+                if(i<0) continue;
+                if(board[r+1][i]==1 || board[r+1][i]==-1) ++ones;
+            }
+        }
+        
+        return ones;
+    }
+    
+    void next_state(int& curr_state, int ones)
+    {
+        if(curr_state==0)
+        {
+            if(ones==3) curr_state=2;
+        }
+        else
+        {
+            if(ones<2 || ones>3) curr_state=-1;
+        }
+    }
+};
