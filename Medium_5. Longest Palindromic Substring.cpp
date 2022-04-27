@@ -55,8 +55,7 @@ public:
     string longestPalindrome(string s)
     {
         int n=s.size();
-        if(n==1) return s;
-        
+        if(n==1) return s;        
         
         int range[2]={0};
         int len=0;
@@ -70,7 +69,7 @@ public:
             {
                 if(s[i]==s[i+1])
                 {
-                    dp[i][i+1]=2;
+                    dp[i][i+1]=1;
                     
                     if(len<2)
                     {
@@ -82,38 +81,77 @@ public:
                 else dp[i][i+1]=0;
             }
             
-            for(int j=2; j<n; ++j)
+            for(int j=i+2; j<n; ++j)
             {
                 dp[i][j]=-1;
             }
         }
         
-        for(int i=0; i>=n; ++i)
+        /*for(int i=0; i<n; ++i) 
         {
-            int j=i+2;
-            
-            while(j<n)
+            for(int j=0; j<n; ++j)
             {
-                cout<<i<<" "<<j<<endl;
-                if(s[j]==s[i])
+                cout<<dp[i][j]<<" ";
+            }
+            cout<<endl;
+        }*/
+        
+        for(int i=0; i<n; ++i)
+        {
+            if(n-i<=len) break;
+                                                
+            for(int j=i+2; j<n; ++j)
+            {
+                if(j-i+1<=len) continue;
+                
+                if(dp[i][j]!=-1) 
                 {
-                    if(dp[i+1][j-1]==0) dp[i][j]=0;
-                    else if(dp[i+1][j-1]==1) dp[i][j]=1;
-                    else
-                    {
-                        int 
-                        while(dp
-                    }
-                    
-                    if(i-j+1>len)
+                    if(dp[i][j]==1 && j-i+1>len)
                     {
                         len=j-i+1;
-                        range[0]=j;
-                        range[1]=i;
+                        range[0]=i;
+                        range[1]=j;
                     }
+                    continue;
                 }
                 
-                ++j;
+                //cout<<i<<" "<<j<<endl;
+                if(s[i]==s[j])
+                {                    
+                    if(dp[i+1][j-1]==0) dp[i][j]=0;
+                    else if(dp[i+1][j-1]==1)
+                    {
+                        dp[i][j]=1;
+                    }
+                    else
+                    {
+                        int l=i;
+                        int r=j;
+                        while(dp[l+1][r-1]==-1)
+                        {
+                            //if(i==3 && j==9) cout<<l<<" "<<r<<" - "<<dp[l][r]<<endl;
+                            ++l;
+                            --r;
+                        }
+                                                
+                        while(l>=i)
+                        {
+                            if(s[l]==s[r]) dp[l][r]=dp[l+1][r-1];
+                            else dp[l][r]=0;
+                            
+                            --l;
+                            ++r;
+                        }
+                    }
+                    
+                    if(dp[i][j]==1 && j-i+1>len)
+                    {
+                        len=j-i+1;
+                        range[0]=i;
+                        range[1]=j;
+                    }
+                }
+                else dp[i][j]=0;
             }
         }
         
