@@ -163,6 +163,54 @@ public:
 };
 
 //2022-04-27
+//clear dp
+//time  : O(n*n)
+//space : O(n*n)
+class Solution {
+public:
+    string longestPalindrome(string s)
+    {
+        int n=s.size();
+        if(n==1) return s;        
+                        
+        bool dp[n][n];
+        for(int i=0; i<n; ++i) 
+        {
+            dp[i][i]=true;
+        }    
+        
+        int range[2]={0};
+        int max_len=0;
+        for(int end=1; end<n; ++end)
+        {                      
+            for(int start=end-1; start>=0; --start)
+            {                
+                if(s[start]!=s[end]) 
+                {
+                    dp[start][end]=false;
+                }
+                else
+                {
+                    if(end-start==1) dp[start][end]=true;
+                    else dp[start][end]=dp[start+1][end-1];
+                    //cout<<start<<" "<<end<<" - "<<dp[start][end]<<endl;
+                    if(dp[start][end] && max_len<end-start+1)
+                    {                        
+                        max_len=end-start+1;
+                        range[0]=start;
+                        range[1]=end;
+                    }
+                }
+            }
+        }
+        
+        string res="";
+        for(int i=range[0]; i<=range[1]; ++i) res.push_back(s[i]);                                                            
+        return res;
+    }
+};
+
+//2022-04-27
 //center-based
 //time  : O(n*n)
 //space : O(1)
