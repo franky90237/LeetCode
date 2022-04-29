@@ -40,3 +40,36 @@ public:
         kth_inorder(root->right,k,res);
     }
 };
+
+//2022-04-29
+//iterative inorder
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k)
+    {
+        int cnt=0;
+        
+        TreeNode* cur=root;
+        stack<TreeNode*> s;
+          
+        while(!s.empty() || cur)
+        {
+            while(cur)
+            {
+                s.push(cur);
+                cur=cur->left;
+            }
+            
+            cur=s.top();
+            ++cnt;
+            //cout<<cnt<<" "<<cur->val<<endl;
+            if(cnt==k) return cur->val;                
+            s.pop();
+            
+            if(cur) cur=cur->right;
+        }
+        
+        //dummy return
+        return 0;
+    }
+};
