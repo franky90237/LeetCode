@@ -16,15 +16,16 @@ public:
         int max_len=0;
         for(int i=now; i<n; ++i)
         {
-            int len=0;
-            if(pre==-1 || nums[now]>nums[pre])
+            if(pre==-1 || nums[i]>nums[pre])
             {
-                len=1+dfs(nums,i+1,i);
+                //cout<<i<<" "<<pre<<endl;
+                int len=1+dfs(nums,i+1,i);
+                max_len=max(max_len,len);
+                
             }
-            
-            max_len=max(max_len,len);
         }
         
+        //cout<<now<<"-"<<nums[now]<<" "<<"*"<<pre<<" "<<max_len<<endl;
         return max_len;
     }
 };
