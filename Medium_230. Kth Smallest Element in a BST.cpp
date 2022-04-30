@@ -73,3 +73,34 @@ public:
         return 0;
     }
 };
+
+//2022-04-30
+//binary search
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) 
+    {        
+        int cnt=count_node(root->left);
+        //cout<<root->val<<" "<<cnt<<endl;
+        
+        if(k<=cnt)
+        {
+            return kthSmallest(root->left,k);
+        }
+        else if(k>cnt+1)
+        {
+            return kthSmallest(root->right,k-cnt-1);
+        }
+        else
+        {
+            return root->val; 
+        }                
+    }
+    
+    int count_node(TreeNode* root)
+    {
+        if(!root) return 0;
+        
+        return 1+count_node(root->left)+count_node(root->right);
+    }
+};
