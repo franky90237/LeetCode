@@ -29,3 +29,33 @@ public:
         }
     }
 };
+
+//2022-05-02
+//backtracking
+//time  : O(2^n)
+//space : O(1)
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums)
+    {
+        int n=nums.size();
+        
+        vector<vector<int>> res;
+        res.push_back({});
+        
+        for(int i=0; i<n; ++i)
+        {
+            int size=res.size();
+            for(int j=0; j<size; ++j)
+            {
+                vector<int> tmp=res[j];
+                tmp.push_back(nums[i]);
+                
+                res.push_back(tmp);
+            }
+        }
+        
+        //cout<<res.size()<<endl;
+        return res;
+    }
+};
