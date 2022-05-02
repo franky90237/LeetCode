@@ -33,7 +33,7 @@ public:
 //2022-05-02
 //iterative
 //time  : O(2^n)
-//space : O(1)
+//space : O(n)
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums)
@@ -63,7 +63,7 @@ public:
 //2022-05-02
 //bit manipulation
 //time  : O(N*2^n)
-//space : O(1)
+//space : O(n)
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums)
