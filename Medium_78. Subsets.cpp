@@ -31,7 +31,7 @@ public:
 };
 
 //2022-05-02
-//backtracking
+//iterative
 //time  : O(2^n)
 //space : O(1)
 class Solution {
@@ -56,6 +56,33 @@ public:
         }
         
         //cout<<res.size()<<endl;
+        return res;
+    }
+};
+
+//2022-05-02
+//bit manipulation
+//time  : O(N*2^n)
+//space : O(1)
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums)
+    {
+        int n=nums.size();
+        int max_size=1<<n;
+        
+        vector<vector<int>> res(max_size,vector<int>());
+        
+        
+        for(int bit=0; bit<max_size; ++bit)
+        {
+            for(int i=0; i<n; ++i)
+            {
+                //printf("%d,%d.  %d \n",bit,mask,mask&bit);
+                if((1 & bit>>i)>0) res[bit].push_back(nums[i]);
+            }
+        }
+        
         return res;
     }
 };
