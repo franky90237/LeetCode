@@ -63,3 +63,53 @@ public:
         return false;
     }
 };
+
+//2022-05-03
+//clear backtracking + dfs
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word)
+    {
+        int m=board.size();
+        int n=board[0].size();
+        
+        bool isFind=false;
+        for(int r=0; r<m; ++r)
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(board[r][c]==word[0])
+                {                   
+                    isFind=solve(board,word,0,r,c);
+                    if(isFind) return true;
+                }
+            }
+        }                
+        
+        return isFind;        
+    }
+    
+    bool solve(vector<vector<char>>& board, string& word, int idx, int r, int c)
+    {
+        int m=board.size();
+        int n=board[0].size();
+        
+        if(r<0 || r>=m || c<0 || c>=n) return false;
+        if(board[r][c]!=word[idx]) return false;
+        if(idx==word.size()-1) return true;
+        
+        int dir[5]={0,1,0,-1,0};
+        bool isFind=false;
+        for(int i=1; i<5; ++i)
+        {
+            //printf("%d, %d,  %d \n",r+dir[i-1],c+dir[i],isFind);
+            board[r][c]='?';
+            isFind=solve(board,word,idx+1,r+dir[i-1],c+dir[i]);
+            if(isFind) return true;
+            board[r][c]=word[idx];
+
+        }
+        
+        return false;
+    }
+};
