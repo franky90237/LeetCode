@@ -10,9 +10,10 @@
  */
 
 //2022-05-04
+//TLE
 //quick sort
 //time  : O(nlog(n))
-//space : O(1)
+//space : O(log(n))
 class Solution {
 public:
     ListNode* sortList(ListNode* head) 
@@ -60,6 +61,63 @@ public:
         //print_list(head);
         
         return small;
+    }
+    
+    void print_list(ListNode* head)
+    {
+        while(head)
+        {
+            printf("%d ",head->val);
+            head=head->next;
+        }
+        
+        printf("\n");
+    }
+};
+
+//2022-05-04
+//merge sort
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) 
+    {
+        merge_sort(head);
+        return head;
+    }
+    
+    void merge_sort(ListNode* head)
+    {
+        int size=1;
+        ListNode* cur=head;
+        
+        while(cur)
+        {
+            ListNode *pre=NULL;
+            ListNode * end=cur;
+            for(int i=0; i<cnt; ++i) end=end->next;
+        }
+    }
+    
+    void merge(ListNode* first, ListNode* second, int cnt)
+    {
+        ListNode dummy;
+        ListNode *cur=&dummy;
+        
+        for(int i=0; i<cnt; ++i)
+        {
+            if(first->val < second->val)
+            {
+                cur->next=first;
+                first=first->next;
+            }
+            else
+            {
+                cur->next=second;
+                second=second->next;                
+            }
+        }
     }
     
     void print_list(ListNode* head)
