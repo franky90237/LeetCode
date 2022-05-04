@@ -8,6 +8,11 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+
+//2022-05-04
+//quick sort
+//time  : O(nlog(n))
+//space : O(1)
 class Solution {
 public:
     ListNode* sortList(ListNode* head) 
@@ -18,8 +23,9 @@ public:
     
     void quick_sort(ListNode* head, ListNode* tail)
     {
-        if(head->next==tail) return;
-        printf("%d. \n",head->val);
+        if(head==tail || head->next==tail) return;
+        //printf("%d. \n",head->val);
+        
         ListNode* pivot=partition(head,tail);
         quick_sort(head,pivot);
         quick_sort(pivot->next,tail);
@@ -27,7 +33,7 @@ public:
     
     ListNode* partition(ListNode* head, ListNode* tail)
     {
-        ListNode* small=head->next;
+        ListNode* small=head;
         ListNode* curr=head->next;
         
         while(curr!=tail)
@@ -35,8 +41,8 @@ public:
             if(curr->val<head->val)
             {
                 int tmp=curr->val;
-                curr->val=small->val;
-                small->val=tmp;
+                curr->val=small->next->val;
+                small->next->val=tmp;
                 
                 small=small->next;
             }
@@ -44,13 +50,26 @@ public:
             curr=curr->next;
         }
         
-        if(small && small->val<head->val)
+        if(small->val<head->val)
         {
             int tmp=small->val;
             small->val=head->val;
             head->val=tmp;
         }
         
+        //print_list(head);
+        
         return small;
+    }
+    
+    void print_list(ListNode* head)
+    {
+        while(head)
+        {
+            printf("%d ",head->val);
+            head=head->next;
+        }
+        
+        printf("\n");
     }
 };
