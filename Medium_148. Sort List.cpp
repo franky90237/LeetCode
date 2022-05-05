@@ -8,80 +8,9 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-
-//2022-05-04
-//TLE
-//quick sort
-//time  : O(nlog(n))
-//space : O(log(n))
 class Solution {
 public:
-    ListNode* sortList(ListNode* head) 
-    {
-        quick_sort(head,NULL);
-        return head;
-    }
-    
-    void quick_sort(ListNode* head, ListNode* tail)
-    {
-        if(head==tail || head->next==tail) return;
-        //printf("%d. \n",head->val);
-        
-        ListNode* pivot=partition(head,tail);
-        quick_sort(head,pivot);
-        quick_sort(pivot->next,tail);
-    }
-    
-    ListNode* partition(ListNode* head, ListNode* tail)
-    {
-        ListNode* small=head;
-        ListNode* curr=head->next;
-        
-        while(curr!=tail)
-        {
-            if(curr->val<head->val)
-            {
-                int tmp=curr->val;
-                curr->val=small->next->val;
-                small->next->val=tmp;
-                
-                small=small->next;
-            }
-            
-            curr=curr->next;
-        }
-        
-        if(small->val<head->val)
-        {
-            int tmp=small->val;
-            small->val=head->val;
-            head->val=tmp;
-        }
-        
-        //print_list(head);
-        
-        return small;
-    }
-    
-    void print_list(ListNode* head)
-    {
-        while(head)
-        {
-            printf("%d ",head->val);
-            head=head->next;
-        }
-        
-        printf("\n");
-    }
-};
-
-//2022-05-04
-//merge sort
-//time  : O(nlog(n))
-//space : O(1)
-class Solution {
-public:
-    ListNode* sortList(ListNode* head) 
+    ListNode* sortList(ListNode* head)
     {
         merge_sort(head);
         return head;
@@ -90,44 +19,103 @@ public:
     void merge_sort(ListNode* head)
     {
         int size=1;
-        ListNode* cur=head;
+        int len=get_len(head);
         
-        while(cur)
+        while(size<=len)
         {
-            ListNode *pre=NULL;
-            ListNode * end=cur;
-            for(int i=0; i<cnt; ++i) end=end->next;
+            ListNode* cur=head;
+            ListNode* fs=cur;
+            ListNode* fe=cur
+            ListNode* ss=cur;
+            ListNode* ss=cur;
+            
+            int cnt=ceil(len/(2.0*size));
+            for(int i=0; i<cnt; ++i)
+            {
+                fs=cur;
+                
+                cur=spilt(*fs,*fe,*ss,*se,size);
+                ListNode* last=merge(*fs,*fe,*ss,*se,size);
+                
+                last->next=cur;
+            }
+            
+            size*=2;
         }
     }
     
-    void merge(ListNode* first, ListNode* second, int cnt)
+    ListNode* split(ListNode** fs, ListNode** fe, ListNode** ss, ListNode** se, int size)
+    {
+        ListNode* cur=fs;
+        
+        for(int i=0; i<size; ++i)
+        {
+            //**fe=&cur;
+            cur=cur->next;
+        }
+        
+        **fe=&cur;
+        **ss=&cur;
+        for(int i=0; cur && i<size; ++i)
+        {
+            //se=cur;
+            cur=cur->next;
+        }
+        **se=&cur;
+        
+        return cur;
+    }
+    
+    ListNode* merge(ListNode* fs, ListNode* fe, ListNode* ss, ListNode* se, int size)
     {
         ListNode dummy;
-        ListNode *cur=&dummy;
+        ListNode* cur=&dummy;
+        //int cf=0, cs=0;
         
-        for(int i=0; i<cnt; ++i)
+        while(fs!=fe && st!=se)
         {
-            if(first->val < second->val)
+            if(fs->val < ss->val)
             {
-                cur->next=first;
-                first=first->next;
+                cur->next=fs;
+                fs=fs->next;
+                //++cf;
             }
             else
             {
-                cur->next=second;
-                second=second->next;                
+                cur->next=ss;
+                ss=ss->next;
+                //++cs;
             }
+            
+            cur=cur->next;
         }
+        
+        while(fs!=fe)
+        {
+            cur->next=fs;
+            fs=fs->next;
+            cur=cur->next;
+        }
+        
+        while(ss!=se)
+        {
+            cur->next=ss;
+            ss=ss->next;
+            cur=cur->next;
+        }
+        
+        return cur;
     }
     
-    void print_list(ListNode* head)
+    int get_len(ListNode* head)
     {
+        int len=0;
         while(head)
         {
-            printf("%d ",head->val);
+            ++len;
             head=head->next;
         }
         
-        printf("\n");
+        return len;
     }
 };
