@@ -59,3 +59,32 @@ public:
         cout<<endl;
     }
 };
+
+//2022-05-06
+//time  : O(nlog(k))
+//space : O(k)
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k)
+    {
+        priority_queue<int,vector<int>,greater<int>> min_heap;
+        
+        for(auto& num:nums)
+        {
+            if(min_heap.size()<k)
+            {
+                min_heap.push(num);
+            }
+            else
+            {
+                if(num > min_heap.top())
+                {
+                    min_heap.pop();
+                    min_heap.push(num);
+                }
+            }
+        }
+        
+        return min_heap.top();
+    }
+};
