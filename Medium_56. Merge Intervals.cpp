@@ -8,8 +8,8 @@ private:
     public:
         bool operator() (vector<int> i,vector<int> j) 
         { 
-            if(i[1]<j[1]) return true;
-            else if(i[1]==j[1]) return (i[0]<j[0]);            
+            if(i[0]<j[0]) return true;
+            else if(i[0]==j[0]) return (i[0]<j[0]);            
             return false;
         }
     };
@@ -19,7 +19,7 @@ public:
     {
         comp compare;
         sort(intervals.begin(),intervals.end(),compare);
-        print_intervals(intervals);
+        //print_intervals(intervals);
                 
         vector<vector<int>> res;
         int n=intervals.size();        
@@ -28,10 +28,20 @@ public:
             int start=intervals[i][0];
             int end  =intervals[i][1];
             int j=i+1;
-            while(j<n && end >= intervals[j][0] && end <= intervals[j][1])
+            /*while(j<n && start <= intervals[j][0] && end >= intervals[j][1])
             {
                 start=min(start,intervals[j][0]);
-                end=intervals[j][1];
+                end=max(end,intervals[j][1]);
+                ++j;
+                ++i;
+            }*/
+                        
+            while(j<n && 
+                 ((end >= intervals[j][0] && end <= intervals[j][1]) || 
+                  (start <= intervals[j][0] && end >= intervals[j][1])))
+            {
+                start=min(start,intervals[j][0]);
+                end=max(end,intervals[j][1]);
                 ++j;
                 ++i;
             }
@@ -42,6 +52,8 @@ public:
         
         return res;
     }
+    
+    
     
     void print_intervals(vector<vector<int>>& intervals)
     {
