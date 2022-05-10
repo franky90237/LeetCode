@@ -58,3 +58,24 @@ public:
         return dp[0];
     }
 };
+
+//2022-05-10
+//greedy
+//time  : O(n*n)
+//space : O(1)
+class Solution {
+public:
+    bool canJump(vector<int>& nums)
+    {
+        int n=nums.size();
+        
+        int max_index=0;
+        for(int i=0; i<n-1; ++i)
+        {
+            max_index=max(max_index,i+nums[i]);
+            if(i==max_index) return false;
+        }
+        
+        return true;
+    }
+};
