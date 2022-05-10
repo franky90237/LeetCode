@@ -26,3 +26,35 @@ public:
         return false;
     }
 };
+
+//2022-05-10
+//dp iterative
+//time  : O(n*n)
+//space : O(n)
+class Solution {
+public:
+    bool canJump(vector<int>& nums)
+    {
+        int n=nums.size();
+        if(n==1) return true;
+        
+        bool dp[n];
+        for(int i=0; i<n; ++i) dp[i]=false;
+        
+        for(int i=n-2; i>=0; --i)
+        {
+            for(int step=nums[i]; step>=1; --step)
+            {
+                if(i+step>=n-1 || dp[i+step]) 
+                {
+                    dp[i]=true;
+                    break;
+                }
+                
+                dp[i]=false;
+            }
+        }
+        
+        return dp[0];
+    }
+};
