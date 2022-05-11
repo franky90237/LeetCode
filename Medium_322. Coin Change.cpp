@@ -61,6 +61,37 @@ public:
 };
 
 //2022-05-11
+//dp iterative
+//time  : O(n*amount)
+//space : O(amount)
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount)
+    {
+        if(amount==0) return 0;
+        
+        int n=coins.size();
+        int dp[amount+1];
+        for(int i=0; i<=amount; ++i) dp[i]=0;
+        
+        for(int i=1; i<=amount; ++i)
+        {
+            int min_val=10001;
+            for(int j=0; j<n; ++j)
+            {
+                int rest=i-coins[j];
+                if(rest<0) continue;
+                min_val=min(min_val,1+dp[rest]);
+            }
+            //printf("%d, %d \n",i,min_val);
+            dp[i]=min_val;
+        }
+        
+        return (dp[amount]>=10001) ? -1 : dp[amount];
+    }
+};
+
+//2022-05-11
 //bfs with visited
 class Solution {
 public:
