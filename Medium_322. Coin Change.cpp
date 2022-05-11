@@ -59,3 +59,55 @@ public:
         return min_cnt;
     }
 };
+
+//2022-05-11
+//bfs with visited
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount)
+    {
+        if(amount==0) return 0;
+        
+        int n=coins.size();
+        
+        bool visited[amount+1];
+        for(int i=0; i<amount; ++i) visited[i]=false;
+        queue<int> q;
+        for(int i=0; i<n; ++i)
+        {
+            if(amount-coins[i]==0) return 1;
+            if(amount-coins[i]<0) continue;
+            
+            visited[amount-coins[i]]=true;
+            q.push(amount-coins[i]);
+        }
+        
+        int cnt=2;
+        while(!q.empty())
+        {
+            int size=q.size();
+            for(int i=0; i<size; ++i)
+            {
+                int tmp=q.front();
+                q.pop();
+                if(tmp<0) continue;
+                
+                for(int j=0; j<n; ++j)
+                {
+                    //printf("%d %d \n",tmp,tmp-coins[j]);
+                    if(tmp-coins[j]<0) continue;
+                    if(visited[tmp-coins[j]]) continue;
+                    if(tmp-coins[j]==0) return cnt;
+                    
+                    visited[tmp-coins[j]]=true;
+                    q.push(tmp-coins[j]);
+                }
+                //cout<<endl<<endl;
+            }
+            //cout<<endl<<endl;
+            ++cnt;
+        }
+        
+        return -1;
+    }
+};
