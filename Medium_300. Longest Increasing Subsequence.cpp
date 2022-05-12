@@ -98,3 +98,50 @@ public:
         return LIS;
     }
 };
+
+//2022-05-12
+//binary search
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) 
+    {
+        int n=nums.size();
+        vector<int> lis;
+        
+        lis.push_back(nums[0]);
+        for(int i=1; i<n; ++i)
+        {
+            if(nums[i]>lis.back())
+            {
+                lis.push_back(nums[i]);
+            }
+            else
+            {
+                int idx=binary_search(lis,nums[i]);
+                lis[idx]=nums[i];
+            }
+        }
+        
+        //for(int i=0; i<lis.size(); ++i) cout<<lis[i]<<" ";
+        
+        return lis.size();
+    }
+    
+    int binary_search(vector<int>& lis, int target)
+    {
+        int left=0;
+        int right=lis.size()-1;
+        
+        while(left<right)
+        {
+            int mid=left+(right-left)/2;
+            
+            if(target>lis[mid]) left=mid+1;
+            else right=mid;
+        }
+        
+        return left;
+    }
+};
