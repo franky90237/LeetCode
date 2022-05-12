@@ -66,3 +66,35 @@ public:
         return max_len;
     }
 };
+
+//2022-05-12
+//dp iterative
+//time  : O(n*n)
+//space : O(n)
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) 
+    {
+        int n=nums.size();
+        int dp[n];
+        for(int i=0; i<n; ++i) dp[i]=1;
+        
+        int LIS=1;
+        for(int last=1; last<n; ++last)
+        {
+            for(int i=0; i<last; ++i)
+            {
+                if(nums[last]>nums[i])
+                {
+                    dp[last]=max(dp[last],1+dp[i]);
+                }
+                
+                LIS=max(LIS,dp[last]);
+            }
+        }
+        
+        //for(int i=0; i<n; ++i) cout<<dp[i]<<" ";
+        
+        return LIS;
+    }
+};
