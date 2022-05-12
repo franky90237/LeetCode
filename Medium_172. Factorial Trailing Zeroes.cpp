@@ -22,3 +22,22 @@ public:
         return res;
     }
 };
+
+//2022-05-12
+//time  : O(log(5)(n))
+//space : O(1)
+class Solution {
+public:
+    int trailingZeroes(int n)
+    {
+        int factor=5;
+        int res=0;
+        while(factor<=n)
+        {
+            res+=n/factor;
+            factor*=5;
+        }
+        
+        return res;
+    }
+};
