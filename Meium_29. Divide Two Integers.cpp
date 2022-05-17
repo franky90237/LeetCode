@@ -43,3 +43,41 @@ public:
         return (num<0) ? -num : num;
     }
 };
+
+//2022-05-16
+//time  : O(32)
+//space : O(1)
+class Solution {
+public:
+    int divide(int dividend, int divisor) 
+    {
+        if(dividend==INT_MIN && divisor==-1) return INT_MAX;        
+        if(divisor==1 || divisor==-1) return dividend*divisor;        
+        
+        unsigned int dd=abs_my(dividend);
+        unsigned int ds=abs_my(divisor);
+        //cout<<dd<<" "<<ds<<endl;
+        
+        int res=0;
+        for(int i=31; i>=0; --i)
+        {
+            if(dd>>i >= ds)
+            {
+                res=(res<<1) | 1;
+                dd=dd-(ds<<i);
+            }
+            else
+            {
+                res=res<<1;
+            }
+        }
+        
+        return ((dividend<0) == (divisor<0)) ? res : -res;
+    }
+    
+    unsigned int abs_my(int num)
+    {        
+        if(num==INT_MIN) return (unsigned)INT_MAX+1;
+        return (num<0) ? -num : num;
+    }
+};
