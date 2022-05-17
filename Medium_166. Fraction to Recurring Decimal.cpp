@@ -1,34 +1,39 @@
+//2022-05-17
 class Solution {
 public:
     string fractionToDecimal(int numerator, int denominator)
     {
-        //return "";
+        //avoid "-0"
         if(numerator==0) return "0";
-        if(numerator==denominator) return "1";
         
-        string interger="";
-        vector<int> remainder;
-        int r;
+        unordered_map<int,int> remainder;
+        string interger="";               
         
         if((numerator<0)!=(denominator<0)==1) interger="-";
+        
         long a=abs_my(numerator);
         long b=abs_my(denominator);
         
         update(a,b,interger,remainder);
+        
         if(a==0) return interger;
         interger.push_back('.');
-        r=remainder.back();
         
         string fraction="";
         do
         {
-            cout<<remainder.back()<<endl;
-            update(a,b,fraction,remainder);
-            r=remainder.back();
+            //cout<<a<<endl;
+            int repeat=update(a,b,fraction,remainder);
+            if(repeat!=-1)
+            {
+                int index=remainder[repeat];
+                fraction.insert(index,"(");
+                return interger+fraction+")";
+            }
             
-        } while( (remainder.size()==1 || r!=remainder[0]) && numerator!=0 );
+        } while(a!=0);                
         
-        return (numerator==0) ? interger+fraction : interger+"("+fraction+")";
+        return interger+fraction;
     }
     
     long abs_my(int num)
@@ -37,19 +42,22 @@ public:
         return (num<0) ? -num : num;
     }
     
-    void update(long& numerator, long denominator, string& res, vector<int>& remainder)
+    int update(long& numerator, long denominator, string& res, unordered_map<int,int>& remainder)
     {
-        if(numerator<denominator)
+        int r=numerator%denominator;
+        long q=numerator/denominator;
+        
+        if(remainder.find(r)!=remainder.end()) 
         {
-            remainder.push_back(numerator);
-            res.push_back('0');
-            numerator=numerator*10;
+            res+=to_string(q);
+            return r;
         }
-        else
-        {
-            remainder.push_back(numerator%denominator);
-            res+=to_string(numerator/denominator);
-            numerator=(long)remainder.back()*10;
-        }
+        
+        int index=remainder.size();
+        remainder[r]=index;
+        res+=to_string(q);
+        numerator=(long)r*10;
+        
+        return -1;
     }
 };
