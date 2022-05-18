@@ -1,3 +1,6 @@
+//2022-05-18
+//time  : O(32)
+//space : O(1)
 class Solution {
 public:
     int getSum(int a, int b)
@@ -5,7 +8,7 @@ public:
         int res=0;
         int carry=0;
         
-        for(int i=0; i<=11; ++i)
+        for(int i=0; i<=31; ++i)
         {
             int ai=a & 1;
             int bi=b & 1;
