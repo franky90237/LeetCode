@@ -24,3 +24,24 @@ public:
         return res;
     }
 };
+
+//2022-05-18
+class Solution {
+public:
+    int getSum(int a, int b)
+    {
+        int res=a;
+        int carry=b;
+        
+        while(carry!=0)
+        {
+            int tmp=res&carry;
+            res=res^carry;
+            carry=(unsigned)tmp<<1;
+            
+            //cout<<res<<" "<<carry<<endl;
+        }
+        
+        return res;
+    }
+};
