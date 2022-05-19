@@ -1,4 +1,5 @@
 //2022-05-19
+//greedy
 //reference : https://leetcode.com/problems/reorganize-string/discuss/232469/Java-No-Sort-O(N)-0ms-beat-100
 //time  : O(n)
 //space : O(26)
