@@ -83,3 +83,42 @@ public:
         return true;
     }
 };
+
+//2022-05-23
+//inner to outer
+//time  : O(n*n)
+//space : O(1)
+class Solution {
+public:
+    int countSubstrings(string s)
+    {
+        int n=s.size();
+        
+        int res=0;
+        for(int i=0; i<n; ++i)
+        {
+            int odd=is_palindromic(s,i,i);
+            int even=is_palindromic(s,i,i+1);
+            //printf("%d, %d \n",odd,even);
+            
+            res=res+odd+even;
+        }
+        
+        return res;
+    }
+    
+    int is_palindromic(string& s, int left, int right)
+    {
+        int cnt=0;
+        while(left>=0 && right<s.size() && s[left]==s[right])
+        {
+            ++cnt;
+            //printf("%c %c %d\n",s[left],s[right],cnt);
+            
+            --left;
+            ++right;
+        }
+        
+        return cnt;
+    }
+};
