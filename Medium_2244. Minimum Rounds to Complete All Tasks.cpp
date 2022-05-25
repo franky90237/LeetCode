@@ -40,3 +40,27 @@ public:
         return sum;
     }
 };
+
+//2022-05-25
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int minimumRounds(vector<int>& tasks)
+    {
+        unordered_map<int,int> record;
+        for(auto& i:tasks) ++record[i];
+        
+        int sum=0;
+        for(auto& i:record)
+        {
+            int cnt=i.second;
+            if(cnt==1) return -1;
+            
+            if(cnt%3==0) sum+=cnt/3;
+            else sum+=(cnt/3)+1;
+        }
+        
+        return sum;
+    }
+};
