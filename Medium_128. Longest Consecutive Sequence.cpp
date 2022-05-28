@@ -1,4 +1,5 @@
 //2022-05-27
+//TLE
 //time  : O(max(nums))
 //space : O(max(nums))
 class Solution {
@@ -11,15 +12,20 @@ public:
         int max_num=abs(nums[0]);
         for(int i=1; i<n; ++i) max_num=max(max_num,abs(nums[i]));
         
-        int buckets[2*max_num+2];
-        memset(buckets,0,sizeof(int)*(2*max_num+1));
+        cout<<max_num<<endl;
+        bool *buckets=new bool[2*max_num+1];
+        memset(buckets,0,sizeof(bool)*(2*max_num+1));
         
-        for(auto& num:nums) buckets[num+max_num]=1;
+        for(auto& num:nums) 
+        {
+            //cout<<num+max_num<<" ";
+            buckets[num+max_num]=1;
+        }
         //for(int i=0; i<=2*max_num; ++i) cout<<buckets[i]<<" ";
         
         int max_len=1;        
-        /*for(int i=0; i<=2*max_num; ++i)
-        {
+        for(int i=0; i<=2*max_num; ++i)
+        {            
             if(buckets[i]==0) continue;
             
             int len=1;
@@ -32,7 +38,7 @@ public:
             
             max_len=max(max_len,len);
             i=j-1;
-        }*/
+        }
         
         return max_len;
     }
