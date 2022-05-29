@@ -130,3 +130,33 @@ public:
         }
     }
 };
+
+//2022-05-30
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums)
+    {
+        unordered_set<int> s;
+        for(auto& num:nums) s.insert(num);
+        
+        int lcs=0;
+        for(auto num:nums)
+        {
+            if(s.find(num-1)==s.end())
+            {
+                int cnt=1;
+                while(s.find(num+1)!=s.end())
+                {
+                    ++cnt;
+                    ++num;
+                }
+                
+                lcs=max(lcs,cnt);
+            }
+        }
+        
+        return lcs;
+    }
+};
