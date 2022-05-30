@@ -140,3 +140,115 @@ public:
         board[r][c]=idx+'a';
     }
 };
+
+//2022-05-30
+//optimized
+//use trie data structure
+class TrieNode
+{
+public:
+    TrieNode* children[26];
+    string word;
+        
+    TrieNode()
+    {
+        for(int i=0; i<26; ++i) children[i]=NULL;
+        word="";
+    }
+};
+
+class Solution {
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words)
+    {
+        int m=board.size();
+        int n=board[0].size();
+        
+        TrieNode* root=bulidTrie(words);        
+        
+        vector<string> res;
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                //printf("%d,%d \n",i,j);
+                solve(i,j,board,words,res,root);
+            }
+        }    
+        
+        return res;
+    }
+    
+    void solve(int r, int c, vector<vector<char>>& board, vector<string>& words, vector<string>& res, TrieNode* cur)
+    {
+        int m=board.size();
+        int n=board[0].size();
+                
+        if(r<0 || r>=m || c<0 || c>=n || board[r][c]=='.') return;                
+        //printf("%d,%d \n",r,c);
+        
+        int idx=board[r][c]-'a';
+        if(!(cur->children)[idx]) return;
+        
+        cur=(cur->children)[idx];        
+        board[r][c]='.';
+        
+        if(cur->word!="")
+        {
+            //cout<<cur->word<<endl;
+            res.push_back(cur->word);
+            cur->word="";
+        }
+        
+        int dir[5]={0,1,0,-1,0};
+        for(int i=1; i<5; ++i)
+        {
+            int n_r=r+dir[i-1];
+            int n_c=c+dir[i];
+            
+            solve(n_r,n_c,board,words,res,cur);
+        }
+        
+        board[r][c]=idx+'a';
+    }
+    
+    TrieNode* bulidTrie(vector<string>& words)
+    {
+        TrieNode* root=new TrieNode();
+        
+        for(auto& word:words)
+        {
+            TrieNode* cur=root;
+            for(auto& c:word)
+            {
+                if(!(cur->children)[c-'a'])
+                {
+                    (cur->children)[c-'a']=new TrieNode();
+                }
+
+                cur=(cur->children)[c-'a'];
+            }
+            
+            cur->word=word;
+        }
+        
+        return root;
+    }
+    
+    /*void print(vector<vector<char>>& board)
+    {
+        int m=board.size();
+        int n=board[0].size();
+        
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                cout<<board[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+        
+        cout<<endl;
+    }*/
+};
