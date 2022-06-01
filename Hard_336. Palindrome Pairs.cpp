@@ -61,6 +61,89 @@ public:
     }
 };
 
+//2022-06-01
+//TLE for last case
+class Solution {
+public:
+    vector<vector<int>> palindromePairs(vector<string>& words)
+    {
+        int n=words.size();
+        vector<vector<int>> res;
+        
+        unordered_map<string,int> m;
+        for(int i=0; i<n; ++i) m[words[i]]=i;
+        
+        unordered_set<string> s;
+        //1
+        if(m.find("")!=m.end())
+        {
+            for(int i=0; i<n; ++i)
+            {
+                if(i==m[""] || !isPalindrome(s,words[i],0,words[i].size()-1)) continue;
+                res.push_back({m[""],i});
+                res.push_back({i,m[""]});
+            }
+            
+            m.erase("");
+        }
+        
+        //2
+        /*for(int i=0; i<n; ++i)
+        {
+            string rev(words[i].rbegin(),words[i].rend());
+            if(m.find(rev)!=m.end())
+            {
+                if(m[rev]==i) continue;
+                res.push_back({i,m[rev]});
+            }
+        }*/
+        
+        //3,4
+        for(int i=0; i<n; ++i)
+        {
+            if(words[i]=="") continue;
+            
+            for(int j=0; j<words[i].size(); ++j)
+            {
+                if(isPalindrome(s,words[i],0,j))
+                {
+                    string rev(words[i].rbegin(),words[i].rend()-j-1);
+                    //cout<<words[i]<<":"<<rev<<endl;
+                    if(m.find(rev)!=m.end() && i!=m[rev]) res.push_back({m[rev],i});
+                }
+            }
+            
+            for(int j=0; j<words[i].size(); ++j)
+            {
+                if(isPalindrome(s,words[i],j+1,words[i].size()-1))
+                {
+                    string rev(words[i].rend()-j-1,words[i].rend());
+                    //cout<<words[i]<<":"<<rev<<endl;
+                    if(m.find(rev)!=m.end() && i!=m[rev]) res.push_back({i,m[rev]});
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    bool isPalindrome(unordered_set<string>& s, string& word, int l, int r)
+    {
+        string tmp(word.begin()+l,word.begin()+r+1);
+        if(s.count(tmp)!=0) return true;
+        
+        while(l<r)
+        {
+            if(word[l]!=word[r]) return false;
+            ++l;
+            --r;
+        }
+        
+        s.insert(tmp);
+        return true;
+    }
+};
+
 //2022-05-31
 //use trie data structure
 //time  : O(n*m)
