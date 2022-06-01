@@ -82,3 +82,40 @@ public:
         return root;
     }
 };
+
+//2022-06-01
+//dp iterative
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict)
+    {
+        unordered_set<string> wordSet;
+        for(auto& word:wordDict) wordSet.insert(word);
+        
+        int n=s.size();        
+        int dp[n+1];
+        for(int i=0; i<n; ++i) dp[i]=-1;
+        
+        return search(dp,wordSet,s,0);
+    }
+    
+    bool search(int dp[], unordered_set<string>& wordSet, string& s,int now)
+    {
+        if(now==s.size()) return true;        
+        if(dp[now]!=-1) return dp[now];               
+        
+        for(int cut=now; cut<s.size(); ++cut)
+        {
+            string sub(s.begin()+now,s.begin()+cut+1);  
+            //cout<<now<<","<<cut<<" "<<sub<<endl;
+            if(wordSet.count(sub)!=0 && search(dp,wordSet,s,cut+1))
+            {
+                dp[cut+1]=true;
+                return true;
+            }            
+        }
+        
+        dp[now]=false;
+        return false;
+    }
+};
