@@ -84,7 +84,7 @@ public:
 };
 
 //2022-06-01
-//dp iterative
+//dp recursive
 class Solution {
 public:
     bool wordBreak(string s, vector<string>& wordDict)
