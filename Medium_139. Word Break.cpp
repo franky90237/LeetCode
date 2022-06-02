@@ -119,3 +119,39 @@ public:
         return false;
     }
 };
+
+//2022-06-02
+//dp iterative
+//time : O(n*n)
+//space : O(n)
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict)
+    {
+        unordered_set<string> wordSet;
+        for(auto& word:wordDict) wordSet.insert(word);
+        
+        int n=s.size();
+        bool dp[n+1];
+        for(int i=1; i<=n; ++i) dp[i]=false;
+        
+        dp[0]=true;
+        for(int i=1; i<=n; ++i)
+        {
+            for(int j=0; j<i; ++j)
+            {
+                //cout<<s.substr(j,i-j)<<endl;
+                if(dp[j] && wordSet.count(s.substr(j,i-j)))
+                {
+                    //cout<<s.substr(j,i)<<endl;
+                    dp[i]=true;
+                    break;
+                }
+            }
+            //cout<<endl;
+        }
+        
+        //for(auto& i:dp) printf("%d \n",i);
+        return dp[n];
+    }
+};
