@@ -45,3 +45,40 @@ public:
         }
     }
 };
+
+//2022-06-06
+//use map(balanced binary search tree)
+//time  : O((n-k)*log(k))
+//space : O(k)
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k)
+    {
+        vector<int> res;
+        
+        map<int,int> window;
+        for(int i=0; i<=k-1; ++i) ++window[nums[i]];
+        res.push_back(window.rbegin()->first);
+        
+        //print(window);
+        int n=nums.size();
+        for(int i=1; i<=n-k; ++i)
+        {
+            if(window[nums[i-1]]>1) --window[nums[i-1]];
+            else window.erase(nums[i-1]);
+            
+            ++window[nums[k+i-1]];
+            res.push_back(window.rbegin()->first);
+            
+            //print(window);
+        }
+        
+        return res;
+    }
+    
+    void  print(map<int,int>& window)
+    {
+        for(auto& i:window) cout<<i.first<<" ";
+        cout<<endl;
+    }
+};
