@@ -116,3 +116,66 @@ public:
         cout<<endl;
     }
 };
+
+//2022-06-06
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k)
+    {
+        int n=nums.size();
+        vector<int> res;
+        int left[n];
+        int right[n];
+        
+        for(int i=0; i<=(n-1)/k; ++i)
+        {
+            for(int j=i*k; j<n && j<(i+1)*k; ++j)
+            {
+                if(j==i*k)
+                {
+                    left[j]=nums[j];
+                    continue;
+                }
+                
+                left[j]=max(left[j-1],nums[j]);
+            }
+        }
+        
+        for(int i=0; i<=(n-1)/k; ++i)
+        {
+            for(int j=(i+1)*k-1; j>=i*k; --j)
+            {
+                if(j>=n) continue;
+                
+                if(j==(i+1)*k-1 || j==n-1)
+                {
+                    right[j]=nums[j];
+                    continue;
+                }
+                
+                right[j]=max(right[j+1],nums[j]);
+            }
+        }
+        
+        //print(right,n);
+        //print(left,n);
+        
+        for(int i=0; i<=n-k; ++i)
+        {
+            //int l=(i+k-1<n) ? i+k-1 : n-1;
+            int l=i+k-1;
+            int r=i;
+            res.push_back(max(left[l],right[r]));
+        }
+        
+        return res;
+    }
+    
+    void print(int arr[], int n)
+    {
+        for(int i=0; i<n; ++i) cout<<arr[i]<<" ";
+        cout<<endl;
+    }
+};
