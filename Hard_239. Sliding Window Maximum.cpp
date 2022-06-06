@@ -82,3 +82,37 @@ public:
         cout<<endl;
     }
 };
+
+//2022-06-06
+//use deque
+//time  : O((n)
+//space : O(k)
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k)
+    {
+        vector<int> res;
+        
+        deque<int> dq;
+        
+        int n=nums.size();
+        for(int i=0; i<n; ++i)
+        {
+            if(!dq.empty() && dq.front()<i-k+1) dq.pop_front();
+            
+            while(!dq.empty() && nums[dq.back()]<nums[i]) dq.pop_back();
+            
+            dq.push_back(i);
+            if(i>=k-1) res.push_back(nums[dq.front()]);
+            //print(dq);
+        }
+        
+        return res;
+    }
+    
+    void  print(deque<int> dq)
+    {
+        for(auto& i:dq) cout<<i<<" ";
+        cout<<endl;
+    }
+};
