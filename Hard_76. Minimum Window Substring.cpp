@@ -148,3 +148,48 @@ public:
         cout<<endl;
     }
 };
+
+//2022-06-07
+//clear two pointer 
+//time  : O(n+m)
+//space : O(m)
+class Solution {
+public:
+    string minWindow(string s, string t)
+    {
+        vector<int> map(128,0);
+        for(auto& c:t) ++map[c];
+        
+        int cnt=0;
+        int left=0;
+        int right=0;
+        int len=s.size()+1;
+        int window_start=-1;
+        
+        while(right<s.size())
+        {
+            char c=s[right];
+            
+            --map[c];
+            if(map[c]>=0) ++cnt;
+            
+            //cout<<right<<" : "<<cnt<<endl;
+            while(cnt==t.size())
+            {
+                if(len>right-left+1)
+                {
+                    len=right-left+1;
+                    window_start=left;
+                }
+                
+                ++map[s[left]];
+                if(map[s[left]]>=1) --cnt;
+                
+                ++left;
+            }
+            ++right;
+        }
+        
+        return (window_start==-1) ? "" : s.substr(window_start,len);
+    }
+};
