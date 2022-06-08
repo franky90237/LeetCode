@@ -106,3 +106,44 @@ public:
         
     }
 };
+
+//2022-06-08
+class Solution {
+public:
+    Node* cloneGraph(Node* node)
+    {
+        if(!node) return NULL;
+        
+        Node* initial=new Node(node->val);
+        
+        unordered_map<int,Node*> created_node;
+        created_node[node->val]=initial;
+        clone(node,initial,created_node);
+        
+        return initial;
+    }
+    
+    void clone(Node* node, Node* cur, unordered_map<int,Node*>& created_node)
+    {
+        if(node->neighbors.size()==cur->neighbors.size()) return;
+        
+        for(auto& n:node->neighbors)
+        {
+            if(created_node.find(n->val)==created_node.end()) 
+            {
+                Node* tmp=new Node(n->val);
+                cur->neighbors.push_back(tmp);
+                created_node[n->val]=tmp;
+            }
+            else
+            {
+                cur->neighbors.push_back(created_node[n->val]);
+            }
+        }
+        
+        for(int i=0; i<node->neighbors.size(); ++i)
+        {
+            clone(node->neighbors[i],cur->neighbors[i],created_node);
+        }
+    }
+};
