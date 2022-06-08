@@ -55,3 +55,48 @@ public:
         return dp[now];
     }
 };
+
+//2022-06-08
+//dp iterative
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int numDecodings(string s)
+    {
+        int n=s.size();
+        
+        if(s[0]=='0') return 0;
+        if(n==1) return 1;       
+        
+        int dp[n];
+        dp[0]=1;
+        if(s[1]=='0') 
+        {
+            if(stoi(s.substr(0,2))>26) return 0;
+            else dp[1]=1;
+        }
+        else             
+        {
+            if(stoi(s.substr(0,2))>26) dp[1]=1;
+            else dp[1]=2;
+        }
+        
+        for(int i=2; i<n; ++i)
+        {
+            int one_digit=0;
+            if(s[i]!='0') one_digit=dp[i-1];
+            
+            int two_digit=0;
+            if(s[i-1]!='0' && stoi(s.substr(i-1,2))<=26)
+            {
+                two_digit=dp[i-2];
+            }
+            
+            dp[i]=one_digit+two_digit;
+            if(dp[i]==0) return 0;
+        }
+        
+        return dp[n-1];
+    }
+};
