@@ -52,3 +52,33 @@ public:
         return sum;
     }
 };
+
+//2022-06-08
+//dp iterative
+//time  : O(n*m), m is the target size
+//space : O(m)
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target)
+    {
+        int dp[target+1];
+        for(int i=1; i<=target; ++i) dp[i]=0;
+        dp[0]=1;
+        
+        for(int i=1; i<=target; ++i)
+        {
+            //cout<<i<<endl;
+            for(auto& num:nums)
+            {
+                //if(i==320) cout<<i<<":"<<num<<endl;
+                if((i-num)>=0) 
+                {
+                    if(dp[i]<=INT_MAX-dp[i-num]) dp[i]=dp[i]+dp[i-num];
+                }
+            }
+            //cout<<i<<":"<<dp[i]<<endl;
+        }
+        
+        return dp[target];
+    }
+};
