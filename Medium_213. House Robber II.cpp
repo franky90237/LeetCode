@@ -75,3 +75,33 @@ public:
         return maxMoney;
     }
 };
+
+//2022-06-08
+//dp iterative
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int rob(vector<int>& nums)
+    {
+        int n=nums.size();
+        if(n==1) return nums[0];
+        if(n==2) return max(nums[1],nums[0]);
+        
+        return max(rob(nums,0,n-2),rob(nums,1,n-1));
+    }
+    
+    int rob(vector<int>& nums, int l, int r)
+    {
+        int dp[r+1];
+        dp[l]=nums[l];
+        dp[l+1]=max(nums[l+1],nums[l]);
+            
+        for(int i=l+2; i<=r; ++i)
+        {
+            dp[i]=max(dp[i-1],nums[i]+dp[i-2]);
+        }
+        
+        return dp[r];
+    }
+};
