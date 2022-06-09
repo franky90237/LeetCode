@@ -1,5 +1,4 @@
 //2022-06-09
-//TLE
 //dfs
 class Solution {
 public:
@@ -14,15 +13,7 @@ public:
             
             if(pre==cur) return false;
             relation[pre].push_back(cur);
-        }
-        
-        /*for(int i=0; i<numCourses; ++i)
-        {
-            printf("%d [",i);
-            for(auto& j:relation[i]) printf(" %d ",j);
-            printf("] \n");
-        }
-        cout<<endl;*/
+        }      
         
         bool travel[numCourses];
         for(int i=0; i<numCourses; ++i) travel[i]=false;    
@@ -62,6 +53,7 @@ public:
         
         visited[now]=false;
         
+        travel[now]=true;
         return false;
     }
 };
