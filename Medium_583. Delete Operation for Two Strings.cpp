@@ -40,50 +40,34 @@ public:
     }
 };
 
-//2022-06-15
-//
+//2022-06-16
+//dp recursive
 class Solution {
 public:
     int minDistance(string word1, string word2)
-    {
-        string tmp;
-        vector<vector<string>> dp(word1.size(),vector<string>(word2.size(),""));
-        lcs(tmp,0,0,word1,word2,dp);
+    {        
+        vector<vector<int>> dp(word1.size(),vector<int>(word2.size(),-1));
+        int len=lcs(0,0,word1,word2,dp);
         
-        cout<<tmp<<endl;
-        return word1.size()-tmp.size() + word2.size()-tmp.size();
+        return word1.size()-len + word2.size()-len;
     }
     
-    void lcs(string& tmp, int i1, int i2, string& word1, string& word2, vector<vector<string>>& dp)
+    int lcs(int i1, int i2, string& word1, string& word2, vector<vector<int>>& dp)
     {        
-        if(i1==word1.size() || i2==word2.size()) return;
-        if(dp[i1][i2]!="")
-        {            
-            //tmp+=dp[i1][i2];
-            cout<<i1<<":"<<i2<<"  "<<tmp<<" : "<<dp[i1][i2]<<endl;
-            //return;
-        }
+        if(i1==word1.size() || i2==word2.size()) return 0;
+        if(dp[i1][i2]!=-1) return dp[i1][i2];        
                 
-        if(word1[i1]==word2[i2]) 
+        int len;
+        if(word1[i1]==word2[i2])
         {
-            dp[i1][i2].push_back(word1[i1]);
-            //tmp.push_back(word1[i1]);
-            lcs(tmp,i1+1,i2+1,word1,word2,dp);
-            //cout<<i1<<":"<<i2<<"  "<<tmp<<endl;
+            len=1+lcs(i1+1,i2+1,word1,word2,dp);
         }
         else
-        {
-            string tmp1=tmp;
-            lcs(tmp1,i1+1,i2,word1,word2,dp);            
-            
-            string tmp2=tmp;
-            lcs(tmp2,i1,i2+1,word1,word2,dp);            
-            
-            if(tmp1.size()>=tmp2.size()) tmp=tmp1;
-            else tmp=tmp2;
-            //cout<<i1<<":"<<i2<<"  "<<tmp<<endl;
+        {            
+            len=max(lcs(i1+1,i2,word1,word2,dp), lcs(i1,i2+1,word1,word2,dp));
         }
         
-        dp[i1][i2]=tmp;
+        dp[i1][i2]=len;
+        return len;
     }
 };
