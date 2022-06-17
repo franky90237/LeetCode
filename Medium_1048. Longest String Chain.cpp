@@ -113,3 +113,42 @@ public:
         return false;
     }
 };
+
+//2022-06-17
+//dp iterative
+//time  : O(n*m*m)
+//space : O(n*m)
+class Solution 
+{
+private:
+    struct Mycomparator
+    {
+        bool operator()(string& a, string& b) 
+        {
+            return a.size()<b.size();
+        }
+    } comparator;
+    
+public:
+    int longestStrChain(vector<string>& words)
+    {
+        //O(nlog(n))
+        sort(words.begin(),words.end(),comparator);
+        
+        unordered_map<string,int> dp;
+        int res=1;
+        for(auto& word:words)
+        {
+            for(int i=0; i<word.size(); ++i)
+            {
+                string pre=word.substr(0,i) + word.substr(i+1);
+                int len=(dp.find(pre)==dp.end()) ? 1 : 1+dp[pre];
+                dp[word]=max(dp[word],len);                
+            }
+            
+            res=max(res,dp[word]);
+        }
+        
+        return res;
+    }
+};
