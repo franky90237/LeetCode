@@ -65,3 +65,45 @@ public:
         return false;
     }
 };
+
+//2022-06-18
+//clear
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval)
+    {
+        int n=intervals.size();
+        if(n==0) return {newInterval};
+        
+        vector<vector<int>> res;
+        int i=0;
+        while(i<n && intervals[i][1]<newInterval[0]) 
+        {
+            res.push_back(intervals[i]);
+            ++i;
+        }
+        
+        //cout<<i<<endl;
+        while(i<n && Overlaping(intervals[i],newInterval))
+        {
+            newInterval[0]=min(intervals[i][0],newInterval[0]);
+            newInterval[1]=max(intervals[i][1],newInterval[1]);
+            ++i;
+        }
+        
+        res.push_back(newInterval);
+        
+        while(i<n)
+        {
+            res.push_back(intervals[i]);
+            ++i;            
+        }
+        
+        return res;
+    }
+    
+    bool Overlaping(vector<int>& curInterval, vector<int>& newInterval)
+    {
+        return (newInterval[1]>=curInterval[0]);
+    }
+};
