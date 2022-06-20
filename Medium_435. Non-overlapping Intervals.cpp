@@ -99,3 +99,46 @@ public:
         return (intervals[now][0]<intervals[pre][1]);
     }
 };
+
+//2022-06-20
+//greedy
+//time  : O(nlog(n))
+//space : O(1)
+class Solution 
+{
+private:
+    struct Mycomp
+    {
+        bool operator()(vector<int>& a, vector<int>& b)
+        {
+            if(a[0]<b[0]) return true;
+            else if(a[0]==b[0]) return a[1]<b[1];
+            else return false;            
+        }
+    } comp;
+    
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) 
+    {
+        sort(intervals.begin(),intervals.end(),comp);
+        
+        int n=intervals.size();
+        
+        int cnt=0;
+        int pre_end=intervals[0][1];
+        for(int i=1; i<n; ++i)
+        {
+            if(pre_end<=intervals[i][0])
+            {
+                pre_end=intervals[i][1];
+            }
+            else
+            {
+                pre_end=min(pre_end,intervals[i][1]);
+                ++cnt;
+            }
+        }
+        
+        return cnt;
+    }    
+};
