@@ -16,3 +16,58 @@ public:
         }
     }
 };
+
+//2022-06-22
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums)
+    {
+        int n=nums.size();
+        
+        int zero=0;        
+        for(int i=0; i<n; ++i)
+        {
+            if(nums[i]!=0)
+            {
+                swap(nums[zero],nums[i]);
+                ++zero;
+            }
+            
+            //for(auto& num:nums) cout<<num<<" ";
+            //cout<<endl;
+        }                
+    }
+};
+
+//2022-06-22
+//no swap
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums)
+    {
+        int n=nums.size();
+        
+        int zero=0;        
+        for(int i=0; i<n; ++i)
+        {
+            if(nums[i]!=0)
+            {
+                nums[zero]=nums[i];
+                ++zero;
+            }
+            
+            for(auto& num:nums) cout<<num<<" ";
+            cout<<endl;
+        }
+        
+        while(zero<n)
+        {
+            nums[zero]=0;
+            ++zero;
+        }
+    }
+};
