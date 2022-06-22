@@ -39,3 +39,32 @@ public:
         
     }
 };
+
+//2022-06-22
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums)
+    {
+        vector<vector<int>> ans;
+        
+        solve(0,nums,ans);
+        return ans;
+    }
+    
+    void solve(int now, vector<int>& nums, vector<vector<int>>& ans)
+    {
+        int n=nums.size();
+        if(now==n)
+        {
+            ans.push_back(nums);
+            return;
+        }
+        
+        for(int i=now; i<n; ++i)
+        {
+            swap(nums[now],nums[i]);
+            solve(now+1,nums,ans);
+            swap(nums[now],nums[i]);
+        }
+    }
+};
