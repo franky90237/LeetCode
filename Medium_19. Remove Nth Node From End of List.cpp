@@ -116,3 +116,46 @@ public:
         return head;
     }
 };
+
+//2022-06-25
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n)
+    {
+        ListNode* cur=head;
+        
+        int i=1;
+        while(i!=n+1)
+        {
+            cur=cur->next;
+            ++i;
+        }
+        
+        /*if(!cur) 
+        {
+            delete head;
+            return NULL;
+        }*/
+        
+        ListNode* pre=NULL;
+        ListNode* removed=head;
+        while(cur)
+        {
+            pre=removed;
+            removed=removed->next;
+            cur=cur->next;
+        }
+        
+        if(pre)
+        {
+            pre->next=removed->next;
+        }
+        else if(removed==head)
+        {
+            head=head->next;
+        }
+        
+        delete removed;
+        return head;
+    }
+};
