@@ -37,3 +37,41 @@ public:
         return max(left,right);
     }
 };
+
+//2022-07-04
+//sliding window + greedy
+//time  : O(n)
+//space : O(26)
+class Solution {
+public:
+    int characterReplacement(string s, int k)
+    {
+        int n=s.size();
+        
+        int charCount[26]={0};
+        int maxCharCount=1;
+        int ans=1;        
+        int left=0;
+        
+        for(int right=0; right<n; ++right)
+        {        
+            ++charCount[s[right]-'A'];
+            maxCharCount=max(maxCharCount,charCount[s[right]-'A']);
+            
+            //012345
+            //AABBCD k=2
+            //l=0, r=4, maxCharCount=2, curLen=5, 5-2=3 > k=2
+            //l=1, r=4
+            int curLen=right-left+1;
+            if(curLen-maxCharCount > k)
+            {
+                --charCount[s[left]-'A'];
+                ++left;                
+            }
+            
+            ans=max(ans,right-left+1);
+        }
+        
+        return ans;
+    }
+};
