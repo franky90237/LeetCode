@@ -82,3 +82,37 @@ public:
         return maxPath_withoutBranch<0 ? 0 : maxPath_withoutBranch;
     }
 };
+
+//2022-07-06
+//rederence : https://leetcode.com/problems/binary-tree-maximum-path-sum/discuss/603423/Python-Recursion-stack-thinking-process-diagram
+//clear (reduces the max function call) : using an answer variable to keep the maximum path sum form bottom to top at each node
+class Solution {
+public:
+    int maxPathSum(TreeNode* root)
+    {
+        if(!root) return 0;
+        
+        int answer=INT_MIN;
+        solve(root,answer);
+        
+        return answer;
+    }
+    
+    int solve(TreeNode* root, int& answer)
+    {
+        if(!root) return 0;
+        
+        int left=max(solve(root->left,answer),0);
+        int right=max(solve(root->right,answer),0);
+        
+        int max_with_root=left+right+root->val;
+        answer=max(answer,max_with_root);
+        
+        //int max_without_branch=max(left+root->val,right+root->val);
+        //int max_with_branch=max(max_without_branch,left+right+root->val);
+        
+        //answer=max(answer,max_with_branch);
+        
+        return max(left+root->val,right+root->val);
+    }
+};
