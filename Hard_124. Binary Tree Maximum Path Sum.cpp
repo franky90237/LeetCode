@@ -52,3 +52,33 @@ public:
         return {max(root->val,max(left,right)),max(both,max(l[1],r[1])),max(root->val,max(l[2],r[2]))};
     }
 };
+
+//2022-07-06
+//clear : using an answer variable to keep the maximum path sum form bottom to top at each node
+class Solution {
+public:
+    int maxPathSum(TreeNode* root)
+    {
+        if(!root) return 0;
+        
+        int answer=INT_MIN;
+        solve(root,answer);
+        
+        return answer;
+    }
+    
+    int solve(TreeNode* root, int& answer)
+    {
+        if(!root) return 0;
+        
+        int left=solve(root->left,answer);
+        int right=solve(root->right,answer);
+        
+        int maxPath_withoutBranch=max(root->val,max(left+root->val,right+root->val));
+        int curMax=max(maxPath_withoutBranch,left+right+root->val);
+        
+        answer=max(answer,curMax);
+        
+        return maxPath_withoutBranch<0 ? 0 : maxPath_withoutBranch;
+    }
+};
