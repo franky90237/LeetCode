@@ -68,3 +68,29 @@ public:
         return false;
      }
 };
+
+//2022-07-07
+//clear using isSameTree
+//time  : O(n*m) ,n is #nodes in root tree, m is #nodes in subRoot tree 
+//space : O(height of the tree)
+class Solution {
+public:
+    bool isSubtree(TreeNode* root, TreeNode* subRoot)
+    {
+         if(!root) return false;
+        
+        if(isSameTree(root,subRoot)) return true; 
+        return isSubtree(root->left,subRoot) || isSubtree(root->right,subRoot);
+    }
+    
+     bool isSameTree(TreeNode* root, TreeNode* subRoot)
+     {
+         if(!root && !subRoot) return true;
+         if(!root || !subRoot) return false;
+         
+         //cout<<root->val<<" "<<subRoot->val<<endl;
+         
+         if(root->val==subRoot->val) return isSameTree(root->left,subRoot->left) && isSameTree(root->right,subRoot->right);
+         return false;
+     }
+};
