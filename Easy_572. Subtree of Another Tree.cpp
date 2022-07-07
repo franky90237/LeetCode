@@ -38,3 +38,33 @@ public:
         return false;
      }
 };
+
+//2022-07-07
+//clear base condition
+//time  : O(n*m) ,n is #nodes in root tree, m is #nodes in subRoot tree 
+//space : O(height of the tree)
+class Solution {
+public:
+    bool isSubtree(TreeNode* root, TreeNode* subRoot)
+    {
+        return solve(root,subRoot,true);                  
+    }
+    
+     bool solve(TreeNode* root, TreeNode* subRoot, bool begin)
+     {
+        if(!root && !subRoot) return true;
+        if(!root || !subRoot) return false;
+         
+        //cout<<root->val<<" "<<subRoot->val<<endl;
+                
+        if(root->val==subRoot->val)
+        {
+            bool find=solve(root->left,subRoot->left,false) && solve(root->right,subRoot->right,false);
+            if(find) return true;
+        }        
+        
+        //cout<<endl;
+        if(begin) return solve(root->left,subRoot,true) || solve(root->right,subRoot,true);         
+        return false;
+     }
+};
