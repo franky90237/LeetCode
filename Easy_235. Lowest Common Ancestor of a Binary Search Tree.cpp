@@ -59,6 +59,7 @@ public:
 };
 
 //2022-07-08
+//recursive
 //time  : O(height of the tree)
 //space : O(height of the tree)
 class Solution {
@@ -67,6 +68,25 @@ public:
     {
         if(root->val > p->val && root->val > q->val) return lowestCommonAncestor(root->left,p,q);
         else if(root->val < p->val && root->val < q->val) return lowestCommonAncestor(root->right,p,q);
+        
+        return root;
+    }
+};
+
+//2022-07-08
+//itertive
+//time  : O(height of the tree)
+//space : O(height of the tree)
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q)
+    {
+        while(root)
+        {
+            if(root->val > p->val && root->val > q->val) root=root->left;
+            else if(root->val < p->val && root->val < q->val) root=root->right;
+            else break;
+        }
         
         return root;
     }
