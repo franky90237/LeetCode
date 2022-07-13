@@ -104,3 +104,28 @@ public:
         return root;
     }    
 };
+
+//2022-07-13
+//time  : O(height of the tree)
+//space : O(height of the tree)
+class Solution {
+public:
+    bool isValidBST(TreeNode* root)
+    {
+        return check(root,NULL,NULL);
+    }
+    
+    bool check(TreeNode* root, TreeNode* predecessor, TreeNode* successor)
+    {        
+        if(!root) return true;
+        //cout<<((predecessor) ? predecessor->val : -1)<<" "<<root->val<<" "<<((successor) ? successor->val : 9999999)<<endl;
+        if((predecessor && predecessor->val >= root->val) || (successor && root->val >= successor->val)) return false;
+        
+        bool left=check(root->left,predecessor,root);
+        if(!left) return false;
+        
+        bool right=check(root->right,root,successor);
+        
+        return (left && right);
+    }
+};
