@@ -57,3 +57,49 @@ public:
         return min_node;
     }
 };
+
+//2022-07-14
+//min heap
+//time  : O(n*m), m is the average size of each list
+//space : O(n)
+class Solution {
+private:
+    class comp
+    {
+    public:
+        bool operator()(const ListNode* a, const ListNode* b)
+        {
+            return a->val > b->val;
+        }
+    };
+    
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists)
+    {
+        int n=lists.size();
+        if(n==0) return NULL;
+                
+        priority_queue<ListNode*,vector<ListNode*>,comp> min_heap;
+        for(auto& node:lists)
+        {
+            while(node)
+            {
+                min_heap.push(node);
+                node=node->next;
+            }
+        }
+        
+        ListNode dummy;        
+        ListNode* cur=&dummy;
+        while(!min_heap.empty())
+        {
+            //cout<<min_heap.top()->val<<endl;
+            cur->next=min_heap.top();
+            min_heap.pop();
+            cur=cur->next;
+        }
+        
+        cur->next=NULL;
+        return dummy.next;
+    }
+};
