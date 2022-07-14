@@ -10,7 +10,7 @@
  */
 
 //2022-07-14
-//time  : O(n*m), m is the average size of each list
+//time  : O(n*k), n is the total node in all lists, k is the size of lists
 //space : O(n)
 class Solution {
 public:
@@ -60,7 +60,7 @@ public:
 
 //2022-07-14
 //min heap
-//time  : O(n*m), m is the average size of each list
+//time  : O(n*log(n)), n is the total node in all lists
 //space : O(n)
 class Solution {
 private:
@@ -101,5 +101,64 @@ public:
         
         cur->next=NULL;
         return dummy.next;
+    }
+};
+
+//2022-07-14
+//merge sort
+//time  : O(n*log(k)), n is the total node in all lists, k is the size of lists
+//space : O(1)
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists)
+    {       
+        int len=lists.size();
+        if(len==0) return NULL;
+        
+
+        while(len!=1)
+        {
+            int l=0;
+            int r=len-1;
+            while(l<r)
+            {
+                lists[l]=mergeTwoLists(lists[l],lists[r]);
+                ++l;
+                --r;
+            }
+            
+            len=(len+1)/2;
+        }
+        
+        return lists[0];
+    }
+    
+    ListNode* mergeTwoLists(ListNode* l, ListNode* r)
+    {        
+        if(!l) return r;
+        if(!r) return l;
+            
+        ListNode dummy;
+        ListNode* cur=&dummy;
+        while(l && r)
+        {
+            if(l->val < r->val)
+            {
+                cur->next=l;
+                l=l->next;
+            }
+            else
+            {
+                cur->next=r;
+                r=r->next;
+            }
+            
+            cur=cur->next;
+        }
+        
+        if(l) cur->next=l;
+        if(r) cur->next=r;
+        
+        return dummy.next;        
     }
 };
