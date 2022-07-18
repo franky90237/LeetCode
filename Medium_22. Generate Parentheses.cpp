@@ -112,3 +112,38 @@ public:
         }
     }
 };
+
+//2022-07-18
+//dp iterative
+class Solution {
+public:
+    vector<string> generateParenthesis(int n)
+    {
+        vector<vector<string>> ans(n+1,vector<string>());
+        
+        ans[0].push_back("");
+        for(int i=1; i<=n; ++i)
+        {
+            int left=0;
+            int right=i-left-1;
+            
+            while(left<i)
+            {
+                for(auto& l:ans[left])
+                {
+                    for(auto& r:ans[right])
+                    {
+                        string tmp = "(" + l + ")" + r;
+                        ans[i].push_back(tmp);
+                    }
+                }
+                
+                ++left;
+                --right;
+            }
+        }
+        
+        //cout<<ans[n].size()<<endl;
+        return ans[n];
+    }    
+};
