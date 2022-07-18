@@ -60,10 +60,69 @@ public:
     }  
 };
 
-/*
-"()"
-"["
-"[["
-"}{}"
-"{}]"
-*/
+//2022-07-18
+//stack, good for many push operations
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    bool isValid(string s)
+    {
+        vector<char> stack;
+        for(auto& c:s)
+        {
+            if(c=='(' || c=='[' || c=='{')
+            {
+                stack.push_back(c);
+            }
+            else
+            {
+                if(stack.empty()) return false;
+                
+                char left=stack.back();                
+                switch(left)
+                {
+                    case '(':
+                        if(c!=')') return false;
+                        break;
+                    case '[':
+                        if(c!=']') return false;
+                        break;
+                    case '{':
+                        if(c!='}') return false;
+                        break;                    
+                }
+                
+                stack.pop_back();
+            }
+        }
+        
+        return stack.empty();
+    }
+};
+
+//2022-07-18
+//stack, good for many pop operations
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    bool isValid(string s)
+    {
+        vector<char> stack;
+        for(auto& c:s)
+        {
+            if(c=='(') stack.push_back(')');
+            else if(c=='[') stack.push_back(']');
+            else if(c=='{') stack.push_back('}');
+            else
+            {
+                if(stack.empty() || stack.back()!=c) return false;
+                
+                stack.pop_back();
+            }
+        }
+        
+        return stack.empty();
+    }
+};
