@@ -69,7 +69,7 @@ public:
 };
 
 //2022-07-19
-//hasp mapa
+//hasp map
 //time  : O(n)
 //space : O(n)
 class Solution {
@@ -98,6 +98,32 @@ public:
             {
                 return {table[diff][0],i};
             }
+        }
+        
+        return {-1,-1};
+    }
+};
+
+//2022-07-19
+//clear hasp map
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target)
+    {
+        unordered_map<int,int> table;
+        
+        for(int i=0; i<nums.size(); ++i)
+        {
+            int diff=target-nums[i];            
+            
+            if(table.find(diff)!=table.end())
+            {
+                return {table[diff],i};
+            }
+            
+            table[nums[i]]=i;
         }
         
         return {-1,-1};
