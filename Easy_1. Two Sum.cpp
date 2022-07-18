@@ -67,3 +67,39 @@ public:
         return {-1,-1};
     }
 };
+
+//2022-07-19
+//hasp mapa
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target)
+    {
+        unordered_map<int,vector<int>> table;
+        
+        for(int i=0; i<nums.size(); ++i)
+        {
+             table[nums[i]].push_back(i);
+        }
+        
+        if(target%2==0)
+        {
+            int val=target/2;
+            if(table.find(val)!=table.end() && table[val].size()>=2) return {table[val][0],table[val][1]}; 
+        }
+        
+        for(int i=0; i<nums.size(); ++i)
+        {
+            int diff=target-nums[i];
+            if(diff==nums[i]) continue;
+            
+            if(table.find(diff)!=table.end())
+            {
+                return {table[diff][0],i};
+            }
+        }
+        
+        return {-1,-1};
+    }
+};
