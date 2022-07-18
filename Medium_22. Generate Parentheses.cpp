@@ -77,7 +77,7 @@ public:
 
 //2022-07-18
 //backtracking + backtracking
-//time : O()
+//time : O(Catalan number(n))
 class Solution {
 public:
     vector<string> generateParenthesis(int n)
