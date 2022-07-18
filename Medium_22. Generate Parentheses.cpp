@@ -74,3 +74,41 @@ public:
         }
     }
 };
+
+//2022-07-18
+//backtracking + backtracking
+//time : O()
+class Solution {
+public:
+    vector<string> generateParenthesis(int n)
+    {
+        vector<string> ans;
+        string tmp="";        
+        backtracking(0,0,n,tmp,ans);
+        cout<<ans.size()<<endl;
+        return ans;
+    }
+    
+    void backtracking(int left, int right, int n, string& tmp, vector<string>& ans)
+    {
+        if(tmp.size()==n*2)
+        {
+            ans.push_back(tmp);
+            return;
+        }                
+                
+        if(left < n)
+        {
+            tmp.push_back('(');
+            backtracking(left+1,right,n,tmp,ans);
+            tmp.pop_back();
+        }
+        
+        if(left > right)
+        {
+            tmp.push_back(')');
+            backtracking(left,right+1,n,tmp,ans);
+            tmp.pop_back();            
+        }
+    }
+};
