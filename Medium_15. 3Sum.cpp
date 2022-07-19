@@ -160,7 +160,7 @@ public:
 };
 
 //2022-04-25
-//time  : O(n*n)
+//time  : O(nlog(n))
 //space : O(1)
 class Solution {    
 public:
@@ -278,5 +278,50 @@ public:
     bool same(vector<int>& pre, vector<int>& cur)
     {
         return (pre[0]==cur[0] && pre[1]==cur[1] && pre[2]==cur[2]);
+    }
+};
+
+//2022-07-19
+//sorting + twoSum(two poiner)
+//time  : O(nlog(n))
+//space : O(1)
+class Solution 
+{
+public:
+    vector<vector<int>> threeSum(vector<int>& nums)
+    {
+        int n=nums.size();
+        sort(nums.begin(),nums.end());               
+        
+        vector<vector<int>> ans;        
+        for(int i=0; i<n; ++i)
+        {
+            if(i!=0 && nums[i-1]==nums[i]) continue;
+            //cout<<i<<" : "<<endl;
+            
+            int target=0-nums[i];
+            int left=i+1;
+            int right=(i==n-1) ? n-2 : n-1;
+            while(left<right)
+            {                
+                int sum=nums[left]+nums[right];
+                
+                if(sum==target) 
+                {                
+                    ans.push_back({nums[i],nums[left],nums[right]});
+                    //printf("%d, %d, %d \n",nums[i],nums[left],nums[right]);
+                    
+                    ++left;
+                    while(left<right && nums[left-1]==nums[left]) ++left;
+                    
+                    --right;
+                    while(left<right && nums[right]==nums[right+1]) --right;
+                }
+                else if(sum<target) ++left;                
+                else --right;
+            }
+        }
+        
+        return ans;
     }
 };
