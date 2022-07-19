@@ -196,3 +196,87 @@ public:
         return res;
     }
 };
+
+//2022-07-19
+//TLE
+//twoSum(hash set)
+//time  : O(n*n)
+//space : O(n)
+class Solution 
+{
+private: 
+    struct comp
+    {    
+        bool operator()(const vector<int>& a, const vector<int>& b) const
+        {
+            if(a[0]==b[0] && a[1]==b[1]) return a[2]<b[2];
+            else if(a[0]==b[0]) return a[1]<b[1];
+            return a[0]<b[0];
+        }
+    } comp;    
+    
+public:
+    vector<vector<int>> threeSum(vector<int>& nums)
+    {
+        /*sort(nums.begin(),nums.end());
+        vector<int> tmp;
+        for(int i=0; i<nums.size(); ++i)
+        {
+            if(i==0 || nums[i-1]!=nums[i])
+            {
+                tmp.push_back(nums[i]);
+            }
+        }
+        swap(tmp,nums);*/
+        
+        vector<vector<int>> ans;
+        for(int i=0; i<nums.size(); ++i)
+        {
+            int target=0-nums[i];                        
+            twoSum(nums,i,target,ans);                 
+        }
+        
+        sort(ans.begin(),ans.end(),comp);
+        
+        vector<vector<int>> ans_without_duplicate;
+        //if(!ans.empty()) ans_without_duplicate.push_back(ans[0]);
+                
+        for(int i=0; i<ans.size(); ++i)
+        {
+            if(i==0 || !same(ans[i-1],ans[i]))
+            {
+                ans_without_duplicate.push_back(ans[i]);
+            }
+        }        
+        
+        return ans_without_duplicate;
+    }
+    
+    void twoSum(vector<int>& nums, int cur, int target, vector<vector<int>>& ans)
+    {
+        unordered_set<int> table;
+        
+        for(int i=0; i<nums.size() &&  i!=cur; ++i)
+        {
+            int diff=target-nums[i];
+            
+            if(table.find(diff)!=table.end())
+            {                
+                vector<int> tmp;
+                tmp.push_back(nums[cur]);
+                tmp.push_back(nums[i]);
+                tmp.push_back(diff);
+                
+                sort(tmp.begin(),tmp.end());
+                ans.push_back(tmp);
+            }
+            
+            table.insert(nums[i]);
+        }
+    }
+    
+    bool same(vector<int>& pre, vector<int>& cur)
+    {
+        return (pre[0]==cur[0] && pre[1]==cur[1] && pre[2]==cur[2]);
+    }
+};
