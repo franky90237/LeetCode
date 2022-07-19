@@ -160,7 +160,7 @@ public:
 };
 
 //2022-04-25
-//time  : O(nlog(n))
+//time  : O(n*n)
 //space : O(1)
 class Solution {    
 public:
@@ -283,7 +283,7 @@ public:
 
 //2022-07-19
 //sorting + twoSum(two poiner)
-//time  : O(nlog(n))
+//time  : O(n*n)
 //space : O(1)
 class Solution 
 {
