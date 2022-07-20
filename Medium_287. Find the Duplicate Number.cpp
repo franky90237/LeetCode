@@ -124,3 +124,23 @@ public:
         return slow;
     }
 };
+
+//2022-07-20
+//change the val
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums)
+    {
+        for(int i=0; i<nums.size(); ++i)
+        {                        
+            int index=abs(nums[i]);
+            nums[index]=-nums[index];
+            
+            if(nums[index]>0) return index;
+        }
+        
+        return -1;
+    }
+};
