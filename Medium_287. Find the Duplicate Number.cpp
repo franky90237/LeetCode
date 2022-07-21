@@ -175,3 +175,35 @@ public:
         return slow;
     }
 };
+
+//2022-07-21
+//binary search (pigeon hole principle)
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums)
+    {
+        int n=nums.size();
+        
+        int low=0;
+        int high=n-1;
+        
+        while(low<high)
+        {
+            int mid=low+(high-low)/2;
+            
+            int cnt=0;
+            for(auto& num:nums)
+            {
+                if(num<=mid) ++cnt;
+            }
+            
+            //cout<<cnt<<" "<<mid<<endl;
+            if(cnt<=mid) low=mid+1;
+            else high=mid;
+        }
+        
+        return low;
+    }
+};
