@@ -119,3 +119,29 @@ public:
         return profit;
     }
 };
+
+//2022-07-21
+//greedy
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices)
+    {        
+        int profit=0;
+        int buy=prices[0];
+        for(auto price:prices)
+        {
+            if(price>buy)
+            {
+                profit=max(profit,price-buy);
+            }
+            else
+            {
+                buy=price;
+            }
+        }
+        
+        return profit;
+    }
+};
