@@ -103,3 +103,34 @@ public:
         return profit;
     }
 };
+
+//2022-07-22
+//finate state machine (dp)
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) 
+    {
+        int n=prices.size();
+        int hold[n];
+        int notHold[n];
+        
+        hold[0]=-prices[0];
+        notHold[0]=0;
+        
+        for(int i=1; i<n; ++i)
+        {
+            hold[i]=max(hold[i-1],notHold[i-1]-prices[i]);
+            notHold[i]=max(notHold[i-1],hold[i-1]+prices[i]);
+        }
+        
+        /*for(int i=0; i<n; ++i)
+        {
+            cout<<hold[i]<<" ";
+            cout<<notHold[i]<<endl;
+        }*/
+        
+        return notHold[n-1];        
+    }
+};
