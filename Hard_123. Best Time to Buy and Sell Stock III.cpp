@@ -266,3 +266,38 @@ public:
         return dp[2][n-1];
     }
 };
+
+//2022-07-26
+//change k nad i
+//dp
+//time  : O(k*n)
+//space : O(k)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices)
+    {
+        const int n=prices.size();
+        int dp[3];
+        int diff[3];        
+                
+        for(int k=0; k<=2; ++k) 
+        {
+            dp[k]=0;
+            diff[k]=INT_MIN;
+        }
+        
+        //dp[k][i] = max( dp[k][i-1],  (x=0 to i-1) max(prices[i]-prices[x]+dp[k-1][x-1]) )
+        //(x=0 to i-1) max(prices[i]-prices[x]+dp[k-1][x-1]) ->
+        //(x=0 to i-1) prices[i] + max(-prices[x]+dp[k-1][x-1])
+        for(int i=0; i<n; ++i)
+        {           
+            for(int k=1; k<=2; ++k)
+            {
+                diff[k]=max(diff[k],-prices[i]+dp[k-1]);
+                dp[k]=max(dp[k],prices[i]+diff[k]);                
+            }
+        }
+        
+        return dp[2];
+    }
+};
