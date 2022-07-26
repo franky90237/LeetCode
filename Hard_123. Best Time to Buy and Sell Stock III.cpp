@@ -160,6 +160,8 @@ public:
     }
 };
 
+----------------------------------------------------------------------------------------------------------------------------------------
+
 //2022-07-26
 //TLE
 //dp
@@ -221,6 +223,44 @@ public:
                 
                 dp[k][i]=max(dp[k][i-1],prices[i]+diff);
             }            
+        }
+        
+        return dp[2][n-1];
+    }
+};
+
+//2022-07-26
+//change k nad i
+//dp
+//time  : O(k*n)
+//space : O(k*n)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices)
+    {
+        const int n=prices.size();
+        int dp[3][n];
+        int diff[3];        
+        
+        for(int i=0; i<n; ++i) dp[0][i]=0;
+        for(int k=0; k<=2; ++k) 
+        {
+            dp[k][0]=0;
+            diff[k]=INT_MIN;
+        }
+        
+        //dp[k][i] = max( dp[k][i-1],  (x=0 to i-1) max(prices[i]-prices[x]+dp[k-1][x-1]) )
+        //(x=0 to i-1) max(prices[i]-prices[x]+dp[k-1][x-1]) ->
+        //(x=0 to i-1) prices[i] + max(-prices[x]+dp[k-1][x-1])
+        for(int i=1; i<n; ++i)
+        {            
+            for(int k=1; k<=2; ++k)
+            {
+                if(i==1) diff[k]=max(diff[k],-prices[0]);
+                else diff[k]=max(diff[k],-prices[i-1]+dp[k-1][i-2]);
+                
+                dp[k][i]=max(dp[k][i-1],prices[i]+diff[k]);
+            }
         }
         
         return dp[2][n-1];
