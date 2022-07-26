@@ -159,3 +159,37 @@ public:
         return sell2;
     }
 };
+
+//2022-07-26
+//TLE
+//dp
+//time  : O(k*n*n)
+//space : O(k*n)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices)
+    {
+        const int n=prices.size();
+        int dp[3][n];
+        
+        for(int i=0; i<n; ++i) dp[0][i]=0;
+        for(int k=0; k<=2; ++k) dp[k][0]=0;
+        
+        //dp[k][i] = max( dp[k][i-1],  (x=0 to i-1) max(prices[i]-prices[x]+dp[k-1][x-1]) )
+        for(int k=1; k<=2; ++k)
+        {
+            for(int i=1; i<n; ++i)
+            {
+                int sell_on_i=0;
+                for(int x=0; x<i; ++x)
+                {                    
+                    if(x==0) sell_on_i=max(sell_on_i,prices[i]-prices[x]);
+                    else sell_on_i=max(sell_on_i,prices[i]-prices[x]+dp[k-1][x-1]);
+                }
+                dp[k][i]=max(dp[k][i-1],sell_on_i);
+            }            
+        }
+        
+        return dp[2][n-1];
+    }
+};
