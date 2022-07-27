@@ -129,3 +129,40 @@ public:
     }
     
 };
+
+//2022-07-27
+//different state transition
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices)
+    {
+        int n=prices.size();
+        
+        int hold[n];
+        int not_hold[n];
+        int rest[n];
+        
+        hold[0]=-prices[0];
+        not_hold[0]=0;
+        rest[0]=0;
+        
+        for(int i=1; i<n; ++i)
+        {
+            hold[i]=max(hold[i-1],rest[i-1]-prices[i]);
+            not_hold[i]=max(not_hold[i-1],hold[i-1]+prices[i]);
+            rest[i]=max(rest[i-1],not_hold[i-1]);
+        }
+        
+        /*for(int i=0; i<n; ++i) cout<<hold[i]<<" ";
+        cout<<endl;
+        for(int i=0; i<n; ++i) cout<<not_hold[i]<<" ";
+        cout<<endl;
+        for(int i=0; i<n; ++i) cout<<rest[i]<<" ";
+        cout<<endl;*/
+        
+        return max(not_hold[n-1],rest[n-1]);
+    }
+    
+};
