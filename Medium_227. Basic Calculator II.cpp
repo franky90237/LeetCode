@@ -106,3 +106,73 @@ public:
         return res;
     }
 };
+
+//2022-07-27
+//one stack
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int calculate(string s)
+    {
+        vector<int> stack;
+        
+        int i=0;
+        while(i<s.size())
+        {            
+            if(s[i]==' ') 
+            {
+                ++i;
+                continue;                
+            }
+                        
+            if('0'<=s[i] && s[i]<='9')
+            {
+                int num=get_num(i,s);
+                stack.push_back(num);                
+            }
+            else 
+            {
+                int symbol=s[i];
+                
+                ++i;
+                while(s[i]==' ') ++i;
+                
+                int num=get_num(i,s);
+                    
+                if(symbol=='+')
+                {
+                    stack.push_back(num);                    
+                }
+                else if(symbol=='-')
+                {
+                    stack.push_back(-1*num);                
+                }
+                else 
+                {
+                    int pre_num=stack.back();
+                    stack.pop_back();
+                    
+                    if(symbol=='*') stack.push_back(pre_num*num);
+                    else if(symbol=='/') stack.push_back(pre_num/num);
+                }                              
+            }
+        }
+        
+        return accumulate(stack.begin(),stack.end(),0);
+    }
+    
+    int get_num(int& i, string& s)
+    {
+        int num=0;
+        
+        while('0'<=s[i] && s[i]<='9')
+        {
+            //cout<<num<<" "<<s[i]-'0'<<endl;
+            num= num*10 + (s[i]-'0');
+            ++i;
+        }
+        
+        return num;
+    }
+};
