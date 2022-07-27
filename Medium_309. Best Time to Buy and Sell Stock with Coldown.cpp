@@ -56,3 +56,39 @@ public:
         }
     }
 };
+
+//2022-07-27
+//dfs + dp
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices)
+    {
+        vector<vector<int>> dp(prices.size(),vector<int>(2,-1));
+        return dfs(dp,prices,0,false);
+    }
+    
+    int dfs(vector<vector<int>>& dp, vector<int>& prices, int cur, bool have_bought)
+    {
+        int n=prices.size();
+        if(cur>=n) return 0;
+        if(dp[cur][have_bought]!=-1) return dp[cur][have_bought];
+        
+        if(have_bought)
+        {
+            int sell = prices[cur] + dfs(dp,prices,cur+2,false);
+            int cold = dfs(dp,prices,cur+1,true);
+            dp[cur][have_bought] = max(sell,cold);
+            
+        }
+        else
+        {
+            int buy= -prices[cur] + dfs(dp,prices,cur+1,true);
+            int cold = dfs(dp,prices,cur+1,false);
+            dp[cur][have_bought] = max(buy,cold);
+        }
+        
+        return dp[cur][have_bought];
+    }
+};
