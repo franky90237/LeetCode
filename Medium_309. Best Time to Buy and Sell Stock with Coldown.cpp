@@ -92,3 +92,40 @@ public:
         return dp[cur][have_bought];
     }
 };
+
+//2022-07-27
+//finate state machine
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices)
+    {
+        int n=prices.size();
+        
+        int hold[n];
+        int not_hold[n];
+        int cold[n];
+        
+        hold[0]=-prices[0];
+        not_hold[0]=0;
+        cold[0]=0;
+        
+        for(int i=1; i<n; ++i)
+        {
+            hold[i]=max(hold[i-1],not_hold[i-1]-prices[i]);
+            not_hold[i]=max(not_hold[i-1],cold[i-1]);
+            cold[i]=hold[i-1]+prices[i];
+        }
+        
+        /*for(int i=0; i<n; ++i) cout<<hold[i]<<" ";
+        cout<<endl;
+        for(int i=0; i<n; ++i) cout<<not_hold[i]<<" ";
+        cout<<endl;
+        for(int i=0; i<n; ++i) cout<<cold[i]<<" ";
+        cout<<endl;*/
+                
+        return max(not_hold[n-1],cold[n-1]);
+    }
+    
+};
