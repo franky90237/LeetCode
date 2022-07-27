@@ -22,3 +22,29 @@ public:
         return max(s0[n-1],s1[n-1]);
     }
 };
+
+//2022-07-27
+//state transition
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee)
+    {
+        int n=prices.size();
+        
+        int hold[n];
+        int not_hold[n];
+        
+        hold[0]=-prices[0];
+        not_hold[0]=0;
+        
+        for(int i=1; i<n; ++i)
+        {
+            hold[i]=max(hold[i-1],not_hold[i-1]-prices[i]);
+            not_hold[i]=max(not_hold[i-1],hold[i-1]+prices[i]-fee);
+        }
+        
+        return not_hold[n-1];
+    }
+};
