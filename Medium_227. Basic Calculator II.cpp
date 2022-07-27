@@ -176,3 +176,44 @@ public:
         return num;
     }
 };
+
+//2022-07-27
+//one stack, look from past
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int calculate(string s)
+    {
+        s+='+';
+        vector<int> stack;
+        char pre_sign='+';
+        
+        int num=0;
+        for(int i=0; i<s.size(); ++i)
+        {
+            if(s[i]==' ') continue;
+            
+            //cout<<i<<" "<<s[i]<<endl;
+            if(isdigit(s[i])) num= num*10 + (s[i]-'0');
+            else
+            {
+                if(pre_sign=='+') stack.push_back(num);
+                else if(pre_sign=='-') stack.push_back(-num);
+                else
+                {
+                    int pre_num=stack.back();
+                    stack.pop_back();
+                    
+                    if(pre_sign=='*') stack.push_back(pre_num*num);
+                    else if(pre_sign=='/') stack.push_back(pre_num/num);
+                }
+                    
+                pre_sign=s[i];
+                num=0;
+            }
+        }                               
+        
+        return accumulate(stack.begin(),stack.end(),0);
+    }    
+};
