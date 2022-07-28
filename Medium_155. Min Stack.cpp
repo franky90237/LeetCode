@@ -75,11 +75,45 @@ public:
     }
 };
 
-/**
- * Your MinStack object will be instantiated and called as such:
- * MinStack* obj = new MinStack();
- * obj->push(val);
- * obj->pop();
- * int param_3 = obj->top();
- * int param_4 = obj->getMin();
- */
+//2022-07-28
+//two stack
+class MinStack 
+{
+private:
+    vector<int> s;
+    vector<int> min_s;
+    
+public:
+    MinStack() 
+    {
+        /*         
+        5 4 3 7 9 6 2
+                    ^ 
+        s1 : 5 4 3 7 9 6 2
+        s2 : 5 4 3 2
+        
+        */
+    }
+    
+    void push(int val)
+    {
+        s.push_back(val);
+        if(min_s.empty() || val<=min_s.back()) min_s.push_back(val);
+    }
+    
+    void pop()
+    {
+        if(s.back()==min_s.back()) min_s.pop_back();
+        s.pop_back();
+    }
+    
+    int top()
+    {
+        return s.back();
+    }
+    
+    int getMin()
+    {
+        return min_s.back();
+    }
+};
