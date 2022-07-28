@@ -80,3 +80,42 @@ public:
         root->left=NULL;
     }
 };
+
+//2022-07-28
+//iterative
+//time  : O(n)
+//space : O(1)
+class Solution {    
+public:
+    void flatten(TreeNode* root)
+    {
+        /*
+        1,2,3,4,5,6 
+        
+                1             1                1              1
+              2   3   ->       2      ->        2      ->      2
+             4 5 6 7          4 5                4              4     
+                                 3                5              5
+                                6 7                3              3
+                                                  6 7              6
+                                                                    7
+        */
+        
+        TreeNode* cur=root;
+        
+        while(cur)
+        {
+            if(cur->left)
+            {
+                TreeNode* last=cur->left;
+                while(last->right) last=last->right;
+                
+                last->right=cur->right;
+                cur->right=cur->left;
+                cur->left=NULL;
+            }
+            
+            cur=cur->right;
+        }                
+    }    
+};
