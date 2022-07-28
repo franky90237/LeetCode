@@ -42,3 +42,41 @@ public:
         return right;
     }
 };
+
+//2022-07-28
+//dfs (reverse post-order)
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {    
+public:
+    void flatten(TreeNode* root)
+    {
+        /*
+        1,2,3,4,5,6 
+        
+                1
+              2   3
+             4 5 6 7
+             
+        pre-order  :         1,2,4,5,3,6,7
+        pos-torder :         4,5,2,6,7,3,1
+        reverse post-order : 7,6,3,5,4,2,1
+                
+        */
+        
+        TreeNode* next=NULL;
+        reverse_postorder(root,&next);
+    }
+    
+    void reverse_postorder(TreeNode* root, TreeNode** next)
+    {
+        if(!root) return;
+        
+        reverse_postorder(root->right,next);
+        reverse_postorder(root->left,next);
+        
+        root->right=*next;
+        *next=root;
+        root->left=NULL;
+    }
+};
