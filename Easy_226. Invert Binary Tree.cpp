@@ -12,7 +12,7 @@
 
 //2022-07-05
 //time  : O(n)
-//space L O(height of the tree)
+//space : O(height of the tree)
 class Solution {
 public:
     TreeNode* invertTree(TreeNode* root)
@@ -24,6 +24,26 @@ public:
         
         root->left=newLeft;
         root->right=newRight;
+        
+        return root;
+    }
+};
+
+//2022-07-29
+//dfs (post-order)
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root)
+    {
+        if(!root) return NULL;
+        
+        TreeNode* left_subtree=invertTree(root->left);
+        TreeNode* right_subtree=invertTree(root->right);
+        
+        root->left=right_subtree;
+        root->right=left_subtree;
         
         return root;
     }
