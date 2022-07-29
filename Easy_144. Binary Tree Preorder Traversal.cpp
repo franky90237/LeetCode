@@ -102,3 +102,34 @@ public:
         return ans;
     }
 };
+
+//2022-07-29
+//clear
+//iterative with one while condition
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root)
+    {
+        if(!root) return {};
+        
+        vector<int> ans;
+        vector<TreeNode*> stack;
+        stack.push_back(root);
+        
+        TreeNode* cur;
+        
+        while(!stack.empty())
+        {
+            cur=stack.back();
+            stack.pop_back();
+            ans.push_back(cur->val);
+            
+            if(cur->right) stack.push_back(cur->right);
+            if(cur->left) stack.push_back(cur->left);
+        }            
+        
+        return ans;
+    }
+};
