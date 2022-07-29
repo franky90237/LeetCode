@@ -78,3 +78,46 @@ public:
         return root;
     }
 };
+
+//2022-07-29
+//dfs iterative
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root)
+    {
+        /*
+        s : 4 2 3
+                
+        */
+            
+        if(!root) return NULL;
+        
+        vector<TreeNode*> s;        
+        
+        TreeNode* cur=root;
+        while(!s.empty() || cur)
+        {
+            while(cur)
+            {                
+                s.push_back(cur);
+                cur=cur->left;
+            }
+            
+            //for(auto& i:s) cout<<i->val<<" ";
+            //cout<<endl;
+            
+            TreeNode* top=s.back();
+            s.pop_back();
+            
+            TreeNode* tmp=top->left;
+            top->left=top->right;
+            top->right=tmp;
+            
+            cur=top->left;
+        }
+        
+        return root;
+    }
+};
