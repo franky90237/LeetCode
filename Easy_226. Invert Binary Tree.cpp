@@ -48,3 +48,33 @@ public:
         return root;
     }
 };
+
+//2022-07-29
+//bfs
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root)
+    {
+        if(!root) return NULL;
+        
+        queue<TreeNode*> q;
+        q.push(root);
+        
+        while(!q.empty())
+        {
+            TreeNode* cur=q.front();
+            q.pop();
+            
+            TreeNode* tmp=cur->left;
+            cur->left=cur->right;
+            cur->right=tmp;
+            
+            if(cur->left) q.push(cur->left);
+            if(cur->right) q.push(cur->right);
+        }
+        
+        return root;
+    }
+};
