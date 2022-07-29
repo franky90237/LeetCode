@@ -46,3 +46,37 @@ public:
         return result;
     }
 };
+
+//2022-07-29
+//iterative with tow while condition
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root)
+    {
+        if(!root) return {};
+        
+        vector<int> ans;
+        vector<TreeNode*> s;        
+        
+        TreeNode* cur=root;
+        
+        while(!s.empty() || cur)
+        {
+            while(cur)
+            {
+                s.push_back(cur);
+                cur=cur->left;
+            }
+            
+            cur=s.back();
+            s.pop_back();
+            ans.push_back(cur->val);
+            
+            cur=cur->right;
+        }
+        
+        return ans;
+    }
+};
