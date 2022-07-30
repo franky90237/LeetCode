@@ -70,3 +70,24 @@ public:
         return true;
     }
 };
+
+//2022-07-30
+//dfs
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q)
+    {
+        if(!p && !q) return true;
+        if(!p || !q) return false;        
+        if(p->val != q->val) return false;
+        
+        bool left=isSameTree(p->left,q->left);
+        if(!left) return false;
+        
+        bool right=isSameTree(p->right,q->right);
+        
+        return (left && right);
+    }
+};
