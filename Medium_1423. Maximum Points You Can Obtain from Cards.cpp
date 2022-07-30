@@ -53,3 +53,41 @@ public:
         return dp[k][l][r];
     }
 };
+
+//2022-07-30
+//sliding window
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int maxScore(vector<int>& cardPoints, int k)
+    {
+        /* 
+        [1,2,3,4,5,6,1]
+        [1,2,3,4] = 10
+        [2,3,4,5] = 14
+        [3,4,5,6] = 18
+        [4,5,6,1] = 16
+        */
+        int n=cardPoints.size();
+        
+        int sum=accumulate(cardPoints.begin(),cardPoints.end()-k,0);
+        int min_sum=sum;
+        
+        //cout<<sum<<endl;
+        int start=1;
+        int end=n-k;
+        
+        while(end<n)
+        {
+            sum=sum-cardPoints[start-1]+cardPoints[end];
+            //cout<<sum<<endl;
+            min_sum=min(min_sum,sum);
+            
+            ++start;
+            ++end;
+        }            
+            
+        return accumulate(cardPoints.begin(),cardPoints.end(),0)-min_sum;
+    }    
+};
