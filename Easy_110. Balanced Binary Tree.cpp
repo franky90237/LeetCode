@@ -59,3 +59,58 @@ public:
         return max(left_hight, right_hight)+1;
     }
 };
+
+//2022-07-30
+//dfs
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    bool isBalanced(TreeNode* root)
+    {
+        bool answer=true;
+        dfs(root,answer);
+        
+        return answer;
+    }
+    
+    int dfs(TreeNode* root, bool& answer)
+    {
+        if(!root) return 0;
+                
+        int left_depth = dfs(root->left,answer);
+        int right_depth = dfs(root->right,answer);        
+        if(abs(left_depth-right_depth)>=2) answer=false;
+        
+        return max(left_depth,right_depth) + 1;
+    }
+};
+
+//2022-07-30
+//dfs with one argument 
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    bool isBalanced(TreeNode* root)
+    {       
+        int answer=dfs(root);
+        
+        return answer!=-1;
+    }
+    
+    int dfs(TreeNode* root)
+    {
+        if(!root) return 0;
+                
+        int left_depth = dfs(root->left);
+        if(left_depth==-1) return -1;
+        
+        int right_depth = dfs(root->right);
+        if(right_depth==-1) return -1;
+        
+        if(abs(left_depth-right_depth)>=2) return -1;
+        
+        return max(left_depth,right_depth) + 1;
+    }
+};
