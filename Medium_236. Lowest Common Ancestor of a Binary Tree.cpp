@@ -50,3 +50,25 @@ public:
         tmp.pop_back();                
     }        
 };
+
+//2022-07-31
+//df, make use of the return value
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q)
+    {                
+        if(!root) return NULL;
+        if(root==p) return p;
+        if(root==q) return q;
+        
+        TreeNode* left  = lowestCommonAncestor(root->left,p,q);
+        TreeNode* right = lowestCommonAncestor(root->right,p,q);
+        
+        if(left && right) return root;
+        if(left) return left;
+        if(right) return right;
+        return NULL;
+    }          
+};
