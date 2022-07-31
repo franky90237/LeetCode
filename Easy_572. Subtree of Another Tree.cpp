@@ -94,3 +94,35 @@ public:
          return false;
      }
 };
+
+//2022-07-31
+//time  : O(n*n)
+//space : O(height of the tree)
+class Solution {
+public:
+    bool isSubtree(TreeNode* root, TreeNode* subRoot)
+    {
+        if(!root && !subRoot) return true;
+        if(!root || !subRoot) return false;
+        
+        bool same=isSameTree(root,subRoot);
+        if(same) return true;
+        
+        bool left=isSubtree(root->left,subRoot);
+        bool right=isSubtree(root->right,subRoot);
+        
+        return left || right;
+    }
+    
+    bool isSameTree(TreeNode* a, TreeNode* b)
+    {
+        if(!a && !b) return true;
+        if(!a || !b) return false;
+        if(a->val != b->val) return false;
+        
+        bool left  = isSameTree(a->left,b->left);
+        bool right  = isSameTree(a->right,b->right);
+        
+        return left && right;
+    }
+};
