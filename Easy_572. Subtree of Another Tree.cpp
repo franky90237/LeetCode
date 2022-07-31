@@ -126,3 +126,33 @@ public:
         return left && right;
     }
 };
+
+//2022-07-31
+//serialize and then find substring
+//time  : O(n+m)
+//space : O(n+m)
+class Solution {
+public:
+    bool isSubtree(TreeNode* root, TreeNode* subRoot)
+    {
+        if(!root && !subRoot) return true;
+        if(!root || !subRoot) return false;        
+        
+        string a=serialize(root);
+        string b=serialize(subRoot);
+        
+        char* ca=a.data();
+        char* cb=b.data();
+        //cout<<ca<<endl<<cb<<endl;
+        
+        return strstr(ca,cb)!=NULL;
+    }
+    
+    string serialize(TreeNode* root)
+    {
+        if(!root) return "n";
+        
+        string res= "," + to_string(root->val) + "," + serialize(root->left) + "," +  serialize(root->right);
+        return res;
+    }
+};
