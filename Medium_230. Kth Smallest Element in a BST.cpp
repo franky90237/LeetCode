@@ -146,8 +146,7 @@ class Solution {
 public:
     int kthSmallest(TreeNode* root, int k)
     {
-        int left_cnt=number_of_nodes(root->left);
-        int right_cnt=number_of_nodes(root->right);
+        int left_cnt=number_of_nodes(root->left);    
         
         if(k==left_cnt+1)
         {
@@ -167,6 +166,5 @@ public:
     {
         if(!root) return 0;
         return number_of_nodes(root->left) + 1 + number_of_nodes(root->right);
-    }
-        
+    }        
 };
