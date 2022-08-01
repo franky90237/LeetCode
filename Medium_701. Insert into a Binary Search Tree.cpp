@@ -67,7 +67,7 @@ public:
 //2022-08-01
 //iterative
 //time  : O(n)
-//space : O(height of the tree)
+//space : O(1)
 class Solution {
 public:
     TreeNode* insertIntoBST(TreeNode* root, int val)
@@ -87,6 +87,31 @@ public:
         
         if(val > pre->val) pre->right=new TreeNode(val);
         else pre->left=new TreeNode(val);
+        
+        return root;
+    }
+};
+
+//2022-08-01
+//iterative, one pointer, linux style
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val)
+    {
+        if(!root) return new TreeNode(val);
+            
+        TreeNode **cur=&root;
+        
+        while(*cur)
+        {                        
+            if(val > (*cur)->val) cur=&(*cur)->right;            
+            else cur=&(*cur)->left;
+        }
+        
+        //cout<<cur<<" "<<*cur<<endl;
+        *cur=new TreeNode(val);
         
         return root;
     }
