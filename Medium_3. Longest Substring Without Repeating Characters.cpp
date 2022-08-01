@@ -55,3 +55,35 @@ public:
         return max_len;
     }
 };
+
+//2022-08-01
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s)
+    {
+        /*
+        abcabcbb
+        abba
+        */
+        
+        unordered_map<char,int> table;
+        
+        int len=0;
+        int start=0;
+        for(int i=0; i<s.size(); ++i)
+        {
+            if(table.find(s[i])!=table.end())
+            {
+                //abba
+                start=max(start,table[s[i]]+1);                
+            }
+            
+            table[s[i]]=i;            
+            len=max(len,i-start+1);
+        }
+        
+        return len;
+    }
+};
