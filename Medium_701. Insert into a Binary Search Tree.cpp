@@ -63,3 +63,31 @@ public:
         return root;
     }
 };
+
+//2022-08-01
+//iterative
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val)
+    {
+        if(!root) return new TreeNode(val);
+        
+        TreeNode* pre=NULL;
+        TreeNode* cur=root;
+        
+        while(cur)
+        {
+            pre=cur;
+            
+            if(val > cur->val) cur=cur->right;            
+            else cur=cur->left;
+        }
+        
+        if(val > pre->val) pre->right=new TreeNode(val);
+        else pre->left=new TreeNode(val);
+        
+        return root;
+    }
+};
