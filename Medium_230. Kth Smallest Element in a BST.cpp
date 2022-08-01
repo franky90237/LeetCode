@@ -137,3 +137,36 @@ public:
         return cur->val;
     }
 };
+
+//2022-08-01
+//binary search
+//time  : O(n*n)
+//spcae : O(height of the tree)
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k)
+    {
+        int left_cnt=number_of_nodes(root->left);
+        int right_cnt=number_of_nodes(root->right);
+        
+        if(k==left_cnt+1)
+        {
+            return root->val;
+        }
+        else if(k<left_cnt+1)
+        {
+            return kthSmallest(root->left,k);
+        }
+        else
+        {
+            return kthSmallest(root->right,k-1-left_cnt);
+        }                
+    }
+    
+    int number_of_nodes(TreeNode* root)
+    {
+        if(!root) return 0;
+        return number_of_nodes(root->left) + 1 + number_of_nodes(root->right);
+    }
+        
+};
