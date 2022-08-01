@@ -104,3 +104,36 @@ public:
         return 1+count_node(root->left)+count_node(root->right);
     }
 };
+
+//2022-08-01
+//dfs, inorder
+//time  : O(n)
+//spcae : O(height of the tree)
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k)
+    {        
+        vector<TreeNode*> s;     
+                
+        TreeNode* cur=root;        
+        while(!s.empty() || cur)
+        {
+            while(cur)
+            {
+                s.push_back(cur);
+                cur=cur->left;
+            }
+            
+                        
+            cur=s.back();
+            s.pop_back();
+            
+            --k;
+            if(k==0) break;
+            
+            cur=cur->right;
+        }
+        
+        return cur->val;
+    }
+};
