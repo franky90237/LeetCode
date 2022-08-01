@@ -55,3 +55,28 @@ public:
         return true;
     }
 };
+
+//2022-08-01
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    bool isPalindrome(string s)
+    {
+        int left=0;
+        int right=s.size()-1;
+        
+        while(left<right)
+        {            
+            while(left<right && !isalnum(s[left])) ++left;
+            while(left<right && !isalnum(s[right])) --right;
+            
+            //cout<<s[left]<<" "<<s[right]<<endl;
+            if(tolower(s[left])!=tolower(s[right])) return false;
+            ++left;
+            --right;            
+        }
+        
+        return true;
+    }
+};
