@@ -291,3 +291,58 @@ public:
         return suc;
     }
 };
+
+//2022-08-01
+//clear, recursive
+//time  : O(log(n))
+//space : O(height of the tree)
+class Solution {
+public:
+    TreeNode* deleteNode(TreeNode* root, int key)
+    {
+        if(!root) return NULL;
+        
+        if(root->val < key) root->right = deleteNode(root->right,key);
+        else if(root->val > key) root->left = deleteNode(root->left,key);
+        else
+        {
+            if(!root->left && !root->right) 
+            {                
+                delete root;
+                return NULL;
+            }
+            else if(!root->left)
+            {
+                TreeNode* tmp=root->right;
+                delete root;
+                return tmp;
+            }
+            else if(!root->right)
+            {
+                TreeNode* tmp=root->left;
+                delete root;
+                return tmp;
+            }
+            
+            TreeNode* pre=root;
+            TreeNode* suc=root->right;
+            while(suc->left)
+            {
+                pre=suc;
+                suc=suc->left;
+            }
+            
+            if(pre!=root)
+            {
+                pre->left=suc->right;
+                suc->right=root->right;
+            }
+            suc->left=root->left;
+            
+            delete root;
+            return suc;
+        }
+        
+        return root;
+    }
+};
