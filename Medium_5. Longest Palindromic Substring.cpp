@@ -311,3 +311,79 @@ public:
         }                
     }
 };
+
+//2022-08-02
+//dp
+//time  : O(n*n)
+//space : O(n*n)
+class Solution {
+public:
+    string longestPalindrome(string s)
+    {
+        /*
+        0 1 2 3 4
+        a,b,a,b,a
+        
+        [0,0] [0,1] [0,2] [0,3] [0,4]
+        [1,1] [1,2] [1,3] [1,4]
+        [2,2] [2,3] [2,4]
+        [3,3] [3,4]
+        [4,4]
+        
+        [0,2] -> [1,1]
+        [0,3] -> [1,2]
+        */
+        int n=s.size();
+        
+        int begin=0;
+        int max_len=1;
+        int dp[n][n];
+        
+        for(int i=0; i<n; ++i)
+        {
+            /*for(int x=0; x<n; ++x)
+            {
+                dp[i][x]=999;
+            }*/
+            
+            dp[i][i]=1;
+            if(i+1<n) 
+            {
+                if(s[i]==s[i+1])
+                {
+                    dp[i][i+1]=2;
+                    begin=i;
+                    max_len=2;
+                }
+                else dp[i][i+1]=0;
+            }            
+        }                
+        
+        for(int diff=2; diff<n; ++diff)
+        {
+            for(int start=0; start+diff<n; ++start)
+            {
+                int end=start+diff;
+                //cout<<start<<" "<<end<<endl;
+                
+                if(dp[start+1][end-1]!=0 && s[start]==s[end])
+                {
+                    dp[start][end]=dp[start+1][end-1]+2;
+                    
+                    //cout<<dp[start+1][end-1]<<endl<<endl;
+                    begin=start;
+                    max_len=dp[start][end];
+                }
+                else
+                {
+                    dp[start][end]=0;
+                }
+                                
+            }
+        }
+        
+        //cout<<begin<<" : "<<max_len<<endl;
+        string ans=s.substr(begin,max_len);
+        return ans;
+    }    
+};
