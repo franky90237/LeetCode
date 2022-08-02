@@ -50,3 +50,24 @@ public:
         return tmp;
     }
 };
+
+//2022-08-02
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head)
+    {
+        if(!head || !head->next) return head;
+        
+        ListNode* pre=head;
+        ListNode* cur=head->next;
+        ListNode* nxt=cur->next;
+        
+        head=cur;
+        cur->next=pre;
+        pre->next=swapPairs(nxt);
+            
+        return head;
+    }
+};
