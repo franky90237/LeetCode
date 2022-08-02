@@ -117,3 +117,42 @@ public:
         return final_ans;
     }    
 };
+
+//2022-08-02
+//backtracking
+//time  : O(n!)
+//space : O(n)
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums)
+    {
+        /*
+        (1,2,3) (1,3,2) (2,1,3) (2,3,1) (3,2,1) (3,1,2)
+        
+        (1)
+        (2,1) (1,2)
+        (3,2,1) (2,3,1) (2,1,3) (3,1,2) (1,3,2) (1,2,3)
+        */
+        
+        vector<vector<int>> ans;
+        solve(0,nums,ans);
+        return ans;
+    }
+    
+    void solve(int cur, vector<int>& nums, vector<vector<int>>& ans)
+    {
+        int n=nums.size();
+        if(cur>=n)
+        {
+            ans.push_back(nums);
+            return;
+        }
+        
+        for(int i=cur; i<n; ++i)
+        {
+            swap(nums[cur],nums[i]);
+            solve(cur+1,nums,ans);
+            swap(nums[cur],nums[i]);
+        }
+    }
+};
