@@ -108,3 +108,36 @@ public:
         }
     }
 };
+
+//2022-08-02
+//greedy
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int maxArea(vector<int>& height)
+    {
+        int n=height.size();
+        
+        int max_area=0;
+        int left=0;
+        int right=n-1;
+        while(left<right)
+        {
+            int width=right-left;
+            
+            if(height[left]<height[right])
+            {                
+                max_area=max(max_area,height[left]*width);
+                ++left;
+            }
+            else
+            {
+                max_area=max(max_area,height[right]*width);
+                --right;
+            }            
+        }
+        
+        return max_area;
+    }     
+};
