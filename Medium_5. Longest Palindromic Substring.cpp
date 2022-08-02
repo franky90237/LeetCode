@@ -273,3 +273,41 @@ public:
         return res;
     }
 };
+
+//2022-08-02
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    string longestPalindrome(string s)
+    {    
+        int min_s=0;
+        int max_e=0;
+        for(int i=0; i<s.size(); ++i)
+        {        
+            palindrome_len(s,i,i,min_s,max_e);
+            if(i+1<s.size()) palindrome_len(s,i,i+1,min_s,max_e);            
+        }
+        
+        string ans=s.substr(min_s,max_e-min_s+1);
+        return ans;
+    }
+    
+    void palindrome_len(string& s, int start, int end, int& min_s, int& max_e)
+    {        
+        while(start>=0 && end<s.size() && s[start]==s[end])
+        {
+            --start;
+            ++end;
+        }
+        
+        ++start;
+        --end;
+        
+        if(end-start+1 > max_e-min_s+1)
+        {
+            min_s=start;
+            max_e=end;
+        }                
+    }
+};
