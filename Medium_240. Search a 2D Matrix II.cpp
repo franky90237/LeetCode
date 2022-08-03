@@ -97,3 +97,29 @@ public:
         return false;
     }
 };
+
+//2022-08-03
+//time  : O(m+n)
+//space : O(1)
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target)
+    {
+        int m=matrix.size();
+        int n=matrix[0].size();
+        
+        int row=m-1;
+        int col=0;
+        
+        while(row>=0 && col<n)
+        {
+            int val=matrix[row][col];
+            
+            if(val == target) return true;
+            else if(val > target) --row;
+            else ++col;
+        }
+        
+        return false;
+    }
+};
