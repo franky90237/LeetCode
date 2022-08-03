@@ -73,3 +73,116 @@ public:
         return dummy->next;
     }
 };
+
+//2022-08-03
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val)
+    {
+        if(!head) return NULL;
+        
+        ListNode* pre=NULL;
+        ListNode* cur=head;
+        
+        while(cur)
+        {
+            if(cur->val==val)
+            {
+                ListNode* removed=cur;
+                
+                if(cur==head)
+                {                    
+                    cur=cur->next;
+                    head=cur;
+                }
+                else
+                {
+                    pre->next=cur->next;
+                    cur=pre->next;
+                }
+                
+                delete removed;
+            }
+            else
+            {
+                pre=cur;
+                cur=cur->next;
+            }
+        }
+        
+        return head;
+    }
+};
+
+//2022-08-03
+//clear, two case
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val)
+    {
+        if(!head) return NULL;
+        
+        ListNode* pre=NULL;
+        ListNode* cur=head;
+        
+        while(cur && cur->val==val)
+        {
+            ListNode* removed=cur;
+            
+            cur=cur->next;
+            head=cur;
+            
+            delete removed;            
+        }        
+        
+        while(cur)
+        {
+            if(cur->val==val)
+            {
+                ListNode* removed=cur;
+                                
+                pre->next=cur->next;
+                cur=pre->next;                
+                
+                delete removed;
+            }
+            else
+            {
+                pre=cur;
+                cur=cur->next;
+            }
+        }
+        
+        return head;
+    }
+};
+
+//2022-08-03
+//recursive
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val)
+    {
+        /*
+        1->2->3
+        */
+        if(!head) return NULL;
+        
+        head->next=removeElements(head->next,val);
+        
+        if(head->val==val)
+        {
+            ListNode* removed=head;
+            head=head->next;
+            delete removed;
+        }
+        
+        return head;
+    }
+};
