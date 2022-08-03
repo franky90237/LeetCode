@@ -186,3 +186,42 @@ public:
         return head;
     }
 };
+
+//2022-08-03
+//use dummy node
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val)
+    {
+        /*
+        1->2->3
+        */
+        if(!head) return NULL;
+        
+        ListNode dummy=ListNode(-1,head);
+        ListNode* pre=&dummy;
+        ListNode* cur=head;
+        
+        while(cur)
+        {
+            if(cur->val==val)
+            {
+                ListNode* removed=cur;
+                
+                pre->next=cur->next;
+                cur=pre->next;
+                
+                delete removed;
+            }
+            else
+            {
+                pre=cur;
+                cur=cur->next;
+            }
+        }
+        
+        return dummy.next;
+    }
+};
