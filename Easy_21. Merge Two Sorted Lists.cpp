@@ -87,3 +87,41 @@ public:
         return dummy.next;
     }
 };
+
+//2022-08-04
+//recursive
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2)
+    {
+        /*
+        1->5
+        3->6
+        
+        stack : 1 3 5
+        1 -> m(5,3) => 
+        3 -> m(5,6) =>
+        5 -> m(X,6) =>
+        
+        5 -> 6
+        3- > 5 -> 6
+        1 -> 3 -> 5 -> 6
+        */
+        
+        if(!list1) return list2;
+        if(!list2) return list1;
+        
+        if(list1->val < list2->val)
+        {            
+            list1->next=mergeTwoLists(list1->next,list2);
+            return list1;
+        }
+        else
+        {
+            list2->next=mergeTwoLists(list1,list2->next);
+            return list2;
+        }
+    }
+};
