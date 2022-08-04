@@ -256,3 +256,57 @@ public:
         return false;
     }
 };
+
+//2022-08-04
+//clear condition, use end
+//time  : O(n)
+class MyCalendar
+{
+private:
+    map<int,int> events;
+    
+    bool overlap(int start, int end)
+    {
+        if(events.empty()) return false;
+        
+        int& new_start=start;
+        int& new_end=end;
+        
+        auto next = events.upper_bound(new_start);
+        
+        //cout<<start<<","<<end<<" | ";
+        //cout<<next->second<<","<<next->first<<endl;
+        
+        if(next != events.end() &&  next->second < new_end) return true;
+        return false;
+    }
+    
+public:
+    MyCalendar() 
+    {
+        /*
+              |--------|
+        |----------|
+                    
+        overlap : (new_end > next_start) 
+        
+        (47,50)
+        (33,41)
+        (25,32)
+        (19,25)
+        (3,8)
+        (8,13)               
+        */        
+    }
+    
+    bool book(int start, int end) 
+    {
+        if(!overlap(start,end)) 
+        {
+            events.insert({end,start});
+            return true;
+        }
+        
+        return false;
+    }
+};
