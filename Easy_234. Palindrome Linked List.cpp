@@ -74,3 +74,53 @@ public:
     }
 
 };
+
+//2022-08-05
+//slow fast + reverse list
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    bool isPalindrome(ListNode* head)
+    {
+        if(!head || !head->next) return true;
+        
+        ListNode* slow=head;
+        ListNode* fast=head;
+        
+        while(fast && fast->next)
+        {
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        
+        ListNode* rear = reverse_list(slow);        
+        ListNode* front=head;
+        
+        while(front && rear)
+        {
+            if(front->val != rear->val) return false;
+            
+            front=front->next;
+            rear=rear->next;
+        }
+        
+        return true;
+    }
+    
+    ListNode* reverse_list(ListNode* head)
+    {
+        ListNode* pre=NULL;
+        ListNode* cur=head;
+        
+        while(cur)
+        {
+            ListNode* nxt=cur->next;
+            cur->next=pre;
+            pre=cur;
+            cur=nxt;            
+        }
+        
+        return pre;
+    }
+};
