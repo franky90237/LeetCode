@@ -82,3 +82,44 @@ public:
         return dp[target];
     }
 };
+
+//2022-08-06
+//time  : O(2^n)
+//space : O(n)
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target)
+    {
+        /*
+        1,2,3        
+        */
+        
+        int cnt=0;
+        int sum=0;
+        sort(nums.begin(),nums.end());
+        dfs(nums,target,sum,cnt);
+        
+        return cnt;
+    }
+    
+    void dfs(vector<int>& nums, int target, int sum, int& cnt)
+    {
+        if(sum==target)
+        {
+            ++cnt;
+            return;
+        }
+        
+        if(sum>target) return;
+        
+        for(int i=0; i<nums.size(); ++i)
+        {
+            sum+=nums[i];
+            
+            dfs(nums,target,sum,cnt);
+            if(sum>=target) return;
+            
+            sum-=nums[i];
+        }
+    }
+};
