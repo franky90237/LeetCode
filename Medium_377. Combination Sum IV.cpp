@@ -125,6 +125,7 @@ public:
 };
 
 //2022-08-06
+//dp recursive
 //time  : O(target)
 //space : O(target)
 class Solution {
@@ -155,4 +156,29 @@ public:
         dp[target]=cnt;
         return dp[target];
     }
+};
+
+//2022-08-06
+//dp iterative
+//time  : O(n*target)
+//space : O(target)
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target)
+    {        
+        unsigned int dp[target+1];
+        for(int i=0; i<=target; ++i) dp[i]=0;
+        dp[0]=1;
+        
+        for(int cur_target=1; cur_target<=target; ++cur_target)
+        {            
+            for(auto& num:nums)
+            {
+                int pre_target=cur_target-num;
+                if(pre_target>=0) dp[cur_target]+=dp[pre_target];
+            }
+        }
+        
+        return dp[target];
+    }     
 };
