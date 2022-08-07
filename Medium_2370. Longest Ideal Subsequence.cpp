@@ -47,6 +47,8 @@ public:
 //2022-08-07
 //TLE
 //dp iterative
+//time  : O(n*n)
+//space L O(n)
 class Solution {
 public:
     int longestIdealString(string s, int k)
@@ -66,6 +68,39 @@ public:
             }
             
             ans=max(ans,dp[cur]);
+        }
+        
+        //for(auto& i:dp) cout<<i<<" ";
+        return ans;
+    }    
+};
+
+//2022-08-07
+//dp iterative
+//time  : O(n*k)
+//space : O(26)
+class Solution {
+public:
+    int longestIdealString(string s, int k)
+    {
+        int n=s.size();
+        int dp[26]={0};
+        
+        int ans=0;
+        for(int i=0; i<n; ++i)
+        {
+            int idx=s[i]-'a';
+            int start=max(0,idx-k);
+            int end=min(25,idx+k);
+            
+            while(start<=end)
+            {                
+                dp[idx]=max(dp[idx],dp[start]);                
+                ++start;
+            }
+            
+            ++dp[idx];
+            ans=max(ans,dp[idx]);
         }
         
         //for(auto& i:dp) cout<<i<<" ";
