@@ -43,3 +43,32 @@ public:
         return (pre==-1 || abs(s[cur]-s[pre])<=k);
     }
 };
+
+//2022-08-07
+//TLE
+//dp iterative
+class Solution {
+public:
+    int longestIdealString(string s, int k)
+    {
+        int n=s.size();
+        vector<int> dp(n,1);
+        
+        int ans=0;
+        for(int cur=1; cur<n; ++cur)
+        {
+            for(int pre=0; pre<cur; ++pre)
+            {
+                if(abs(s[cur]-s[pre])<=k)
+                {
+                    dp[cur]=max(dp[cur],1+dp[pre]);
+                }
+            }
+            
+            ans=max(ans,dp[cur]);
+        }
+        
+        //for(auto& i:dp) cout<<i<<" ";
+        return ans;
+    }    
+};
