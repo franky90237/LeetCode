@@ -120,3 +120,42 @@ public:
         return dp[cur][sum];
     }
 };
+
+//2022-08-08
+//clear, dp iterative
+//time  : O(n*m), m is the sum of the nums/2
+//space : O(n*m), m is the sum of the nums/2
+class Solution 
+{
+public:
+    bool canPartition(vector<int>& nums)
+    {
+        int sum=accumulate(nums.begin(),nums.end(),0);
+        if(sum%2==1) return false;
+        
+        sum=sum/2;        
+        int n=nums.size();
+        
+        vector<vector<bool>> dp(n+1,vector<bool>(sum+1,false));        
+        for(int i=0; i<=n; ++i) dp[i][0]=true;
+        for(int s=1; s<=sum; ++s) dp[0][s]=false;        
+        
+        for(int i=1; i<=n; ++i)
+        {
+            for(int s=1; s<=sum; ++s)
+            {
+                //cout<<i<<" "<<s<<endl;
+                dp[i][s] = dp[i-1][s];
+                if(s-nums[i-1]>=0) dp[i][s] = dp[i][s] || dp[i-1][s-nums[i-1]];
+            }
+        }
+        
+        /*for(int i=0; i<=n; ++i)
+        {
+            for(int s=0; s<=sum; ++s) cout<<dp[i][s]<<" ";
+            cout<<endl;
+        }*/
+        
+        return dp[n][sum];        
+    }
+};
