@@ -87,3 +87,36 @@ public:
         return dp[cur][cur_sum];
     }
 };
+
+//2022-08-08
+//clear, dp recursive
+//time  : O(n*m), m is the sum of the nums/2
+//space : O(n*m), m is the sum of the nums/2
+class Solution 
+{
+private:
+    vector<vector<int>> dp;
+    
+public:
+    bool canPartition(vector<int>& nums)
+    {
+        int all_sum=accumulate(nums.begin(),nums.end(),0);
+        if(all_sum%2==1) return false;
+        
+        dp.resize(nums.size(),vector<int>(all_sum+1,-1));
+        return solve(nums,0,all_sum/2);
+    }
+    
+    bool solve(vector<int>& nums, int cur, int sum)
+    {
+        int n=nums.size();
+        
+        if(sum==0) return true;
+        if(cur>=n || sum<0) return false;
+        if(dp[cur][sum]!=-1) return dp[cur][sum];
+                
+        dp[cur][sum] = solve(nums,cur+1,sum-nums[cur]) || 
+                       solve(nums,cur+1,sum);
+        return dp[cur][sum];
+    }
+};
