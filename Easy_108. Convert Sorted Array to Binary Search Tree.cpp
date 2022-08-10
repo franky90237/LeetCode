@@ -9,6 +9,7 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution {
 public:
     TreeNode* sortedArrayToBST(vector<int>& nums) 
@@ -65,5 +66,29 @@ public:
         //cout<<root->val<<endl;
         
         return root;
+    }
+};
+
+//2022-08-10
+//time  : O(n)
+//space : O(log(n))
+class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums)
+    {
+        return create_BST(nums,0,nums.size()-1);
+    }
+    
+    TreeNode* create_BST(vector<int>& nums, int low, int high)
+    {
+        if(low>high) return NULL;
+        
+        int mid=low+(high-low)/2;
+        
+        TreeNode* cur=new TreeNode(nums[mid]);        
+        cur->left=create_BST(nums,low,mid-1);
+        cur->right=create_BST(nums,mid+1,high);
+        
+        return cur;
     }
 };
