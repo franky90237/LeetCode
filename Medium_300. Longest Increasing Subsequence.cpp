@@ -145,3 +145,32 @@ public:
         return left;
     }
 };
+
+//2022-08-11
+//time  : O(n*n)
+//space : O(n)
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums)
+    {
+        int dp[nums.size()];
+        for(auto& i:dp) i=-1;
+        
+        return dfs(nums,-1,0,dp);
+    }
+    
+    int dfs(vector<int>& nums, int pre, int cur, int dp[])
+    {
+        int n=nums.size();
+        if(cur>=n) return 0;
+        if(dp[pre+1]!=-1) return dp[pre+1];
+        
+        //cout<<pre<<" "<<cur<<endl;
+        int pick=0;
+        if(pre==-1 || nums[pre]<nums[cur]) pick = 1 + dfs(nums,cur,cur+1,dp);
+        int not_pick = dfs(nums,pre,cur+1,dp);
+        
+        dp[pre+1]=max(pick,not_pick);
+        return dp[pre+1];
+    }
+};
