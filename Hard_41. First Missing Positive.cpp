@@ -55,3 +55,34 @@ public:
         return INT_MAX+1;
     }
 };
+
+//2022-08-12
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums)
+    {        
+        int n=nums.size();
+        
+        for(int i=0; i<n;)
+        {            
+            if(nums[i]>0 && nums[i]<=n && nums[i]!=i+1 && nums[i]!=nums[nums[i]-1])
+            {
+                int correct_idx=nums[i]-1;
+                swap(nums[i],nums[correct_idx]);
+            }
+            else
+            {
+                ++i;
+            }
+        }
+        
+        for(int i=0; i<n; ++i)
+        {
+            if(nums[i]!=i+1) return i+1;
+        }
+        
+        return n+1;
+    }
+};
