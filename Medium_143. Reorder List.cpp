@@ -70,3 +70,54 @@ public:
         return head;        
     }
 };
+
+//2022-08-12
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    void reorderList(ListNode* head)
+    {
+        if(!head || !head->next) return;
+        
+        ListNode* slow=head;
+        ListNode* fast=head;
+                
+        while(fast && fast->next)
+        {
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        
+        ListNode* last = revere_linked_list(slow);
+        ListNode* cur=head;
+        
+        while(cur!=last && last->next)
+        {
+            ListNode* nxt_cur=cur->next;
+            ListNode* nxt_last=last->next;
+            
+            cur->next=last;
+            last->next=nxt_cur;
+            
+            cur=nxt_cur;
+            last=nxt_last;
+        }        
+    }
+    
+    ListNode* revere_linked_list(ListNode* head)
+    {
+        ListNode* pre=NULL;
+        ListNode* cur=head;
+        
+        while(cur)
+        {
+            ListNode* nxt=cur->next;            
+            cur->next=pre;
+            pre=cur;
+            cur=nxt;
+        }
+        
+        return pre;
+    }
+};
