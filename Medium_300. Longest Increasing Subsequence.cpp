@@ -202,3 +202,71 @@ public:
         return ans;
     } 
 };
+
+//2022-08-14a
+//binary_search
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) 
+    {
+        /*
+        [3,5,6,2,5,4,19,5,6,7,12]
+                 ^
+        3,5,6
+        2,5,6
+        */
+        
+        int n=nums.size();
+        vector<int> lis;
+        lis.push_back(nums[0]);
+        
+        for(int i=1; i<n; ++i)
+        {
+            int num=nums[i];
+            
+            if(num==lis.back()) continue;
+            if(num>lis.back()) lis.push_back(num);
+            
+            int idx=binary_search(lis,num);
+            lis[idx]=num;
+        }
+        
+        return lis.size();
+    }
+    
+    int binary_search(vector<int>& lis, int key)
+    {
+        /*
+        [5,6], 1
+        (0,0,1) => 5>1
+        (0,0,0)
+        
+        [1,3,6], 2
+        (0,1,2) => 3>2
+        (0,0,1) => 1<2
+        (1,1,1)
+        
+        [2,3,6], 1
+        (0,1,2) => 3>1
+        (0,0,1) => 2>1
+        (0,0,0)
+        */
+        
+        int low=0;
+        int high=lis.size()-1;
+        
+        while(low<high)
+        {
+            int mid=low+(high-low)/2;
+            
+            if(lis[mid]>=key) high=mid;
+            else low=mid+1;
+        }
+        
+        return low;
+    }
+};
+
+
