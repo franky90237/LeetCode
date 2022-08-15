@@ -37,3 +37,47 @@ public:
         roman['M']=1000;
     }
 };
+
+//2022-08-15
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int romanToInt(string s)
+    {
+        /*
+        29 = XXIX
+        10
+        20
+        19
+        29
+        
+        429 = CDXXIV
+        -100
+        400
+        410
+        420
+        419
+        429
+        */
+        
+        unordered_map<char,int> table;
+        table['I']=1;
+        table['V']=5;
+        table['X']=10;
+        table['L']=50;
+        table['C']=100;
+        table['D']=500;
+        table['M']=1000;
+                
+        int ans=0;
+        
+        for(int i=0; i<s.size(); ++i)
+        {
+            if(i+1<s.size() && table[s[i]]<table[s[i+1]]) ans-=table[s[i]];
+            else ans+=table[s[i]];
+        }
+        
+        return ans;
+    }
+};
