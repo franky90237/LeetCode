@@ -42,3 +42,22 @@ public:
         return min_index==INT_MAX ? -1 : min_index;
     }
 };
+
+//2022-08-16
+//time  : O(n)
+//space : O(26)
+class Solution {
+public:
+    int firstUniqChar(string s)
+    {
+        int table[26]={0};
+        
+        for(auto& c:s) ++table[c-'a'];        
+        for(int i=0; i<s.size(); ++i)            
+        {
+            if(table[s[i]-'a']==1) return i; 
+        }
+        
+        return -1;
+    }
+};
