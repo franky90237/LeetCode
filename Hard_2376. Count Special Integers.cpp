@@ -180,3 +180,76 @@ public:
         return sum;
     }
 };
+
+//2022-08-16
+//time  : O(m), m is the number of digits of n
+//space : O(1)
+class Solution {
+public:
+    int countSpecialNumbers(int n)
+    {        
+        string s=to_string(n);
+        int digits=s.size();        
+        
+        int ans=0;
+        int product=9;
+        for(int i=1; i<=digits-1; ++i)
+        {
+            ans+=product;
+            product*=(10-i);
+        }
+        //cout<<digits<<" "<<ans<<endl;
+        
+        bool used[10]={false};
+        
+        for(int i=0; i<digits; ++i)
+        {
+            int val=s[i]-'0';            
+            if(i==digits-1 && !used[val]) ++ans;            
+            
+            ans+=calculate(i,s,used);
+            
+            if(used[val]) break;
+            used[val]=true;
+        }
+                
+        return ans;
+    }
+    
+    int calculate(int cur, string& s, bool used[])
+    {        
+        int val=s[cur]-'0';
+        if(cur==0) --val;
+        if(val<=0) return 0;
+        
+        int product=val;
+        for(int i=0; i<val; ++i)
+        {        
+            if(used[i]) --product;
+        }
+        if(product<=0) return 0;
+        //cout<<cur<<" "<<val<<" : "<<endl;        
+        
+        for(int i=cur+1; i<s.size(); ++i)
+        {
+            product*=(10-i);
+        }
+        
+        //cout<<product<<endl;
+        return product;
+    }
+};
+
+/*
+1215
+121
+1211
+121212129
+2
+20
+200
+1234
+1350
+1300
+2000000000
+*/
