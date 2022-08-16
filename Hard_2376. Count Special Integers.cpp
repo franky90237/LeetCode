@@ -121,3 +121,62 @@ public:
         }                
     }
 };
+
+//2022-08-16
+//dp
+//time  : O(m), m is the number of digits of n
+//space : O(m), m is the number of digits of n
+class Solution {
+public:
+    int countSpecialNumbers(int n)
+    {        
+        string s=to_string(n);
+        int digits=s.size();        
+        
+        int ans=0;
+        int product=9;        
+        for(int i=1; i<=digits-1; ++i)
+        {
+            ans+=product;
+            product*=(10-i);
+        }
+        //cout<<digits<<" "<<ans<<endl;
+                
+        vector<vector<vector<int>>> dp(digits, vector<vector<int>>(1024, vector<int>(2,-1) ) );        
+        
+        ans+=dfs(0,0,1,s,dp);
+        
+        return ans;
+    }
+    
+    int dfs(int cur, int bitmap, int greater, string& s, vector<vector<vector<int>>>& dp)
+    {
+        if(cur==s.size()) return 1;
+        if(dp[cur][bitmap][greater]!=-1) return dp[cur][bitmap][greater];
+        
+        int sum=0;
+        
+        for(char d='0'; d<='9'; ++d)
+        {
+            if(cur==0 && d=='0') continue;
+            if((bitmap>>(d-'0')) & 1) continue;
+            
+            if(d<s[cur])
+            {
+                sum+=dfs(cur+1, bitmap|(1<<(d-'0')), 0, s, dp);
+            }
+            else if(d==s[cur])
+            {
+                sum+=dfs(cur+1, bitmap|(1<<(d-'0')), greater, s, dp);
+            }
+            else if(d>s[cur] && greater==0)
+            {
+                sum+=dfs(cur+1, bitmap|(1<<(d-'0')), 0, s, dp);
+            }
+        }
+        
+        //cout<<cur<<" "<<bitmap<<" "<<greater<<" : "<<sum<<endl;
+        dp[cur][bitmap][greater]=sum;
+        return sum;
+    }
+};
