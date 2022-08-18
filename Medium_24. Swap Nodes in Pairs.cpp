@@ -71,3 +71,21 @@ public:
         return head;
     }
 };
+
+//2022-08-18
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head)
+    {
+        if(!head || !head->next) return head;
+        
+        ListNode* cur=head;
+        head=head->next;
+        cur->next=swapPairs(head->next);
+        head->next=cur;
+        
+        return head;
+    }
+};
