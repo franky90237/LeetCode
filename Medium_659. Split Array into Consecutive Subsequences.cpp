@@ -138,3 +138,58 @@ public:
         cout<<endl;
     }
 };
+
+//2022-08-19
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    bool isPossible(vector<int>& nums)
+    {
+        int curNum=0, curLen1=0, curLen2=0, curLen3=0;
+        int preNum=INT_MIN, preLen1=0, preLen2=0, preLen3=0;
+        
+        int n=nums.size();
+        for(int i=0; i<n;)
+        {
+            curNum=nums[i];
+            int count=0;
+            while(i<n && curNum==nums[i])
+            {
+                ++count;
+                ++i;
+            }
+            
+            if(preNum+1!=curNum)
+            {
+                if(preLen1!=0 || preLen2!=0) return false;
+                
+                curLen1=count;
+                curLen2=0;
+                curLen3=0;                
+            }
+            else
+            {
+                if(count-preLen1-preLen2<0) return false;
+                
+                count-=preLen1;
+                curLen2=preLen1;
+                
+                count-=preLen2;
+                curLen3=preLen2+min(preLen3,count);
+                
+                count-=preLen3;
+                curLen1=max(0,count);
+                
+                //cout<<count+preLen1+preLen2+preLen3<<" = "<<curLen1<<"+"<<curLen2<<"+"<<curLen3<<endl;
+            }
+            
+            preNum=curNum;
+            preLen1=curLen1;
+            preLen2=curLen2;
+            preLen3=curLen3;
+        }
+        
+        return preLen1==0 && preLen2==0;
+    }    
+};
