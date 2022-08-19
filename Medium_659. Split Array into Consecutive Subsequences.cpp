@@ -83,3 +83,58 @@ public:
         cout<<endl;
     }
 };
+
+//2022-08-19
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    bool isPossible(vector<int>& nums)
+    {
+        unordered_map<int,int> cnt,tail;
+        for(auto& num:nums) ++cnt[num];
+        //print(cnt);
+        
+        for(auto& num:nums)
+        {
+            if(cnt.find(num)==cnt.end()) continue;
+             
+            --cnt[num];
+            if(cnt[num]==0) cnt.erase(num);
+            
+            if(tail.find(num-1)!=tail.end())
+            {
+                --tail[num-1];
+                if(tail[num-1]==0) tail.erase(num-1);
+                
+                ++tail[num];
+            }
+            else if(cnt.find(num+1)!=cnt.end() && cnt.find(num+2)!=cnt.end())
+            {
+                    --cnt[num+1];
+                    --cnt[num+2];
+                    if(cnt[num+1]==0) cnt.erase(num+1);
+                    if(cnt[num+2]==0) cnt.erase(num+2);
+                    
+                    ++tail[num+2];
+            }
+            else
+            {
+                return false;
+            }
+            
+            //print(cnt);
+        }
+        
+        return true;
+    }
+    
+    void print(unordered_map<int,int>& m)
+    {
+        for(auto& i:m)
+        {
+            cout<<"("<<i.first<<","<<i.second<<") ";            
+        }
+        cout<<endl;
+    }
+};
