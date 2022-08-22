@@ -46,3 +46,94 @@ public:
         return ans;
     }
 };
+
+//2022-08-22
+//dp iterative
+//time  : O(n*n)
+//space : O(n*n)
+class Solution {
+public:
+    int minRefuelStops(int target, int startFuel, vector<vector<int>>& stations)
+    {
+        int n=stations.size();
+        if(n==0) return (startFuel>=target) ? 0 : -1;
+        
+        long dp[n][n+1];        
+        for(int i=0; i<n; ++i) dp[i][0]=startFuel;
+        dp[0][1] = startFuel>=stations[0][0] ? startFuel+stations[0][1] : -1;
+        
+        for(int i=1; i<n; ++i)
+        {
+            for(int j=1; j<=i+1; ++j)
+            {
+                if(j==i+1)
+                {
+                    if(dp[i-1][j-1]>=stations[i][0]) dp[i][j]=dp[i-1][j-1]+stations[i][1];
+                    else dp[i][j]=-1;                   
+                }
+                else
+                {
+                    dp[i][j]=dp[i-1][j];
+                    
+                    if(dp[i-1][j-1]>=stations[i][0]) dp[i][j]=max(dp[i][j],dp[i-1][j-1]+stations[i][1]);                    
+                }
+            }
+        }
+        
+        /*for(int i=0; i<n; ++i)
+        {
+            for(int j=0; j<=i+1; ++j) cout<<dp[i][j]<<" ";
+            cout<<endl;
+        }*/
+        
+        for(int j=0; j<=n; ++j)
+        {
+            if(dp[n-1][j]>=target) return j;
+        }
+        
+        return -1;
+    }
+};
+
+//2022-08-22
+//dp iterative
+//time  : O(n*n)
+//space : O(n*n)
+class Solution {
+public:
+    int minRefuelStops(int target, int startFuel, vector<vector<int>>& stations)
+    {
+        int n=stations.size();
+        if(n==0) return (startFuel>=target) ? 0 : -1;
+        
+        long dp[n][n+1];        
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=i+1; j<n+1; ++j) dp[i][j]=-1;            
+        }            
+        for(int i=0; i<n; ++i) dp[i][0]=startFuel;
+        dp[0][1] = startFuel>=stations[0][0] ? startFuel+stations[0][1] : -1;
+        
+        for(int i=1; i<n; ++i)
+        {
+            for(int j=1; j<=i+1; ++j)
+            {                
+                dp[i][j]=dp[i-1][j];                
+                if(dp[i-1][j-1]>=stations[i][0]) dp[i][j]=max(dp[i][j],dp[i-1][j-1]+stations[i][1]);
+            }
+        }
+        
+        /*for(int i=0; i<n; ++i)
+        {
+            for(int j=0; j<n+1; ++j) cout<<dp[i][j]<<" ";
+            cout<<endl;
+        }*/
+        
+        for(int j=0; j<=n; ++j)
+        {
+            if(dp[n-1][j]>=target) return j;
+        }
+        
+        return -1;
+    }
+};
