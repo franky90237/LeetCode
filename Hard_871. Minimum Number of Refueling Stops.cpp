@@ -138,7 +138,7 @@ public:
     }
 };
 
-//2022-08-22
+//2022-08-23
 //clear, dp iterative
 //time  : O(n*n)
 //space : O(n*n)
@@ -170,7 +170,44 @@ public:
         
         for(int j=0; j<=n; ++j)
         {
-            if(dp[n-1][j]>=target) return j;
+            if(dp[n][j]>=target) return j;
+        }
+        
+        return -1;
+    }
+};
+
+//2022-08-23
+//greedy, max heap
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    int minRefuelStops(int target, int startFuel, vector<vector<int>>& stations)
+    {
+        int n=stations.size();
+        priority_queue<int> maxHeap;
+        
+        int ans=0;
+        int i=0;
+        while(true)
+        {
+            //cout<<startFuel<<endl;
+            if(startFuel>=target) return ans;
+            
+            while(i<n && startFuel>=stations[i][0])
+            {
+                maxHeap.push(stations[i][1]);
+                ++i;
+            }
+            
+            if(maxHeap.empty()) return -1;
+            
+            int fuel=maxHeap.top();
+            maxHeap.pop();            
+            startFuel+=fuel;
+            
+            ++ans;
         }
         
         return -1;
