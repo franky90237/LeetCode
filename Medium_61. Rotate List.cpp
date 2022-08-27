@@ -67,3 +67,40 @@ public:
         return pre;
     }    
 };
+
+//2022-08-27
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k)
+    {        
+        if(!head || !head->next || k==0) return head;
+        
+        int len=0;
+        ListNode* tail=NULL;
+        ListNode* cur=head;
+        while(cur)
+        {
+            ++len;
+            tail=cur;
+            cur=cur->next;
+        }
+        
+        k%=len;
+        if(k==0) return head;
+        
+        ListNode* new_tail=NULL;
+        ListNode* new_head=head;
+        for(int i=1; i<=len-k; ++i)
+        {
+            new_tail=new_head;
+            new_head=new_head->next;
+        }
+        
+        tail->next=head;
+        new_tail->next=NULL;
+        
+        return new_head;                
+    }      
+};
