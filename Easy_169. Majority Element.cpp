@@ -34,3 +34,84 @@ public:
         return res;
     }
 };
+
+//2022-09-01
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    int majorityElement(vector<int>& nums)
+    {
+        /*
+          1,1,1,2,2,2,2
+            ^
+        c 1 2 3 1 2 3 4 
+        p 1     2
+        
+        */
+        sort(nums.begin(),nums.end());
+        
+        int n=nums.size();
+        int cnt=1;
+        int pre=nums[0];
+        for(int i=1; i<n; ++i)
+        {
+            if(cnt>n/2) break;
+            
+            if(pre==nums[i])
+            {
+                ++cnt;
+            }
+            else
+            {
+                cnt=1;
+                pre=nums[i];
+            }
+        }
+        
+        return pre;
+    }
+};
+
+//2022-09-01
+//clear
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    int majorityElement(vector<int>& nums)
+    {        
+        sort(nums.begin(),nums.end());        
+        int n=nums.size();        
+        return nums[n/2];
+    }
+};
+
+//2022-09-01
+//Boyer–Moore majority vote algorithm
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int majorityElement(vector<int>& nums)
+    {        
+        int n=nums.size();
+        
+        int ans=nums[0];
+        int cnt=1;
+        
+        for(int i=0; i<n; ++i)
+        {
+            if(ans==nums[i]) ++cnt;
+            else --cnt;
+            
+            if(cnt==0)
+            {
+                ans=nums[i];
+                cnt=1;
+            }
+        }
+        
+        return ans;
+    }
+};
