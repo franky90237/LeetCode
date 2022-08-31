@@ -37,3 +37,21 @@ public:
     }
 };
 
+//2022-09-01
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums)
+    {
+        unordered_set<int> table;
+        
+        for(auto& num:nums)
+        {
+            if(table.count(num)) return true;
+            else table.insert(num);
+        }
+        
+        return false;
+    }
+};
