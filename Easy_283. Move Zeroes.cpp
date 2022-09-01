@@ -71,3 +71,22 @@ public:
         }
     }
 };
+
+//2022-09-01
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums)
+    {
+        int idx=0;
+        for(int i=0; i<nums.size(); ++i)
+        {
+            if(nums[i]!=0)
+            {
+                swap(nums[idx],nums[i]);
+                ++idx;
+            }
+        }                
+    }
+};
