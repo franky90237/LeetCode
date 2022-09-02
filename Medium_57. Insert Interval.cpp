@@ -1,6 +1,6 @@
 //2022-06-13
 //time  : O(n)
-//space : O(1)
+//space : O(n)
 class Solution {
 public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval)
@@ -105,5 +105,45 @@ public:
     bool Overlaping(vector<int>& curInterval, vector<int>& newInterval)
     {
         return (newInterval[1]>=curInterval[0]);
+    }
+};
+
+//2022-09-02
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval)
+    {        
+        vector<vector<int>> ans;
+        
+        int n=intervals.size();
+        int i=0;        
+        while(i<n && intervals[i][1]<newInterval[0])
+        {
+            ans.push_back(intervals[i]);
+            ++i;
+        }
+        ans.push_back(newInterval);
+        
+        while(i<n && overlapping(ans.back(),intervals[i]))
+        {
+            ans.back()[0]=min(ans.back()[0],intervals[i][0]);
+            ans.back()[1]=max(ans.back()[1],intervals[i][1]);
+            ++i;
+        }
+        
+        while(i<n)
+        {
+            ans.push_back(intervals[i]);
+            ++i;
+        }
+                    
+        return ans;
+    }
+    
+    bool overlapping(vector<int>& a, vector<int>& b)
+    {
+        return b[0]<=a[1]; 
     }
 };
