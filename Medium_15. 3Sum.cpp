@@ -325,3 +325,119 @@ public:
         return ans;
     }
 };
+
+//2022-09-02
+//time  : O(n*n)
+//space : O(1)
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums)
+    {
+        /*
+        -4,-1,-1, 0, 1, 2
+        
+        (-1,-1, 2)
+        (-1, 0, 1)
+        -4 -> 4 ( 1, 2)
+        -1 -> 1 ( 0, 1)
+        */
+        sort(nums.begin(),nums.end());
+        
+        vector<vector<int>> ans;        
+        int n=nums.size();
+        int i=0;
+        
+        while(i<n)
+        {
+            int target=0-nums[i];
+            int left=i+1;
+            int right=n-1;
+            
+            while(left<right)
+            {
+                int sum=nums[left]+nums[right];
+                
+                if(sum==target) 
+                {
+                    ans.push_back({nums[i],nums[left],nums[right]});
+                    ++left;
+                    while(left<right && nums[left]==nums[left-1]) ++left;
+                }
+                else if(sum<target)
+                {
+                    ++left;
+                    while(left<right && nums[left]==nums[left-1]) ++left;
+                }
+                else
+                {
+                    --right;
+                    while(left<right && nums[right]==nums[right+1]) --right;
+                }                
+            }
+            
+            ++i;
+            while(i<n && nums[i]==nums[i-1]) ++i;
+        }
+        
+        return ans;
+    }
+};
+
+//2022-09-02
+//time  : O(n*n)
+//space : O(1)
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums)
+    {
+        /*
+        -4,-1,-1, 0, 1, 2
+        
+        (-1,-1, 2)
+        (-1, 0, 1)
+        -4 -> 4 ( 1, 2)
+        -1 -> 1 ( 0, 1)
+        */
+        sort(nums.begin(),nums.end());
+        
+        vector<vector<int>> ans;        
+        int n=nums.size();
+        int i=0;
+        
+        while(i<n)
+        {
+            int target=0-nums[i];
+            int left=i+1;
+            int right=n-1;
+            
+            while(left<right)
+            {
+                int sum=nums[left]+nums[right];
+                
+                if(sum<target)
+                {
+                    ++left;                
+                }
+                else if(sum>target)
+                {
+                    --right;
+                }
+                else
+                {
+                    ans.push_back({nums[i],nums[left],nums[right]});
+                    
+                    ++left;
+                    while(left<right && nums[left]==nums[left-1]) ++left;
+                    
+                    --right;
+                    while(left<right && nums[right]==nums[right+1]) --right;
+                }                            
+            }
+            
+            ++i;
+            while(i<n && nums[i]==nums[i-1]) ++i;
+        }
+        
+        return ans;
+    }
+};
