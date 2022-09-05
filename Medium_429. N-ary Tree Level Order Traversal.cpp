@@ -57,3 +57,39 @@ public:
         return ans;
     }
 };
+
+//2022-09-05
+//dfs
+//time  : O(n)
+//space : O(the height of the tree)
+class Solution {
+public:
+    vector<vector<int>> levelOrder(Node* root) 
+    {
+        vector<vector<int>> ans;
+        dfs(root,0,ans);
+        
+        return ans;        
+    }
+    
+    void dfs(Node* root, int level, vector<vector<int>>& ans)
+    {
+        if(!root) return;
+        
+        //cout<<ans.size()<<" "<<level<<endl;
+        if(ans.size()==level)
+        {            
+            ans.push_back({root->val});
+        }
+        else
+        {
+            ans[level].push_back(root->val);
+        }
+        
+        for(auto& child:root->children)
+        {
+            dfs(child,level+1,ans);
+        }
+        
+    }
+};
