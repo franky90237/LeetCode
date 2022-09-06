@@ -52,9 +52,7 @@ public:
         
         return res;
     }
-    
-    
-    
+            
     void print_intervals(vector<vector<int>>& intervals)
     {
         for(auto& i:intervals)
@@ -62,5 +60,43 @@ public:
             printf("[%d,%d] ",i[0],i[1]);
         }
         printf("\n");
+    }
+};
+
+//2022-09-06
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals)
+    {
+        sort(intervals.begin(),intervals.end());
+        
+        vector<vector<int>> ans;
+        ans.push_back(intervals[0]);
+        
+        int n=intervals.size();
+        for(int i=1; i<n; ++i)
+        {
+            if(overlapping(ans.back(),intervals[i]))
+            {
+                ans.back()[1]=max(ans.back()[1],intervals[i][1]);
+            }
+            else
+            {
+                ans.push_back(intervals[i]);
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool overlapping(vector<int>& a, vector<int>& b)
+    {
+        /*
+        --------
+          ---------
+        */
+        return a[1]>=b[0];
     }
 };
