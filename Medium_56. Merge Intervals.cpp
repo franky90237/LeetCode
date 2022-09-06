@@ -64,7 +64,7 @@ public:
 };
 
 //2022-09-06
-//time  : O(n)
+//time  : O(nlong(n))
 //space : O(1)
 class Solution {
 public:
