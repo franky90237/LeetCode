@@ -141,3 +141,37 @@ public:
         return max_area;
     }     
 };
+
+//2022-09-07
+//proof inspireed from : https://leetcode.com/problems/container-with-most-water/discuss/1069746/JS-Python-Java-C%2B%2B-or-2-Pointer-Solution-w-Visual-Explanation-or-beats-100
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int maxArea(vector<int>& height)
+    {
+        int ans=0;
+        
+        int left=0;
+        int right=height.size()-1;
+        
+        while(left<right)
+        {
+            int water=(right-left)*min(height[left],height[right]);
+            ans=max(ans,water);
+            
+            if(height[left]<height[right])
+            {
+                ++left;
+                while(left<right && height[left]<=height[left-1]) ++left;
+            }
+            else
+            {
+                --right;
+                while(left<right && height[right]<=height[right+1]) --right;
+            }
+        }
+        
+        return ans;
+    }
+};
