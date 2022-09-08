@@ -109,3 +109,39 @@ public:
         return true;
     }
 };
+
+//2022-09-08
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost)
+    {
+        /*
+         0, 1, 2, 3, 4
+        [0, 0, 0,-5,10]
+        
+        */
+        int n=gas.size();       
+        
+        int all=0;
+        int cur=0;
+        int start=0;        
+        for(int i=0; i<n; ++i)
+        {
+            int rest=gas[i]-cost[i];
+            cur+=rest;
+            all+=rest;
+            
+            if(cur<0)
+            {
+                cur=0;
+                start=i+1;
+            }
+        }                
+        
+        if(all<0) return -1;
+        return start;
+    }
+        
+};
