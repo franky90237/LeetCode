@@ -207,3 +207,84 @@ public:
         return ans;
     }
 };
+
+//2022-09-08
+//union find
+//time  : O(n)
+//space : O(n)
+class union_find
+{
+private:
+    //num : {parent, size}
+    unordered_map<int,pair<int,int>> parent;
+    
+public:
+    union_find(vector<int>& nums)
+    {        
+        for(auto& num:nums) 
+        {
+            parent[num]={num,1};
+        }
+    }
+    
+    void combine(int a, int b)
+    {
+        int root_a=find(a);
+        int root_b=find(b);
+               
+        if(parent[root_a].second > parent[root_b].second)
+        {
+            parent[root_b].first=root_a;
+            parent[root_a].second+=parent[root_b].second;
+        }
+        else
+        {
+            parent[root_a].first=root_b;
+            parent[root_b].second+=parent[root_a].second;
+        }
+        
+        //cout<<a<<" : "<<parent[a].first<<" "<<parent[a].second<<endl;
+        //cout<<b<<" : "<<parent[b].first<<" "<<parent[b].second<<endl<<endl;
+    }
+    
+    int find(int a)
+    {
+        if(parent[a].first==a) return a;
+        
+        parent[a].first=find(parent[a].first);
+        return parent[a].first;
+    }
+    
+    int get_longest_length()
+    {
+        int max_len=0;
+        for(auto& node:parent)
+        {
+            //cout<<node.first<<" - "<<node.second.first<<","<<node.second.second<<endl;
+            max_len=max(max_len,node.second.second);
+        }
+        
+        return max_len;
+    }
+};
+
+class Solution 
+{
+public:
+    int longestConsecutive(vector<int>& nums)
+    {
+        unordered_set<int> table;
+        union_find uf(nums);
+        
+        for(auto& num:nums)
+        {
+            if(table.count(num)>0) continue;
+            
+            table.insert(num);
+            if(table.count(num-1)>0) uf.combine(num,num-1);
+            if(table.count(num+1)>0) uf.combine(num,num+1);
+        }
+        
+        return uf.get_longest_length();
+    }
+};
