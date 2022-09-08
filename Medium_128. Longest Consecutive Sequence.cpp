@@ -160,3 +160,50 @@ public:
         return lcs;
     }
 };
+
+//2022-09-08
+//MLE
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums)
+    {        
+        /*
+              0,0,0,1,1,1,0,0,1,1,1,1,0,0,0
+        l = 0 0 0 0 1 2 3 0 0 1 2 3 4 0 0 0
+        a = 0 0 0 0 1 2 3 3 3 3 3 3 4 4 4 4
+        */
+        
+        const int SIZE=2*(1e9);        
+        bool table[SIZE+1]={0};        
+        
+        int n=nums.size();
+        int max_num=INT_MIN;
+        for(int i=0; i<n ;++i)
+        {
+            //cout<<nums[i]<<" "<<nums[i]+1e9<<endl;
+            int num=nums[i]+1e9;
+            max_num=max(max_num,num);
+            table[num]=1;
+        }
+        
+        int ans=0;
+        int len=0;
+        for(int i=0; i<=max_num; ++i)
+        {
+            //cout<<i<<" "<<table[i]<<endl;
+            if(table[i]==0)
+            {                
+                len=0;
+            }
+            else
+            {
+                ++len;
+                ans=max(ans,len);
+            }
+        }
+        
+        return ans;
+    }
+};
