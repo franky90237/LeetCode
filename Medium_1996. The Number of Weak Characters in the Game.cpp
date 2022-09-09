@@ -33,3 +33,40 @@ public:
         return ans;
     }
 };
+
+//2022-09-10
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    int numberOfWeakCharacters(vector<vector<int>>& properties)
+    {
+        /*
+        [1,2,2,2,3,3,3]
+        [5,9,3,2,6,5,4]
+        */
+        
+        sort(properties.begin(),properties.end(),
+            [](vector<int>& a, vector<int>& b)
+             {
+                 if(a[0]==b[0]) return a[1]>b[1];
+                 return a[0]<b[0];
+             });
+        
+        int ans=0;
+        int max_defense=INT_MIN;    
+        for(int i=properties.size()-1; i>=0; --i)
+        {
+            if(max_defense>properties[i][1])
+            {            
+                ++ans;
+            }
+            else
+            {
+                max_defense=properties[i][1];
+            }
+        }
+        
+        return ans;
+    }
+};
