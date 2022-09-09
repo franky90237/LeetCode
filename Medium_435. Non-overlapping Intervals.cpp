@@ -142,3 +142,50 @@ public:
         return cnt;
     }    
 };
+
+//2022-09-09
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals)
+    {        
+        sort(intervals.begin(),intervals.end());
+        /*sort(intervals.begin(),intervals.end(),
+             [](vector<int>& a, vector<int>& b)
+             {
+                 if(a[0]==b[0]) return a[1]<b[1];                 
+                 return a[0]<b[0];
+             });*/
+        
+        /*for(auto i:intervals)
+        {
+            cout<<"("<<i[0]<<","<<i[1]<<")"<<" ";
+        }
+        cout<<endl;*/
+        
+        int ans=0;
+        int n=intervals.size();
+        int pre=0;
+        for(int i=1; i<n; ++i)
+        {
+            if(overlapping(intervals[pre],intervals[i]))
+            {
+                //cout<<pre<<" "<<i<<endl;
+                ++ans;
+                if(intervals[pre][1]>intervals[i][1]) pre=i;
+            }
+            else
+            {
+                pre=i;
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool overlapping(vector<int>& a, vector<int>& b)
+    {
+        return a[1]>b[0];
+    }
+};
