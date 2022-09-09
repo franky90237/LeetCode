@@ -295,3 +295,81 @@ public:
         return ans;
     }
 };
+
+//2022-09-09
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k)
+    {
+        /*   0  1  2  3  4  5  6  7
+            [1, 3,-1,-3, 5, 3, 6, 7], k=3
+                             ^
+             1, 3, 3 | -3, 5, 5 | 3, 6, 7
+             3, 3,-1 |  5, 5, 3 | 7, 7, 7
+        ans = [3]
+        (0,2) -> max(3, 3)
+        (1,3) -> max(3,-1)
+        */
+        
+        if(k==1) return nums;
+         
+        int n=nums.size();
+        vector<int> ans;
+        
+        int max_left_block[n];        
+        for(int i=0; i<n; ++i)
+        {
+            if(i%k==0)
+            {
+                max_left_block[i]=nums[i];                
+            }
+            else
+            {
+                max_left_block[i]=max(max_left_block[i-1],nums[i]);                
+            }
+            
+            //cout<<max_left_block[i]<<endl;
+        }
+        
+        
+        int max_right_block[n];
+        max_right_block[n-1]=nums[n-1];        
+        int last=n-2;    
+        while(last>=0 && last%k!=k-1)
+        {
+            max_right_block[last]=max(max_right_block[last+1],nums[last]);            
+            --last;
+        }
+        
+        while(last>=0)
+        {
+            if(last%k==k-1)
+            {
+                 max_right_block[last]=nums[last];
+            }
+            else
+            {
+                max_right_block[last]=max(max_right_block[last+1],nums[last]);
+            }
+                        
+            --last;
+        }
+        
+        /*for(int i=0; i<n; ++i) cout<<max_right_block[i]<<" ";
+        cout<<endl;*/
+        
+        int start=0;
+        int end=k-1;
+        while(end<n)
+        {
+            ans.push_back(max(max_left_block[end],max_right_block[start]));            
+            
+            ++start;
+            ++end;
+        }
+        
+        return ans;
+    }
+};
