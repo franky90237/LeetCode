@@ -1,5 +1,5 @@
 //2022-09-10
-//time  : O(n)
+//time  : O(nlog(n))
 //space : O(n)
 class Solution {
 public:
