@@ -237,3 +237,61 @@ public:
         return ans;
     }
 };
+
+//2022-09-09
+//deque
+//time  : O(n)
+//space : O(k)
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k)
+    {
+        /*   0  1  2  3  4  5  6  7
+            [1, 3,-1,-3, 5, 3, 6, 7]
+                               ^
+        ans = [3,3,5,5,6,7]
+        i=0 -> d : 1
+        i=1 -> d : 3
+
+        i=2 -> d : 3,-1
+        i=3 -> d : 3,-1,-3
+        i=4 -> d : 5
+        i=5 -> d : 5,3
+        i=6 -> d : 6,5,3
+        i=7 -> d : 7
+        */
+        
+        if(k==1) return nums;
+         
+        int n=nums.size();
+        vector<int> ans;
+        
+        deque<int> dq;      
+        int start=0;
+        int end=0;
+        while(end<n)
+        {
+            if(!dq.empty() && dq.front()<start)
+            {
+                dq.pop_front();                
+            }
+            
+            while(!dq.empty() && nums[dq.back()]<=nums[end])
+            {
+                dq.pop_back();
+            }
+            
+            dq.push_back(end);
+            
+            if((end-start+1)==k)
+            {
+                ans.push_back(nums[dq.front()]);
+                ++start;
+            }
+            
+            ++end;
+        }
+        
+        return ans;
+    }
+};
