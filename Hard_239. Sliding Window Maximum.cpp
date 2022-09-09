@@ -85,7 +85,7 @@ public:
 
 //2022-06-06
 //use deque
-//time  : O((n)
+//time  : O(n)
 //space : O(k)
 class Solution {
 public:
@@ -177,5 +177,63 @@ public:
     {
         for(int i=0; i<n; ++i) cout<<arr[i]<<" ";
         cout<<endl;
+    }
+};
+
+//2022-09-09
+//time  : O(klog(k) + (n-k)*log(k))
+//space : O(k)
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k)
+    {
+        if(k==1) return nums;
+        
+        //create max heap of size k
+        priority_queue<int> max_heap;
+        int n=nums.size();
+        for(int i=0; i<k; ++i)
+        {
+            max_heap.push(nums[i]);
+        }
+                
+        vector<int> ans;
+        unordered_map<int,int> to_be_removed;
+        int start=1;
+        int end=k;
+        
+        //iterate form index k to n-1
+        while(end<n)
+        {
+            int old_num=nums[start-1];
+            int new_num=nums[end];
+            
+            ans.push_back(max_heap.top());
+                        
+            if(max_heap.top()==old_num)
+            {
+                max_heap.pop();
+            }
+            else
+            {
+                ++to_be_removed[old_num];
+            }
+                    
+            max_heap.push(new_num);
+                        
+            while(to_be_removed.find(max_heap.top()) != to_be_removed.end())
+            {
+                --to_be_removed[max_heap.top()];
+                if(to_be_removed[max_heap.top()]==0) to_be_removed.erase(max_heap.top());
+                max_heap.pop();
+            }
+            
+            ++start;
+            ++end;            
+        }
+        
+        ans.push_back(max_heap.top());
+        
+        return ans;
     }
 };
