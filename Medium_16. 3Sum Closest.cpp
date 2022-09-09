@@ -119,3 +119,48 @@ public:
         return res;        
     }
 };
+
+//2022-09-09
+//time  : O(n*n)
+//space : O(1)
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target)
+    {
+        sort(nums.begin(),nums.end());
+        
+        int ans=nums[0]+nums[1]+nums[2];
+        
+        int n=nums.size();
+        for(int i=0; i<n; ++i)
+        {
+            if(i!=0 && nums[i-1]==nums[i]) continue;
+                      
+            int l=i+1;
+            int r=n-1;            
+            while(l<r)
+            {
+                int sum=nums[i]+nums[l]+nums[r];
+                
+                if(sum==target) 
+                {
+                    return sum;
+                }
+                else if(sum>target)
+                {
+                    if(abs(sum-target)<abs(ans-target)) ans=sum;
+                    --r;
+                    while(l<r && nums[r]==nums[r+1]) --r;                    
+                }
+                else
+                {
+                    if(abs(sum-target)<abs(ans-target)) ans=sum;
+                    ++l;
+                    while(l<r && nums[l]==nums[l-1]) ++l;                   
+                }                            
+            }
+        }
+        
+        return ans;
+    }
+};
