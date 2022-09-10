@@ -73,3 +73,43 @@ public:
         dfs(root->left,level+1,ans);
     }
 };
+
+//2022-09-10
+//time  : O(n)
+//space : O(2^h), h is the height of the tree
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root)
+    {
+        if(!root) return {};
+        
+        vector<int> ans;
+        
+        queue<TreeNode*> q;
+        q.push(root);
+        
+        while(!q.empty())
+        {
+            bool right=true;
+            int size=q.size();
+            while(size>0)
+            {
+                TreeNode* node=q.front();
+                q.pop();
+                
+                if(right) 
+                {
+                    ans.push_back(node->val);
+                    right=false;
+                }
+                
+                if(node->right) q.push(node->right);
+                if(node->left) q.push(node->left);
+                
+                --size;
+            }
+        }
+        
+        return ans;
+    }
+};
