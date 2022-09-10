@@ -116,3 +116,33 @@ public:
         return max(left+root->val,right+root->val);
     }
 };
+
+//2022-09-10
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    int maxPathSum(TreeNode* root)
+    {
+        if(!root->left && !root->right) return root->val;
+        
+        vector<int> ans=dfs(root);
+        return ans[0];
+    }
+    
+    vector<int> dfs(TreeNode* root)
+    {
+        if(!root) return {INT_MIN,0};
+        
+        vector<int> left_subtree=dfs(root->left);
+        vector<int> right_subtree=dfs(root->right);
+        
+        int max_root_path_sum = root->val + max(left_subtree[1],right_subtree[1]);
+        if(max_root_path_sum<0) max_root_path_sum=0;
+            
+        int max_path_sum = max(left_subtree[1]+root->val+right_subtree[1], max(left_subtree[0], right_subtree[0]));
+        
+        //cout<<root->val<<" : "<<max_path_sum<<" "<<max_root_path_sum<<endl;
+        return {max_path_sum,max_root_path_sum};
+    }
+};
