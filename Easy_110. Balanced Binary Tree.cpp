@@ -114,3 +114,35 @@ public:
         return max(left_depth,right_depth) + 1;
     }
 };
+
+//2022-09-10
+//time  : O(n)
+//space : O(height of the tree)
+class Solution {
+public:
+    bool isBalanced(TreeNode* root)
+    {
+        bool ans=true;
+        dfs(root,ans);
+        
+        return ans;
+    }
+    
+    int dfs(TreeNode* root, bool& ans)
+    {
+        if(!root) return 0;
+        
+        int left=dfs(root->left,ans);
+        int right=dfs(root->right,ans);
+        
+        if(!ans) return -1;
+        
+        if(abs(left-right)>=2) 
+        {
+            ans=false;
+            return -1;
+        }
+        
+        return 1+max(left,right);
+    }
+};
