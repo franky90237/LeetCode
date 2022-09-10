@@ -70,3 +70,38 @@ public:
         return ans;
     }
 };
+
+//2022-09-10
+//time  : O(n+k), k is the range of attack
+//space : O(1)
+class Solution {
+public:
+    int numberOfWeakCharacters(vector<vector<int>>& properties)
+    {        
+        const int SIZE=100000;
+        int group[SIZE+2]={0};
+        
+        for(auto& p:properties)
+        {
+            int attack=p[0];
+            int defense=p[1];
+            
+            group[attack]=max(group[attack],p[1]);
+        }
+                    
+        for(int i=SIZE; i>=0; --i)
+        {            
+            group[i]=max(group[i],group[i+1]);
+        }
+        
+        int ans=0;
+        for(auto& p:properties)
+        {
+            int attack=p[0];
+            int defense=p[1];
+            if(defense<group[attack+1]) ++ans;
+        }
+        
+        return ans;
+    }
+};
