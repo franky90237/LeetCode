@@ -172,7 +172,7 @@ public:
 
 //2022-09-12
 //time  : O(m*n)
-//space : O(1)
+//space : O(m*n)
 class Solution {
 public:
     int numIslands(vector<vector<char>>& grid)
@@ -238,5 +238,49 @@ public:
             }
         }
         
+    }
+};
+
+//2022-09-12
+//time  : O(m*n)
+//space : O(m*n)
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid)
+    {
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        int ans=0;
+        
+        for(int r=0; r<m; ++r)
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(grid[r][c]=='1')
+                {
+                    //cout<<r<<" "<<c<<endl;
+                    dfs(r,c,grid);
+                    ++ans;
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    void dfs(int r, int c, vector<vector<char>>& grid)
+    {
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        if(r<0 || r>=m || c<0 || c>=n || grid[r][c]!='1') return;
+        
+        grid[r][c]='v';
+        
+        dfs(r+1,c,grid);
+        dfs(r-1,c,grid);
+        dfs(r,c+1,grid);
+        dfs(r,c-1,grid);
     }
 };
