@@ -169,3 +169,74 @@ public:
         }        
     }
 };
+
+//2022-09-12
+//time  : O(m*n)
+//space : O(1)
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid)
+    {
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        int ans=0;
+        
+        for(int r=0; r<m; ++r)
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(grid[r][c]=='1')
+                {
+                    //cout<<r<<" "<<c<<endl;
+                    bfs(r,c,grid);
+                    ++ans;
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    void bfs(int r, int c, vector<vector<char>>& grid)
+    {
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        queue<vector<int>> q;
+        q.push({r,c});
+        grid[r][c]='v';
+        
+        while(!q.empty())
+        {
+            int row=q.front()[0];
+            int col=q.front()[1];
+            q.pop();
+            
+            if(row-1>=0 && grid[row-1][col]=='1') 
+            {
+                q.push({row-1,col});
+                grid[row-1][col]='v';
+            }
+            
+            if(row+1<m && grid[row+1][col]=='1') 
+            {
+                q.push({row+1,col});
+                grid[row+1][col]='v';
+            }
+            
+            if(col-1>=0 && grid[row][col-1]=='1') 
+            {
+                q.push({row,col-1});
+                grid[row][col-1]='v';
+            }
+            
+            if(col+1<n && grid[row][col+1]=='1') 
+            {
+                q.push({row,col+1});
+                grid[row][col+1]='v';
+            }
+        }
+        
+    }
+};
