@@ -284,3 +284,127 @@ public:
         dfs(r,c-1,grid);
     }
 };
+
+//2022-09-12
+//time  : O(m*n)
+//space : O(m*n)
+class union_find
+{
+private:
+    vector<int> parent;
+    vector<int> size;    
+    
+public:
+    int count=0;
+    
+    union_find(vector<vector<char>>& grid)
+    {
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        parent.resize(m*n);
+        size.resize(m*n,1);
+        
+        for(int i=0; i<m*n; ++i)
+        {
+            if(grid[i/n][i%n]=='1')
+            {
+                ++count;
+                parent[i]=i;
+            }
+            else
+            {
+                parent[i]=-1;
+            }
+        }
+    }
+    
+    void combine(int a, int b)
+    {
+        int root_a=find(a);
+        int root_b=find(b);
+        
+        if(root_a==root_b) return;
+        
+        if(size[a]>=size[b])
+        {
+            parent[root_b]=root_a;
+            size[root_a]+=size[root_b];
+        }
+        else
+        {
+            parent[root_a]=root_b;
+            size[root_b]+=size[root_a];            
+        }
+        
+        --count;
+    }
+    
+    int find(int a)
+    {
+        if(parent[a]==a) return a;
+        
+        parent[a]=find(parent[a]);
+        return parent[a];
+    }
+    
+    /*int get_total_group_size()
+    {               
+        int ans=0;
+        vector<bool> visited(parent.size(),false);        
+        
+        for(int i=0; i<parent.size(); ++i)
+        {
+            if(parent[i]==-1) continue;
+            
+            int root=find(i);
+            if(!visited[root]) 
+            {
+                ++ans;
+                visited[root]=true;
+            }            
+        }
+        
+        return ans;
+    }*/
+    
+    void print(int n)
+    {
+        for(int i=0; i<parent.size(); ++i)
+        {
+            if(i%n==0) cout<<endl;
+            if(parent[i]!=-1) cout<<find(i)<<" ";            
+            else cout<<-1<<" ";
+        }
+    }
+};
+
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid)
+    {
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        union_find uf(grid);               
+        
+        for(int r=0; r<m; ++r)
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(grid[r][c]=='1')
+                {
+                    //cout<<r*n+c<<endl;
+                    
+                    if(r-1>=0 && grid[r-1][c]=='1') uf.combine(r*n+c,(r-1)*n+c);
+                    if(r+1<m && grid[r+1][c]=='1') uf.combine(r*n+c,(r+1)*n+c);
+                    if(c-1>=0 && grid[r][c-1]=='1') uf.combine(r*n+c,r*n+c-1);                    
+                    if(c+1<n && grid[r][c+1]=='1') uf.combine(r*n+c,r*n+c+1);
+                }
+            }
+        }
+        
+        //uf.print(n);
+        return uf.count;
+    }
+};
