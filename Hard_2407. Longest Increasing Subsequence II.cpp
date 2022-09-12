@@ -61,3 +61,86 @@ public:
         return ans;
     }
 };
+
+//2022-09-12
+//segment tree
+//time  : O(nlog(n))
+//space : O(max(n))
+class segment_tree
+{
+private:
+    int SIZE;
+    vector<int> st;
+    
+public:
+    segment_tree(int n)
+    {
+        SIZE=n;
+        st.resize(2*n+2,0);
+    }
+    
+    void modify(int idx, int len)
+    {
+        idx+=SIZE;
+        
+        st[idx]=len;
+        while(idx>1)
+        {
+           // cout<<idx<<endl;
+            idx/=2;
+            st[idx]=max(st[2*idx],st[2*idx+1]);
+        }
+    }
+    
+    int query(int left, int right)
+    {
+        if(left>right) return 0;
+        
+        left+=SIZE;
+        right+=SIZE;
+        
+        int ans=0;
+        
+        while(left<=right)
+        {
+            //cout<<left<<" "<<right<<endl;
+            if(left%2==1) 
+            {
+                ans=max(ans,st[left]);
+                ++left;
+            }
+            if(right%2==0)
+            {
+                ans=max(ans,st[right]);
+                --right;
+            }
+            
+            left=left/2;
+            right=right/2;
+        }
+        
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums, int k)
+    {
+        int MAX_NUM=1e5;         
+        segment_tree st(MAX_NUM);
+        
+        int ans=0;
+        int n=nums.size();        
+        for(int i=0; i<n; ++i)
+        {
+            //cout<<nums[i]<<endl;
+            int len=st.query(max(1,nums[i]-k),nums[i]-1);
+            st.modify(nums[i],len+1);
+            
+            ans=max(ans,len+1);
+        }
+        
+        return ans;
+    }
+};
