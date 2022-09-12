@@ -129,3 +129,23 @@ public:
         return (left && right);
     }
 };
+
+//2022-09-12
+//time  : O(n)
+//space : O(h), h is the height fo the tree
+class Solution {
+public:
+    bool isValidBST(TreeNode* root)
+    {
+        return dfs(root,NULL,NULL);
+    }
+    
+    bool dfs(TreeNode* root, TreeNode* smaller, TreeNode* bigger)
+    {
+        if(!root) return true;
+        
+        if((smaller && root->val <= smaller->val) || (bigger && root->val >= bigger->val)) return false;
+        
+        return dfs(root->left,smaller,root) && dfs(root->right,root,bigger);
+    }
+};
