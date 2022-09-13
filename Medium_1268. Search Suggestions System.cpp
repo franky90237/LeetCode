@@ -113,3 +113,54 @@ public:
         }
     }
 };
+
+//2022-09-13
+//time  : O(nlog(n)*m), m is the average len of each product
+//space : O(1)
+class Solution {
+public:
+    vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) 
+    {
+        sort(products.begin(),products.end());
+        
+        vector<vector<string>> ans;
+            
+        int l=0;
+        int r=products.size()-1;
+        int cur=0;
+        while(l<=r && cur<searchWord.size())
+        {
+            while(l<=r)
+            {
+                if(cur<products[l].size() && products[l][cur]==searchWord[cur]) break;
+                ++l;
+            }
+            
+            while(l<=r)
+            {
+                if(cur<products[r].size() && products[r][cur]==searchWord[cur]) break;
+                --r;
+            }
+            
+            vector<string> match;
+            
+            for(int i=l; i<=r && i<l+3; ++i)
+            {                
+                match.push_back(products[i]);
+            }
+            
+            ans.push_back(match);
+            
+            ++cur;
+        }
+        
+        //cout<<cur<<endl;
+        while(cur<searchWord.size())
+        {
+            ans.push_back({});
+            ++cur;
+        }
+        
+        return ans;
+    }
+};
