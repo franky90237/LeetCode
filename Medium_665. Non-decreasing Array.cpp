@@ -16,6 +16,10 @@ public:
             [-1,4,2,3]
                 * ^
         b:    0 0 1  
+        
+        9,8,15
+        8,8
+        6,9,3
         */
         
         int n=nums.size();
@@ -27,11 +31,15 @@ public:
         {
             if(nums[i-1]>nums[i])
             {
-                if(i-2>=0) 
+                if(i-2>=0 && nums[i-2]>nums[i]) 
                 {
-                    if(nums[i-2]>nums[i]) nums[i]=nums[i-1];
+                    if(nums[i-1]>nums[i]) nums[i]=nums[i-1];
                     else nums[i-1]=nums[i-2];
-                }                
+                }
+                else
+                {                    
+                    nums[i-1]=nums[i];
+                }
                 
                 ++bigger;
             }
