@@ -11,7 +11,7 @@
  */
 
 //2022-07-11
-//time  : O(n)
+//time  : O(n*n)
 //space : O(height of the tree)
 class Solution {
 public:
@@ -66,5 +66,38 @@ public:
         node->right=build(preorder,cur+mid-l+1,inorder,mid+1,r,val_index);                
         
         return node;
+    }
+};
+
+//2022-09-14
+//time  : O(n*n)
+//space : O(h), h isthe height of the tree
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder)
+    {
+        return build(preorder, 0, preorder.size()-1, inorder, 0, inorder.size()-1);
+    }
+    
+    TreeNode* build(vector<int>& preorder, int pl, int pr, vector<int>& inorder, int il, int ir)
+    {
+        //cout<<pl<<","<<pr<<" : "<<il<<","<<ir<<endl;
+        
+        if(il>ir) return NULL;
+        
+        TreeNode* root=new TreeNode(preorder[pl]);
+        if(il==ir) return root;
+        
+        int mid=il;
+        for(; mid<=ir; ++mid)
+        {
+            if(inorder[mid]==preorder[pl]) break;            
+        }       
+        
+        int len=mid-il;
+        root->left=build(preorder, pl+1, pl+len, inorder, il, mid-1);
+        root->right=build(preorder, pl+len+1, pr, inorder, mid+1, ir);
+        
+        return root;
     }
 };
