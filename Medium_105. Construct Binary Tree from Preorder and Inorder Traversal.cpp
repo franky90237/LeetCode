@@ -101,3 +101,35 @@ public:
         return root;
     }
 };
+
+//2022-09-14
+//time  : O(n)
+//space : O(h), h isthe height of the tree
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder)
+    {
+        unordered_map<int,int> table;
+        for(int i=0; i<inorder.size(); ++i) table[inorder[i]]=i;
+        
+        return build(preorder, 0, inorder, 0, inorder.size()-1, table);
+    }
+    
+    TreeNode* build(vector<int>& preorder, int pl, vector<int>& inorder, int il, int ir, unordered_map<int,int>& table)
+    {
+        //cout<<pl<<","<<pr<<" : "<<il<<","<<ir<<endl;
+        
+        if(il>ir) return NULL;
+        
+        TreeNode* root=new TreeNode(preorder[pl]);
+        if(il==ir) return root;
+        
+        int mid=table[preorder[pl]];
+        
+        int len=mid-il;        
+        root->left=build(preorder, pl+1, inorder, il, mid-1, table);
+        root->right=build(preorder, pl+len+1, inorder, mid+1, ir, table);
+        
+        return root;
+    }
+};
