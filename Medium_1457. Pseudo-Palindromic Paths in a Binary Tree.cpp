@@ -100,3 +100,49 @@ public:
         return (bitmap & (bitmap-1))==0;                
     }
 };
+
+//2022-09-14
+//time  : O(n)
+//sapce : O(h), h is the height of the tree
+class Solution {
+public:
+    int pseudoPalindromicPaths (TreeNode* root)
+    {
+        stack<pair<TreeNode*,int>> s;
+        s.push({root,1<<root->val});
+        
+        int ans=0;
+        
+        while(!s.empty())
+        {
+            TreeNode* cur=s.top().first;
+            int bitmap=s.top().second;
+            s.pop();
+            
+            if(!cur->left && !cur->right)
+            {
+                ans+=check(bitmap);
+            }
+            
+            if(cur->right)
+            {
+                s.push({cur->right, bitmap ^ (1<<cur->right->val)});
+            }
+            
+            if(cur->left)
+            {
+                s.push({cur->left, bitmap ^ (1<<cur->left->val)});
+            }
+            
+        }
+        
+        return ans;
+        
+    }      
+    
+    bool check(int bitmap)
+    {        
+        //cout<<"*****"<<bitmap<<endl;
+        return (bitmap & (bitmap-1))==0;                
+    }
+};
