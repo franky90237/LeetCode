@@ -67,3 +67,36 @@ public:
         return true;
     }
 };
+
+//2022-09-14
+//time  : O(n)
+//sapce : O(h), h is the height of the tree
+class Solution {
+public:
+    int pseudoPalindromicPaths (TreeNode* root)
+    {
+        int bitmap=0;        
+        return dfs(root,bitmap);
+    }
+    
+    int dfs(TreeNode* root, int bitmap)
+    {
+        if(!root) return 0;
+        
+        bitmap = bitmap ^ (1<<root->val);
+        //cout<<bitmap<<endl;
+        
+        if(!root->left && !root->right)
+        {        
+            return check(bitmap);
+        }                
+        
+        return dfs(root->left,bitmap) + dfs(root->right,bitmap);
+    }
+    
+    bool check(int bitmap)
+    {        
+        //cout<<"*****"<<bitmap<<endl;
+        return (bitmap & (bitmap-1))==0;                
+    }
+};
