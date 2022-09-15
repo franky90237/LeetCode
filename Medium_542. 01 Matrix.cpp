@@ -186,7 +186,7 @@ public:
 
 //2022-09-15
 //TLE
-//time  : O(m*n)
+//time  : O((m*n)^2)
 //space : O(m*n)
 class Solution {
 public:
@@ -253,5 +253,57 @@ public:
         }
         
         return distance;
+    }
+};
+
+//2022-09-15
+//time  : O(m*n)
+//space : O(m*n)
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat)
+    {
+        int m=mat.size();
+        int n=mat[0].size();
+        
+        vector<vector<int>> ans(m, vector<int>(n,-1));        
+        
+        queue<vector<int>> q;
+        
+        for(int r=0; r<m; ++r)    
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(mat[r][c] == 0)
+                {
+                    ans[r][c]=0;
+                    q.push({r,c});
+                }
+            }
+        }
+        
+        int dir[4][2]={{-1,0}, {1,0}, {0,-1}, {0,1}};
+        while(!q.empty())
+        {                  
+            int r=q.front()[0];
+            int c=q.front()[1];
+            q.pop();
+
+            for(int i=0; i<4; ++i)
+            {
+                int new_r=r + dir[i][0];
+                int new_c=c + dir[i][1];
+
+                if(new_r<0 || new_r>=m || new_c<0 || new_c>=n) continue;
+                
+                if(ans[new_r][new_c]==-1)
+                {
+                    ans[new_r][new_c]=ans[r][c]+1;
+                    q.push({new_r,new_c});
+                }
+            }                       
+        }        
+            
+        return ans;
     }
 };
