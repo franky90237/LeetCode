@@ -95,3 +95,82 @@ public:
         return ans;
     }
 };
+
+//2022-09-15
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    vector<int> findOriginalArray(vector<int>& changed)
+    {
+        /*
+           [1,3,4,2,6,8]
+           [1,2,3,4,6,8]
+                      ^
+        v : 
+        t : (2) () (6) (6,8)          
+        a : 1,3,4
+        */
+        if(changed.size()%2==1) return {};
+        
+        sort(changed.begin(),changed.end());
+        
+        vector<int> ans;        
+        unordered_map<int,int> table;
+        
+        for(auto& num : changed)
+        {            
+            if(table.find(num)!=table.end())
+            {
+                ans.push_back(num/2);
+                
+                --table[num];
+                if(table[num]==0) table.erase(num);
+            }
+            else
+            {
+                ++table[2*num];
+            }                
+        }
+        
+        return table.empty() ? ans : vector<int>();
+    }
+};
+
+//2022-09-15
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    vector<int> findOriginalArray(vector<int>& changed)
+    {
+        /*
+           [1,3,4,2,6,8]
+           [1,2,3,4,6,8]
+                      ^
+        q : (2) (6) (6,8) (6) (8)
+        a :  1,3,4
+        */
+        if(changed.size()%2==1) return {};
+        
+        sort(changed.begin(),changed.end());
+        
+        vector<int> ans;        
+        queue<int> twice;
+        
+        for(auto& num : changed)
+        {            
+            if(!twice.empty() && twice.front()==num)
+            {
+                ans.push_back(num/2);
+                twice.pop();
+            }
+            else
+            {
+                twice.push(2*num);
+            }                
+        }
+        
+        return twice.empty() ? ans : vector<int>();
+    }
+};
