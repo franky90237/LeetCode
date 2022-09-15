@@ -2,8 +2,7 @@
 class Solution {
 public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) 
-    {
-        
+    {        
         for(int i=0; i<mat.size(); ++i)
         {
             for(int j=0; j<mat[0].size(); ++j)
@@ -182,5 +181,77 @@ public:
         }
         
         return mat;
+    }
+};
+
+//2022-09-15
+//TLE
+//time  : O(m*n)
+//space : O(m*n)
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat)
+    {
+        int m=mat.size();
+        int n=mat[0].size();
+        
+        vector<vector<int>> ans(m, vector<int>(n));        
+        
+        for(int r=0; r<m; ++r)    
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(mat[r][c] != 0)
+                {
+                    ans[r][c]=bfs(mat,r,c);
+                }              
+            }            
+        }
+            
+        return ans;
+    }
+    
+    int bfs(vector<vector<int>> mat, int r, int c)
+    {
+        int m=mat.size();
+        int n=mat[0].size();
+        
+        queue<vector<int>> q;
+        q.push({r,c});
+        mat[r][c]=2;        
+        
+        int dir[4][2]={{-1,0}, {1,0}, {0,-1}, {0,1}};
+        int distance=0;
+        while(!q.empty())
+        {
+            ++distance;
+            
+            int size=q.size();
+            while(size>0)
+            {
+                int row=q.front()[0];
+                int col=q.front()[1];
+                q.pop();
+                
+                for(int i=0; i<4; ++i)
+                {
+                    int new_row=row+dir[i][0];
+                    int new_col=col+dir[i][1];
+                    
+                    if(new_row<0 || new_row>=m || new_col<0 || new_col>=n) continue;
+                    if(mat[new_row][new_col]==0) return distance;
+
+                    if(mat[new_row][new_col]!=2)
+                    {                                                    
+                        q.push({new_row,new_col});
+                        mat[new_row][new_col]=2;
+                    }
+                }
+                
+                --size;
+            }
+        }
+        
+        return distance;
     }
 };
