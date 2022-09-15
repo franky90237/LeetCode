@@ -307,3 +307,51 @@ public:
         return ans;
     }
 };
+
+//2022-09-15
+//time  : O(m*n)
+//space : O(1)
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat)
+    {
+        int m=mat.size();
+        int n=mat[0].size();
+        
+        vector<vector<int>> ans(m, vector<int>(n, m+n));
+        
+        for(int r=0; r<m; ++r)    
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(mat[r][c] != 0)
+                {                    
+                    if(r-1>=0) ans[r][c]=min(ans[r][c], ans[r-1][c] + 1);
+                    if(c-1>=0) ans[r][c]=min(ans[r][c], ans[r][c-1] + 1);                   
+                }
+                else
+                {
+                    ans[r][c]=0;
+                }
+            }
+        }
+        
+        for(int r=m-1; r>=0; --r)    
+        {
+            for(int c=n-1; c>=0; --c)
+            {
+                if(mat[r][c] != 0)
+                {
+                    if(r+1<m) ans[r][c]=min(ans[r][c], ans[r+1][c] + 1);
+                    if(c+1<n) ans[r][c]=min(ans[r][c], ans[r][c+1] + 1);
+                }
+                else
+                {
+                    ans[r][c]=0;
+                }                
+            }
+        }        
+                    
+        return ans;
+    }
+};
