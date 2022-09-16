@@ -147,3 +147,34 @@ public:
         }
     }
 };
+
+//2022-09-16
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    Node* cloneGraph(Node* node)
+    {
+        if(!node) return NULL;
+        
+        unordered_map<Node*,Node*> visited;
+        return dfs(node,visited);
+    }
+    
+    Node* dfs(Node* node, unordered_map<Node*,Node*>& visited)
+    {
+        //cout<<"*"<<node->val<<endl;
+        if(visited.find(node)!=visited.end()) return visited[node];
+        
+        Node* clone_node=new Node(node->val);
+        visited.insert({node,clone_node});
+        
+        for(auto& neighbor : node->neighbors)
+        {
+            //cout<<neighbor->val<<endl;          
+            clone_node->neighbors.push_back(dfs(neighbor,visited));                       
+        }
+        
+        return clone_node;
+    }
+};
