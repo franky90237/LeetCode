@@ -82,16 +82,15 @@ public:
 };
 
 //2022-09-16
-//TLE
-//time  : O(m*n)
-//space : O(m*n)
+//if the dp[][] have many states equal to -2, it may TLE
+//time  : O(m*m)
+//space : O(m*m)
 class Solution {
 public:
     int maximumScore(vector<int>& nums, vector<int>& multipliers) 
     {        
-        int m=nums.size();
-        int n=multipliers.size();
-        vector<vector<int>> dp(m, vector<int>(n,-1) );
+        int m=multipliers.size();
+        vector<vector<int>> dp(m, vector<int>(m,-2) );
                 
         return solve(nums, multipliers, 0, 0, dp);
     }
@@ -100,7 +99,7 @@ public:
     {
         if(k >= multipliers.size()) return 0;
         
-        if(dp[l][k] != -1) return dp[l][k];
+        if(dp[l][k] != -2) return dp[l][k];
         
         int r=nums.size()-1-(k-l);
         int pick_left  = solve(nums, multipliers, l+1, k+1, dp) + nums[l]*multipliers[k];
@@ -108,5 +107,41 @@ public:
         
         dp[l][k]=max(pick_left,pick_right);
         return dp[l][k];
+    }
+};
+
+//2022-09-16
+//dp iterative
+//time  : O(m*m)
+//space : O(m*m)
+class Solution {
+public:
+    int maximumScore(vector<int>& nums, vector<int>& multipliers) 
+    {
+        
+        /*
+        dp[l][k] = max(dp[l+1][k+1] + nums[l]*,mul[k], dp[l][k+1] + nums[r]*mul[k])
+        (r = n-1-(k-l) )
+        */
+                
+        int n=nums.size();
+        int m=multipliers.size();
+        
+        int dp[m+1][m+1];
+        for(int i=0; i<=m; ++i) dp[i][m]=0;
+        
+        for(int k=m-1; k>=0; --k)
+        {
+            for(int l=k; l>=0; --l)
+            {
+                int r=n-1-(k-l);
+                int pick_left  = dp[l+1][k+1] + nums[l]*multipliers[k];
+                int pick_right = dp[l][k+1] + nums[r]*multipliers[k];
+                
+                dp[l][k]=max(pick_left,pick_right);
+            }
+        }
+        
+        return dp[0][0];
     }
 };
