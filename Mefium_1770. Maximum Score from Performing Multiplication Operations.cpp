@@ -41,3 +41,72 @@ public:
         return dp[l][r][k];
     }
 };
+
+//2022-09-16
+//TLE
+//time  : O(m*m*n)
+//space : O(m*m*n)
+class Solution {
+public:
+    int maximumScore(vector<int>& nums, vector<int>& multipliers) 
+    {
+        
+        /*
+        XXXXXXXXXXXX
+        0          1000
+        (l,r,k)
+        
+        dp[l][r][k] = max( dp[l-1][r][k-1] + nums[l-1]*mul[k-1], dp[l][r+1][k-1] + nums[r+1]*mul[k-1])
+        */
+        
+        int m=nums.size();
+        int n=multipliers.size();
+        unordered_map<string,int> dp;
+                
+        return solve(nums, multipliers, 0, m-1, 0, dp);
+    }
+    
+    int solve(vector<int>& nums, vector<int>& multipliers, int l, int r, int k, unordered_map<string,int>& dp)
+    {
+        if(k >= multipliers.size()) return 0;
+        
+        string state= to_string(l) + "," + to_string(r) + "," + to_string(k);        
+        if(dp.find(state) != dp.end()) return dp[state];
+        
+        int pick_left  = solve(nums, multipliers, l+1, r, k+1, dp) + nums[l]*multipliers[k];
+        int pick_right = solve(nums, multipliers, l, r-1, k+1, dp) + nums[r]*multipliers[k];
+        
+        dp[state]=max(pick_left,pick_right);
+        return dp[state];
+    }
+};
+
+//2022-09-16
+//TLE
+//time  : O(m*n)
+//space : O(m*n)
+class Solution {
+public:
+    int maximumScore(vector<int>& nums, vector<int>& multipliers) 
+    {        
+        int m=nums.size();
+        int n=multipliers.size();
+        vector<vector<int>> dp(m, vector<int>(n,-1) );
+                
+        return solve(nums, multipliers, 0, 0, dp);
+    }
+    
+    int solve(vector<int>& nums, vector<int>& multipliers, int l, int k, vector<vector<int>>& dp)
+    {
+        if(k >= multipliers.size()) return 0;
+        
+        if(dp[l][k] != -1) return dp[l][k];
+        
+        int r=nums.size()-1-(k-l);
+        int pick_left  = solve(nums, multipliers, l+1, k+1, dp) + nums[l]*multipliers[k];
+        int pick_right = solve(nums, multipliers, l, k+1, dp) + nums[r]*multipliers[k];
+        
+        dp[l][k]=max(pick_left,pick_right);
+        return dp[l][k];
+    }
+};
