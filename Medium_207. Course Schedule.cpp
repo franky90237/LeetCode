@@ -118,8 +118,8 @@ public:
 };
 
 //2022-09-17
-//time  : O(n)
-//space : O(n)
+//time  : O(n+e)
+//space : O(n+e)
 class Solution {
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) 
@@ -169,5 +169,60 @@ public:
             graph[pre].push_back(nxt);
             ++indegree[nxt];
         }        
+    }
+};
+
+//2022-09-17
+//time  : O(n+e)
+//space : O(n+e)
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) 
+    {
+        vector<vector<int>> graph(numCourses, vector<int>());
+        build_graph(numCourses, prerequisites, graph);
+        
+        vector<bool> last_done(numCourses,false);
+        vector<bool> visited(numCourses,false);
+        for(int i=0; i<numCourses; ++i)
+        {
+            if(!last_done[i] && check_cycle(graph, last_done, visited, i))
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+        
+    void build_graph(int numCourses, vector<vector<int>>& prerequisites, vector<vector<int>>& graph)
+    {
+        for(auto& course : prerequisites)
+        {
+            int pre=course[1];
+            int nxt=course[0];
+            
+            graph[pre].push_back(nxt);            
+        }        
+    }
+    
+    bool check_cycle(vector<vector<int>>& graph, vector<bool>& last_done, vector<bool>& visited, int node)
+    {
+        //cout<<node<<endl;
+        if(visited[node]) return true;
+        
+        if(last_done[node]) return false;
+        
+        visited[node]=true;
+        last_done[node]=true;
+        
+        for(auto& neighbor : graph[node])
+        {            
+            bool has_cycle = check_cycle(graph, last_done, visited, neighbor);
+            if(has_cycle) return true;
+        }
+        
+        visited[node]=false;
+        return false;
     }
 };
