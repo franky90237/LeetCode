@@ -1,7 +1,7 @@
 //2022-09-17
 //clear dfs
 //time  : O(n+e)
-//space : O(n)
+//space : O(n+e)
 class Solution {
 public:
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) 
@@ -56,7 +56,7 @@ public:
 //2022-09-17
 //bfs
 //time  : O(n+e)
-//space : O(e)
+//space : O(n+e)
 class Solution {
 public:
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) 
