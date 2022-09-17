@@ -311,3 +311,115 @@ public:
         return true;
     }
 };
+
+//2022-09-17
+class TrieNode
+{   
+public:
+    vector<TrieNode*> next;
+    int index;
+    
+    TrieNode()
+    {
+        next.resize(26,NULL);
+        index=-1;
+    }
+};
+
+class Solution 
+{
+public:
+    vector<vector<int>> palindromePairs(vector<string>& words) 
+    {
+        // O(n*l)
+        TrieNode* root = build_trie(words);
+        
+        vector<vector<int>> ans;
+        for(int i = 0; i < words.size(); ++i)
+        {
+            //cout<<i<<" : "<<endl;
+            search_trie(root, i, words[i], ans);
+        }
+        
+        return ans;
+    }
+    
+    TrieNode* build_trie(vector<string>& words)
+    {
+        TrieNode* root = new TrieNode();
+        
+        for(int i = 0; i < words.size(); ++i)
+        {            
+            TrieNode* cur = root;
+            for(int k = words[i].size() - 1; k >= 0; --k)
+            {
+                int idx = words[i][k] - 'a';
+                if(!cur->next[idx])
+                {
+                    cur->next[idx] = new TrieNode();
+                }
+                
+                cur = cur->next[idx];
+            }
+            
+            cur->index = i;
+        }
+        
+        return root;
+    }
+    
+    void search_trie(TrieNode* root, int start, string& word, vector<vector<int>>& ans)
+    {
+        TrieNode* cur = root;
+        
+        for(int i = 0; i < word.size(); ++i)
+        {
+            int idx=word[i]-'a';
+            
+            //cur = cur->next[idx];
+            //if(start==3) cout<<i<<" "<<word[i]<<" "<<cur->index;
+            if(cur->index != -1 && cur->index != start && is_palindrome(word, i, word.size()-1))
+            {
+                ans.push_back({start, cur->index});
+            }
+            
+            cur = cur->next[idx];
+            if(!cur) return;
+        }
+                
+        string tmp="";
+        check_rest_trie(cur, start, tmp, ans);        
+    }
+    
+    void check_rest_trie(TrieNode* cur, int start, string& tmp, vector<vector<int>>& ans)
+    {
+        if(!cur) return;
+        if(cur->index != -1 && cur->index != start && is_palindrome(tmp, 0, tmp.size()-1))
+        {
+            //cout<<tmp<<endl;
+            ans.push_back({start, cur->index});
+        }
+                
+        for(int i = 0; i < 26; ++i)
+        {
+            if(cur->next[i])
+            {
+                tmp.push_back(i + 'a');
+                check_rest_trie(cur->next[i], start, tmp, ans);
+                tmp.pop_back();
+            }
+        }
+    }
+    
+    bool is_palindrome(string& tmp, int l, int r)
+    {
+        while(l < r)
+        {
+            if(tmp[l] != tmp[r]) return false;
+            ++l;
+            --r;
+        }
+        
+        return true;
+    }
+};
