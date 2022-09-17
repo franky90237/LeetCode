@@ -1,7 +1,7 @@
 //2022-09-17
 //clear dfs
 //time  : O(n+e)
-//space : O(n+e)
+//space : O(n)
 class Solution {
 public:
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) 
@@ -51,4 +51,52 @@ public:
         
         return true;
     }
+};
+
+//2022-09-17
+//bfs
+//time  : O(n+e)
+//space : O(e)
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) 
+    {
+        vector<vector<int>> graph(numCourses, vector<int>());
+        vector<int> indegree(numCourses,0);
+        build_graph(numCourses, prerequisites, graph, indegree);
+                
+        queue<int> q;
+        for(int i=0; i<numCourses; ++i)
+        {
+            if(indegree[i]==0) q.push(i);
+        }
+                
+        vector<int> ans;        
+        while(!q.empty())
+        {
+            int node=q.front();
+            q.pop();
+            ans.push_back(node);
+            
+            for(auto& neighbor : graph[node])
+            {
+                --indegree[neighbor];
+                if(indegree[neighbor]==0) q.push(neighbor);
+            }
+        }
+        
+        return ans.size()==numCourses ? ans : vector<int>();
+    }
+    
+    void build_graph(int numCourses, vector<vector<int>>& prerequisites, vector<vector<int>>& graph, vector<int>& indegree)
+    {
+        for(auto& course : prerequisites)
+        {
+            int pre=course[1];
+            int nxt=course[0];
+            
+            graph[pre].push_back(nxt);
+            ++indegree[nxt];
+        }        
+    }    
 };
