@@ -226,3 +226,58 @@ public:
         return false;
     }
 };
+
+//2022-09-17
+//clear dfs
+//time  : O(n+e)
+//space : O(n+e)
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) 
+    {
+        vector<vector<int>> graph(numCourses, vector<int>());
+        build_graph(numCourses, prerequisites, graph);
+                
+        vector<int> visited(numCourses,0);
+        for(int i=0; i<numCourses; ++i)
+        {
+            if(check_cycle(graph, visited, i))
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+        
+    void build_graph(int numCourses, vector<vector<int>>& prerequisites, vector<vector<int>>& graph)
+    {
+        for(auto& course : prerequisites)
+        {
+            int pre=course[1];
+            int nxt=course[0];
+            
+            graph[pre].push_back(nxt);            
+        }        
+    }
+    
+    bool check_cycle(vector<vector<int>>& graph, vector<int>& visited, int node)
+    {
+        //cout<<node<<endl;
+        if(visited[node]==1) return true;
+        
+        if(visited[node]==2) return false;
+        
+        visited[node]=1;        
+        
+        for(auto& neighbor : graph[node])
+        {            
+            bool has_cycle = check_cycle(graph, visited, neighbor);
+            if(has_cycle) return true;
+        }
+        
+        visited[node]=2;
+        
+        return false;
+    }
+};
