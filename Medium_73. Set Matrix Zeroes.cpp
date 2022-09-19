@@ -109,3 +109,73 @@ public:
         }
     }
 };
+
+//2022-09-19
+//time  : O(m*n)
+//space : O(1)
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) 
+    {
+        int m=matrix.size();
+        int n=matrix[0].size();
+        
+        bool left_top_zero=false;
+        if(matrix[0][0]==0) left_top_zero=true;        
+        
+        bool row0=false;
+        bool col0=false;
+        for(int r=0; r<m; ++r)
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(matrix[r][c]==0)
+                {
+                    if(c==0) row0=true;
+                    else if(r==0) col0=true;
+                    
+                    matrix[r][0]=0;
+                    matrix[0][c]=0;
+                }
+            }
+        }
+                
+        
+        for(int r=m-1; r>=1; --r)
+        {
+            if(matrix[r][0]==0)
+            {
+                for(int c=1; c<n; ++c) matrix[r][c]=0;
+            }
+            else if(left_top_zero)
+            {
+                matrix[r][0]=0;
+            }
+        }
+        
+        for(int c=n-1; c>=1; --c)
+        {
+            if(matrix[0][c]==0)
+            {
+                for(int r=1; r<m; ++r) matrix[r][c]=0;
+            }
+            else if(left_top_zero)
+            {
+                matrix[0][c]=0;
+            }
+        }
+        
+        if(!left_top_zero)
+        {
+            if(row0)
+            {
+                for(int r=0; r<m; ++r) matrix[r][0]=0;
+            }
+            
+            if(col0)
+            {
+                for(int c=0; c<n; ++c) matrix[0][c]=0;
+            }
+        }
+    }
+};
