@@ -160,3 +160,111 @@ public:
         return ans;
     }
 };
+
+//2022-09-19
+class union_find
+{
+private:
+    vector<int> parent;
+    vector<int> size;
+        
+public:
+    union_find(int n)
+    {
+        for(int i=0; i<n; ++i)
+        {
+            parent.push_back(i);
+            size.push_back(1);
+        }
+    }
+    
+    void combine(int a, int b)
+    {                        
+        int root_a=find(a);
+        int root_b=find(b);
+        //cout<<a<<", "<<root_a<<" | "<<b<<", "<<root_b<<endl;
+        if(root_a==root_b) return;
+        
+        if(size[a]>size[b])
+        {
+            parent[root_b]=root_a;
+            size[root_a]+=size[root_b];
+        }
+        else
+        {
+            parent[root_a]=root_b;
+            size[root_b]+=size[root_a];
+        }                
+    }
+    
+    int find(int a)
+    {       
+        if(parent[a]==a) return a;
+                
+        parent[a]=find(parent[a]);
+        return parent[a];
+    }
+};
+
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts)
+    {
+        int n=accounts.size();
+        
+        union_find uf(n);        
+        unordered_map<string, int> email_group;
+        for(int i=0; i<n; ++i)
+        {
+            //cout<<i<<" : ";
+            vector<string>& account=accounts[i];            
+            for(int k=1; k<account.size(); ++k)
+            {
+                //cout<<k<<" ";
+                string& email=account[k];
+                if(email_group.find(email)==email_group.end())
+                {
+                    email_group[email]=i;
+                }
+                else
+                {
+                    uf.combine(i,email_group[email]);
+                }
+            }
+            //cout<<endl;
+        }                
+        
+        vector<vector<string>> ans;
+        unordered_set<string> visited_email;
+        vector<int> visited_group(n,-1);
+        for(int i=0; i<n; ++i)
+        {
+            vector<string>& account=accounts[i];
+            
+            for(int k=1; k<account.size(); ++k)
+            {
+                string& email=account[k];
+                
+                if(visited_email.find(email)!=visited_email.end()) continue;
+                visited_email.insert(email);
+                
+                int group=uf.find(email_group[email]);
+                if(visited_group[group]==-1)
+                {
+                    ans.push_back({accounts[group][0]});
+                    visited_group[group]=ans.size()-1;
+                }
+                
+                int idx=visited_group[group];
+                ans[idx].push_back(email);
+            }
+        }
+        
+        for(int i=0; i<ans.size(); ++i)
+        {
+            sort(ans[i].begin()+1, ans[i].end());
+        }
+        
+        return ans;
+    }
+};
