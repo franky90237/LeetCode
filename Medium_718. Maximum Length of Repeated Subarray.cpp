@@ -78,3 +78,81 @@ public:
         return ans;
     }     
 };
+
+//2022-09-21
+//time  : O(m*n)
+//space : O(1)
+class Solution {
+public:
+    int findLength(vector<int>& nums1, vector<int>& nums2) 
+    {
+        /*    
+        [0,1,2,3]
+        [0,1]
+
+        (0,0) (0,1)
+        (1,0) (1,1)
+        (2,0) (2,1)
+        (3,0) (3,1)
+
+        (0,0) (1,1) -> 2
+
+        (0,1) ->1
+
+        (1,0) (2,1) -> 2
+        (2,0) (3,1) -> 2
+        (3,0) ->1
+        */
+        
+        int m=nums1.size();
+        int n=nums2.size();
+        
+        int ans=0;
+                        
+        for(int diff=0; diff<n; ++diff)
+        {
+            int len=0;
+            int p1=0;
+            int p2=diff;
+            while(p1<m && p2<n)
+            {
+                if(nums1[p1]==nums2[p2])
+                {
+                    ++len;
+                    ans=max(ans, len);
+                }
+                else
+                {
+                    len=0;
+                }
+                
+                ++p1;
+                ++p2;
+            }
+        }
+        
+        for(int diff=1; diff<m; ++diff)
+        {
+            int len=0;
+            int p1=diff;
+            int p2=0;
+            while(p1<m && p2<n)
+            {
+                if(nums1[p1]==nums2[p2])
+                {
+                    ++len;
+                    ans=max(ans, len);
+                }
+                else
+                {
+                    len=0;
+                }
+                
+                ++p1;
+                ++p2;
+            }
+        }
+        
+        return ans;
+    }
+};    
