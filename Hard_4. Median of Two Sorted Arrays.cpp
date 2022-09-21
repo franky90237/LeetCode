@@ -142,3 +142,149 @@ public:
         }
     }
 };
+
+//2022-09-21
+//time  : O(log(m)*log(n) + log(n)*log(m))
+//space : O(1)
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) 
+    {
+        /*
+        1,2,2,2,10,15
+        [1,2,10]
+        [2,2,15]
+
+        5
+        [10,11,12]
+        [1,2,3]
+        [1,2,10,11,12]
+        */        
+        int m=nums1.size();
+        int n=nums2.size();
+        
+        if(nums1.empty() && nums2.empty()) return 0;
+        if(nums2.empty()) return (nums1[m/2] + nums1[(m-1)/2])/2.0;
+        if(nums1.empty()) return (nums2[n/2] + nums2[(n-1)/2])/2.0;
+        
+        int cnt=m+n;
+                
+        if(cnt%2==0)
+        {
+            int mid1 = search(nums1, nums2, cnt/2);
+            int mid2 = search(nums1, nums2, (cnt/2)+1);
+            if(mid1==-1 || mid2==-1) cout<<mid1<<" "<<mid2<<endl;
+            //cout<<mid1<<" "<<mid2<<endl;
+            return (mid1+mid2) / 2.0;
+        }
+        else
+        {
+            int mid = search(nums1, nums2, (cnt/2)+1);
+            if(mid==-1) cout<<mid<<endl;
+            
+            return mid;
+        }                        
+    }
+    
+    int search(vector<int>& nums1, vector<int>& nums2, int cnt)
+    {
+        int l=0;
+        int r=nums1.size()-1;        
+        while(l<=r)
+        {
+            int mid=l+(r-l)/2;
+            
+            vector<int> range = check(nums2, nums1[mid]);
+            //cout<<nums1[mid]<<" : "<<range[0]<<" "<<range[1]<<endl;
+            
+            if(range[0]==range[1])
+            {   
+                int len=range[0]+mid+1;
+                if(len == cnt) return nums1[mid];
+                else if(len > cnt) r=mid-1;
+                else l=mid+1;
+            }
+            else
+            {
+                int len_l=range[0]+mid+1;
+                int len_r=range[1]+mid+1;
+                
+                if(len_l <= cnt && cnt <= len_r) return nums1[mid];
+                else if(len_l > cnt) r=mid-1;
+                else l=mid+1;
+            }
+        }
+        
+        //
+        l=0;
+        r=nums2.size()-1;        
+        while(l<=r)
+        {
+            int mid=l+(r-l)/2;
+            
+            vector<int> range = check(nums1, nums2[mid]);
+            //cout<<nums2[mid]<<" : "<<range[0]<<" "<<range[1]<<endl;
+            
+            if(range[0]==range[1])
+            {   
+                int len=range[0]+mid+1;
+                if(len == cnt) return nums2[mid];
+                else if(len > cnt) r=mid-1;
+                else l=mid+1;
+            }
+            else
+            {
+                int len_l=range[0]+mid+1;
+                int len_r=range[1]+mid+1;
+                
+                if(len_l <= cnt && cnt <= len_r) return nums2[mid];
+                else if(len_l > cnt) r=mid-1;
+                else l=mid+1;
+            }
+        } 
+        
+        return -1;
+    }
+    
+    vector<int> check(vector<int>& nums, int target)
+    {
+        int l=0;
+        int r=nums.size()-1;
+        
+        vector<int> ans(2);
+        
+        while(l<r)
+        {
+            int mid=l+(r-l)/2;
+            
+            if(target > nums[mid]) l=mid+1;
+            else r=mid;
+        }
+        ans[0]=l;
+        
+        //if(target==2) cout<<l<<endl;
+        if(target != nums[l])
+        {
+            if((l==0 || l==nums.size()-1) && target>nums[l])
+            {
+                ++ans[0];              
+            }
+            
+            ans[1]=ans[0];
+            return ans;            
+        }         
+        
+        l=l;
+        r=nums.size()-1;
+        while(l<r)
+        {
+            int mid=l+ceil((r-l)/2.0);
+            
+            if(target < nums[mid]) r=mid-1;
+            else l=mid;
+        }        
+        ans[1]=l+1;
+        
+        return ans;
+    }
+};
