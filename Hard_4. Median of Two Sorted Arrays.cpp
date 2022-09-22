@@ -288,3 +288,75 @@ public:
         return ans;
     }
 };
+
+//2022-09-22
+//time  : O(log(min(m,n)))
+//space : O(1)
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) 
+    {
+        /*
+        6 [1,2,3,4,5,6]
+        4 [1,2,3,8]
+
+        10 [1,1,2,2,3,3,4,5,6,8] 10/2=5
+
+        5 [1,2,3,4,5]
+        4 [1,2,3,8]
+
+        9 [1,1,2,2,3,3,4,5,8] 9/2=4
+
+        2 [1,3]
+        1 [2]
+
+        [1,3,3] (2+1+1)/2=2
+
+        l=0   1
+        r=1   1
+        c2=0  1
+        c1=2  1
+
+        l2=S  2
+        r2=2  B
+        l1=3  1
+        r1=B  3
+        */
+        
+        int m=nums1.size();
+        int n=nums2.size();        
+        if(m<n) return findMedianSortedArrays(nums2, nums1);
+        
+        int total=(m+n+1)/2;
+        int l=0;
+        int r=n;
+        while(l<=r)
+        {
+            int cnt2 = l+(r-l)/2;
+            int cnt1 = total-cnt2;
+            //cout<<cnt2<<" "<<cnt1<<endl;
+            
+            int l2 = (nums2.empty() || cnt2-1 < 0 ) ? INT_MIN : nums2[cnt2-1];
+            int r2 = (nums2.empty() || cnt2 >= n) ? INT_MAX : nums2[cnt2];
+            int l1 = (nums1.empty() || cnt1-1 < 0) ? INT_MIN : nums1[cnt1-1];
+            int r1 = (nums1.empty() || cnt1 >= m) ? INT_MAX : nums1[cnt1];
+            
+            if(l2<=r1 && l1<=r2)
+            {
+                if((m+n)%2==0) return (max(l1, l2) + min(r1, r2)) / 2.0;
+                else return max(l1, l2);
+            }
+            
+            if(l2>r1)
+            {
+                r=cnt2-1;
+            }
+            else
+            {
+                l=cnt2+1;
+            }
+        }
+        
+        return -1;
+    }
+};
