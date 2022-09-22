@@ -46,3 +46,29 @@ public:
         return s;
     }    
 };
+
+//2022-09-22
+//time  : O(n*w), w is the word size
+//space : O(1)
+class Solution {
+public:
+    string reverseWords(string s)
+    {                
+        int n=s.size();
+        int i=0;
+        while(i < n)
+        {
+            int end=i;
+            while(end < n && s[end]!=' ')
+            {
+                ++end;
+            }
+            
+            reverse(s.begin()+i, s.begin()+end);
+            
+            i=end+1;
+        }
+        
+        return s;
+    }
+};
