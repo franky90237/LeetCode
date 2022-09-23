@@ -52,3 +52,47 @@ public:
         return len;
     }
 };
+
+//2022-09-23
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int concatenatedBinary(int n) 
+    {
+    /*
+    sum*2^len + num;
+
+    1 01
+    2 10
+    3 11
+    4 100
+    5 101
+
+
+    5%3 + 7%3 = 2 + 1
+    12%3=0
+
+    15%10 23%10 = 5 + 3
+    38%10=8
+
+    5*2 % 3 = 1
+    1*2 % 3 = 2
+
+    5*2*2 %3 = 2
+
+    */        
+        int modulo=1e9+7;
+        int len=0;
+        long sum=0;
+        for(int i=1; i<=n; ++i)
+        {
+            if((i & (i-1)) == 0) ++len;
+            //cout<<i<<" "<<len<<endl;
+            sum = (sum<<len) + i;
+            sum = sum % modulo;
+        }
+        
+        return sum;
+    }       
+};
