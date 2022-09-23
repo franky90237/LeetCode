@@ -121,3 +121,24 @@ public:
         return root;
     }
 };
+
+//2022-09-23
+//recursive dfs preorder
+//time  : O(n)
+//space : O(!)
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root)
+    {
+        if(!root) return NULL;
+        
+        TreeNode* tmp=root->left;
+        root->left=root->right;        
+        root->right=tmp;
+        
+        invertTree(root->left);
+        invertTree(root->right);
+        
+        return root;
+    }
+};
