@@ -97,3 +97,111 @@ public:
         visited[vertex.index]=false;
     }
 };
+
+//2022-09-27
+//time  : O(n+e)
+//space : O(n+e)
+class union_find
+{
+private:
+    vector<int> parent;
+    vector<int> size;
+    
+public:
+    union_find(int n)
+    {
+        for(int i=0; i<n; ++i)
+        {
+            parent.push_back(i);
+            size.push_back(1);
+        }
+    }
+    
+    void combine(int a, int b)
+    {
+        int rootA=find(a);
+        int rootB=find(b);
+        if(rootA==rootB) return;
+        
+        if(size[rootA] > size[rootB])
+        {
+            parent[rootB]=rootA;
+            size[rootA]+=size[rootB];
+            //return rootA;
+        }        
+        else
+        {
+            parent[rootA]=rootB;
+            size[rootB]+=size[rootA];
+            //return rootB;
+        }                
+    }
+    
+    int find(int a)
+    {
+        if(parent[a] == a) return a;
+        
+        parent[a]=find(parent[a]);
+        return parent[a];
+    }
+};
+
+class Solution 
+{
+public:
+    int numberOfGoodPaths(vector<int>& vals, vector<vector<int>>& edges) 
+    {        
+        int n=vals.size();
+        if(n==1) return 1;
+        
+        int smallest=INT_MAX;
+        int biggest=INT_MIN;
+        vector<vector<int>> table(1e5+1, vector<int>());
+        for(int i=0; i<n; ++i)
+        {
+            smallest=min(smallest, vals[i]);
+            biggest=max(biggest, vals[i]);
+            table[vals[i]].push_back(i);
+        }
+        
+        vector<vector<int>> adj(n);
+        for(auto& edge : edges)
+        {
+            int nodeA=edge[0];
+            int nodeB=edge[1];
+            
+            if(vals[nodeA] >= vals[nodeB]) adj[nodeA].push_back(nodeB);
+            if(vals[nodeB] >= vals[nodeA]) adj[nodeB].push_back(nodeA);
+        }
+        
+        union_find uf(n);
+        int ans=0;
+        for(int i=smallest; i<=biggest; ++i)
+        {
+            if(table[i].empty()) continue;
+                        
+            for(auto& index : table[i])
+            {
+                for(auto& neighbor : adj[index])
+                {
+                    uf.combine(index, neighbor);                    
+                }                
+            }
+            
+            unordered_map<int, int> parent;
+            for(auto& index : table[i])
+            {
+                ++parent[uf.find(index)];
+            }
+            
+            for(auto& it : parent)
+            {            
+                ans = ans + (it.second * (it.second-1))/2;
+            }
+            ans = ans + table[i].size();
+            //cout<<i<<" "<<ans<<endl;
+        }
+        
+        return ans;
+    }
+};
