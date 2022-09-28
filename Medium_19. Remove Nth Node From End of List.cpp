@@ -187,3 +187,41 @@ public:
         return head;
     }
 };
+
+//2022-09-28
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n)
+    {
+        /*
+        n=2
+        1 2 3 4 5
+
+        (1,3) (2,4) (3,5) (4,NULL)
+
+        */
+        
+        ListNode* cur=head;
+        for(int i=0; i<n; ++i)
+        {
+            cur=cur->next;
+        }
+        
+        ListNode* pre=NULL;
+        ListNode* to_be_deleted=head;
+        while(cur)
+        {
+            pre=to_be_deleted;
+            to_be_deleted=to_be_deleted->next;
+            cur=cur->next;
+        }
+        
+        if(pre) pre->next=to_be_deleted->next;
+        else head=to_be_deleted->next;
+        
+        delete to_be_deleted;
+        return head;
+    }
+};
