@@ -77,3 +77,66 @@ public:
         return dominoes;
     }
 };
+
+//2022-09-28
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    string pushDominoes(string dominoes) 
+    {
+        /*
+        ".L.R...LR..L.."
+
+        1(L) 3(R) 7(L) 8(R) 11(L)
+
+        */
+        int n=dominoes.size();
+        
+        vector<int> table;        
+        for(int i=0; i<n; ++i)
+        {
+            if(dominoes[i]=='L' || dominoes[i]=='R') table.push_back(i);        
+        }
+        
+        int prePos=-1;
+        char preChar='L';
+        int i=0;
+        while(i < table.size())
+        {
+            int idx=table[i];
+            
+            if(preChar=='L' && dominoes[idx]=='L')
+            {
+                for(int k=prePos+1; k<idx; ++k) dominoes[k]='L';                
+            }
+            else if(preChar=='R' && dominoes[idx]=='R')
+            {
+                for(int k=prePos+1; k<idx; ++k) dominoes[k]='R';
+            }
+            else if(preChar=='R' && dominoes[idx]=='L')
+            {
+                int l=prePos+1;
+                int r=idx-1;
+                while(l<r)
+                {
+                    dominoes[l]='R';
+                    dominoes[r]='L';
+                    ++l;
+                    --r;
+                }
+            }       
+            
+            prePos=idx;
+            preChar=dominoes[idx];
+            ++i;
+        }      
+        
+        if(preChar == 'R')
+        {
+            for(int k=prePos+1; k<n; ++k) dominoes[k]='R';
+        }
+        
+        return dominoes;
+    }
+};
