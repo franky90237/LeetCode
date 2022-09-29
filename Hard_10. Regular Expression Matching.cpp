@@ -256,3 +256,56 @@ public:
         }
     }
 };
+
+//202-09-29
+class Solution {
+public:
+    bool isMatch(string s, string p) 
+    {
+        /*
+
+        "aa"
+        "a*"
+        "a"
+        ".*..a*"
+        "abcaaaaaaabaabcabac"
+        ".*ab.a.*a*a*.*b*b*"
+        */
+        
+        return solve(s, p, 0, 0);
+    }
+    
+    bool solve(string& s, string& p, int i, int k)
+    {
+        if(i >= s.size() && k >= p.size()) return true;
+        if(i < s.size() && k >=p.size()) return false;
+        if(i >= s.size() && k < p.size())
+        {
+            while(k < p.size())
+            {                
+                if(k+1 >= p.size() || p[k+1] != '*') return false;
+                k+=2;
+            }
+                        
+            return true;
+        }
+        
+        //cout<<i<<" "<<k<<" | "<<s[i]<<" "<<p[k]<<endl;
+        
+        if(k+1 < p.size() && p[k+1] == '*')
+        {
+            //get empty
+            bool canMatch=solve(s, p, i, k+2);
+            if(canMatch) return true;
+            
+            if(s[i] == p[k] || p[k] == '.')  canMatch=solve(s, p, i+1, k);                
+            
+            return canMatch;
+        }
+        else
+        {
+            if(s[i] == p[k] || p[k] == '.') return solve(s, p, i+1, k+1);
+            return false;
+        }
+    }
+};
