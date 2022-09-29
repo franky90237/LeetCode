@@ -309,3 +309,65 @@ public:
         }
     }
 };
+
+//202-09-29
+//time  : O(m*n)
+//space : O(m*n)
+class Solution {
+public:
+    bool isMatch(string s, string p) 
+    {
+        /*
+
+        "aa"
+        "a*"
+        "a"
+        ".*..a*"
+        "abcaaaaaaabaabcabac"
+        ".*ab.a.*a*a*.*b*b*"
+        
+        s = ac
+        p = ab*c
+        */
+        
+        vector<vector<bool>> dp(s.size()+1, vector<bool>(p.size()+1, false));
+        dp[0][0]=true;
+        for(int i=1; i<=s.size(); ++i) dp[i][0]=false;
+        for(int k=2; k<=p.size(); ++k)
+        {
+            if(k%2 == 1)
+            {
+                dp[0][k]=false;
+            }
+            else
+            {
+                if(p[k-1] == '*') dp[0][k]=dp[0][k-2];
+                else dp[0][k]=false;
+            }
+        }
+                
+        for(int i=1; i<=s.size(); ++i)
+        {
+            for(int k=1; k<=p.size(); ++k)
+            {
+                if(p[k-1] == '*')
+                {
+                    //empty
+                    if(k-2 >= 0) dp[i][k]=dp[i][k-2];
+                    
+                    if(k-2 >= 0 && (p[k-2] == s[i-1] || p[k-2] == '.'))
+                    {
+                        dp[i][k]= dp[i][k] | dp[i-1][k];
+                    }
+                }
+                else
+                {
+                    if(s[i-1] == p[k-1] || p[k-1] == '.') dp[i][k]=dp[i-1][k-1];
+                    else dp[i][k]=false;
+                }
+            }
+        }
+                
+        return dp[s.size()][p.size()];
+    }
+};
