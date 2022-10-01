@@ -179,3 +179,63 @@ public:
         }
     }
 };
+
+//2022-10-01
+//using binary search tree (set) to replace maxHeap
+class Solution {
+private:
+    static bool comp_sort(const vector<int>& a, const vector<int>& b)
+    {
+        if(a[0] == b[0])
+        {
+            if(a[2] == -1 && b[2] == -1) return a[1] < b[1];
+            else if(a[2] == 1 && b[2] == 1) return a[1] > b[1];
+            else return a[2] > b[2];
+        }
+        
+        return a[0] < b[0];
+    } 
+    
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings)
+    {        
+        vector<vector<int>> input;
+        for(auto& building : buildings)
+        {
+            input.push_back({building[0], building[2], 1});
+            input.push_back({building[1], building[2], -1});
+        }
+        
+        sort(input.begin(), input.end(), comp_sort);
+        
+        vector<vector<int>> ans;        
+        multiset<int> maxHeap;
+        
+        int preHeight=0;
+        int i=0;
+        int n=input.size();
+        while(i < n)
+        {
+            if(input[i][2] == 1)
+            {
+                maxHeap.insert(input[i][1]);                               
+            }
+            else
+            {            
+                maxHeap.erase(maxHeap.find(input[i][1]));
+            }
+                        
+            int curHeight=maxHeap.empty() ? 0 : *(maxHeap.rbegin());
+            //cout<<maxHeap.size()<<" | "<<input[i][0]<<" "<<input[i][1]<<" : "<<preHeight<<" "<<curHeight<<endl;
+            if(curHeight != preHeight)
+            {
+                ans.push_back({input[i][0], curHeight});
+                preHeight=curHeight;
+            }
+            
+            ++i;
+        }
+        
+        return ans;        
+    }
+};
