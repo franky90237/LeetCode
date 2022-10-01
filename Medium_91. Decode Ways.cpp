@@ -142,3 +142,37 @@ public:
         return 1 <= num && num <= 26;
     }
 };
+
+//2022-10-01
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int numDecodings(string s) 
+    {
+        int n=s.size();
+        int dp[n+1];
+        for(int i=0; i < n; ++i) dp[i]=0;
+        if(valid(s[n-1]-'0')) dp[n-1]=1;
+        dp[n]=1;
+        
+        for(int i=n-2; i>=0; --i)
+        {
+            int one = s[i]-'0';
+            int two = one!=0 ? one*10+s[i+1]-'0' : 99;
+            
+            int cnt=0;
+            if(valid(one)) cnt+=dp[i+1];
+            if(valid(two)) cnt+=dp[i+2];            
+            
+            dp[i]=cnt;
+        }
+        
+        return dp[0];
+    }  
+    
+    bool valid(int num)
+    {
+        return 1 <= num && num <= 26;
+    }
+};
