@@ -101,3 +101,81 @@ public:
         return ans;
     }
 };
+
+//2022-10-01
+class Solution {
+private:
+    static bool comp_sort(const vector<int>& a, const vector<int>& b)
+    {
+        if(a[0] == b[0])
+        {
+            if(a[2] == -1 && b[2] == -1) return a[1] < b[1];
+            else if(a[2] == 1 && b[2] == 1) return a[1] > b[1];
+            else return a[2] > b[2];
+        }
+        
+        return a[0] < b[0];
+    } 
+    
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings)
+    {        
+        vector<vector<int>> input;
+        for(auto& building : buildings)
+        {
+            input.push_back({building[0], building[2], 1});
+            input.push_back({building[1], building[2], -1});
+        }
+        
+        sort(input.begin(), input.end(), comp_sort);
+        
+        vector<vector<int>> ans;
+        priority_queue<int> maxHeap;        
+        unordered_map<int, int> to_be_removed;
+        
+        int preHeight=0;
+        int i=0;
+        int n=input.size();
+        while(i < n)
+        {
+            if(input[i][2] == 1)
+            {
+                maxHeap.push(input[i][1]);                               
+            }
+            else
+            {            
+                removed_mapHeap_elemet(maxHeap, to_be_removed, input[i][1]);
+            }
+                        
+            int curHeight=maxHeap.empty() ? 0 : maxHeap.top();
+            //cout<<maxHeap.size()<<" | "<<input[i][0]<<" "<<input[i][1]<<" : "<<preHeight<<" "<<curHeight<<endl;
+            if(curHeight != preHeight)
+            {
+                ans.push_back({input[i][0], curHeight});
+                preHeight=curHeight;
+            }
+            
+            ++i;
+        }
+        
+        return ans;        
+    }
+    
+    void removed_mapHeap_elemet(priority_queue<int>& maxHeap, unordered_map<int, int>& to_be_removed, int val)
+    {
+        if(maxHeap.top() == val)
+        {                       
+            maxHeap.pop();
+            while(!maxHeap.empty() && to_be_removed.find(maxHeap.top()) != to_be_removed.end())
+            {                                
+                --to_be_removed[maxHeap.top()];
+                if(to_be_removed[maxHeap.top()] == 0) to_be_removed.erase(maxHeap.top());
+                maxHeap.pop();
+            }                        
+        }
+        else
+        {
+            ++to_be_removed[val];
+        }
+    }
+};
