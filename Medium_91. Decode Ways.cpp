@@ -100,3 +100,45 @@ public:
         return dp[n-1];
     }
 };
+
+//2022-10-01
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int numDecodings(string s) 
+    {
+        vector<int> dp(s.size(), -1);
+        return solve(s, 0, dp);
+    }
+    
+    int solve(string& s, int cur, vector<int>& dp)
+    {
+        int n=s.size();
+        if(cur >= n) return 1;
+        if(dp[cur] != -1) return dp[cur];
+        
+        int cnt=0;
+        int one=s[cur]-'0';
+        int two=(cur+1 < n) && one != 0 ? one*10+(s[cur+1]-'0') : 99;
+        //int two=99;
+        //if(cur+1 <n) two=one*10+(s[cur+1]-'0');
+        
+        if(valid(one))
+        {
+            cnt+=solve(s, cur+1, dp);
+        }
+        if(valid(two))
+        {
+            cnt+=solve(s, cur+2, dp);
+        }
+        
+        dp[cur]=cnt;
+        return cnt;
+    }
+    
+    bool valid(int num)
+    {
+        return 1 <= num && num <= 26;
+    }
+};
