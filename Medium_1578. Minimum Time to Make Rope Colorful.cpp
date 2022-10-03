@@ -62,3 +62,34 @@ public:
         return ans;
     }
 };
+
+//2022-10-03
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int minCost(string colors, vector<int>& neededTime) 
+    {
+        int n=colors.size();
+        
+        int biggest=0;
+        int ans=0;        
+        int i=0;
+        while(i < n)
+        {
+            if(i-1 >= 0 && colors[i] != colors[i-1])
+            {
+                ans-=biggest;
+                biggest=0;             
+            }
+            
+            ans+=neededTime[i];
+            biggest=max(biggest, neededTime[i]);
+            
+            ++i;
+        }
+        
+        ans-=biggest;
+        return ans;
+    }
+};
