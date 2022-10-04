@@ -75,3 +75,61 @@ public:
         return cnt;
     }
 };
+
+//2022-10-05
+//time  : O(32)
+//space : O(1)
+class Solution {
+public:
+    int minimizeXor(int num1, int num2)
+    {
+        int cnt=get_set_bits(num2);
+        
+        int ans=0;
+        
+        unsigned int b=1<<31;
+        for(int i=31; i>=0; --i)
+        {
+            if(cnt==0) break;
+            
+            if((b & num1) > 0)
+            {                
+                ans = ans | b;
+                --cnt;
+            }
+            
+            b = b >> 1;
+        }
+        
+        //cout<<cnt<<" "<<ans<<endl;
+        if(cnt == 0) return ans;
+        
+        b=1;
+        for(int i=0; i<=31; ++i)
+        {
+            if(cnt==0) break;
+            
+            if((b & num1) == 0)
+            {
+                ans = ans | b;
+                --cnt;
+            }
+            
+            b = b << 1;
+        }
+        
+        return ans;
+    }
+    
+    int get_set_bits(int num)
+    {
+        int cnt=0;
+        while(num > 0)
+        {
+            num = num & (num-1);
+            ++cnt;            
+        }
+        
+        return cnt;
+    }
+};
