@@ -57,3 +57,34 @@ public:
         return root;
     }
 };
+
+//2022-10-05
+//time  : O(n)
+//space : O(h), h is the height of the tree
+class Solution {
+public:
+    TreeNode* addOneRow(TreeNode* root, int val, int depth) 
+    {
+        if(!root) return NULL;
+        
+        if(depth==1)
+        {
+            TreeNode* n=new TreeNode(val, root, NULL);
+            return n;
+        }
+        
+        if(depth == 2)
+        {
+            TreeNode* l=new TreeNode(val, root->left, NULL);
+            TreeNode* r=new TreeNode(val, NULL, root->right);
+            root->left=l;
+            root->right=r;
+            return root;
+        }
+        
+        addOneRow(root->left, val, depth-1);
+        addOneRow(root->right, val, depth-1);
+            
+        return root;
+    }
+};
