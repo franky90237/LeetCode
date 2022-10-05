@@ -88,3 +88,38 @@ public:
         return dp[0];
     }
 };
+
+//2022-10-05
+//time  : O(n*n)
+//space : O(n*n)
+class Solution {
+public:
+    int deleteString(string s) 
+    {
+        int n=s.size();
+        
+        vector<vector<int>> lcs(n+1, vector<int>(n+1, 0));        
+        vector<int> dp(n+1, 1);
+        
+        for(int i=n-1; i>=0; --i)
+        {            
+            for(int k=i+1; k<n; ++k)
+            {
+                if(s[i] == s[k])
+                {
+                    lcs[i][k]=1+lcs[i+1][k+1];
+                }
+                
+                if(lcs[i][k] >= k-i)
+                {
+                    dp[i]=max(dp[i], 1+dp[k]);
+                }                
+            }
+        }
+        
+        //for(int i=0; i<n; ++i) cout<<dp[i]<<" ";
+        //cout<<endl;
+        
+        return dp[0];
+    }
+};
