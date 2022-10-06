@@ -121,3 +121,39 @@ public:
         return pre;
     }
 };
+
+//2022-10-07
+//time  : O(n*n)
+//space : O(n)
+class Solution {
+public:
+    void reorderList(ListNode* head) 
+    {        
+        if(!head) return;
+        
+        ListNode* last=get_last(head);
+        if(!last || last == head) return;
+        
+        ListNode* tmp=head->next;
+        head->next=last;
+        last->next=tmp;
+        
+        reorderList(tmp);
+    }
+    
+    ListNode* get_last(ListNode* head)
+    {
+        if(!head) return NULL;
+        
+        ListNode* pre=NULL;
+        ListNode* cur=head;
+        while(cur->next)
+        {
+            pre=cur;
+            cur=cur->next;
+        }
+        
+        if(pre) pre->next=NULL;
+        return cur;
+    }
+};
