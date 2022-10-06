@@ -42,9 +42,41 @@ public:
     }
 };
 
-/**
- * Your TimeMap object will be instantiated and called as such:
- * TimeMap* obj = new TimeMap();
- * obj->set(key,value,timestamp);
- * string param_2 = obj->get(key,timestamp);
- */
+//2022-10-06
+//time  : O(log(n))
+class TimeMap 
+{
+private:
+    unordered_map<string, map<int, string>> table;
+    
+public:
+    TimeMap() 
+    {
+        
+    }
+    
+    void set(string key, string value, int timestamp) 
+    {
+        table[key].insert({timestamp, value});
+    }
+    
+    string get(string key, int timestamp) 
+    {
+        if(table.find(key) == table.end()) return "";
+        
+        auto it=table[key].lower_bound(timestamp);
+        if(it == table[key].end())
+        {
+            --it;
+            return it->second;
+        }
+        else
+        {
+            if(it->first == timestamp) return it->second;            
+            if(it == table[key].begin()) return "";
+            
+            --it;
+            return it->second;
+        }
+    }
+};
