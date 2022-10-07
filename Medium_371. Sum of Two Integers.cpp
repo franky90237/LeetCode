@@ -65,3 +65,33 @@ public:
         return a;
     }
 };
+
+//2022-10-07
+//time  : O(32)
+//space : O(1)
+class Solution {
+public:
+    int getSum(int a, int b) 
+    {
+        int ans=0;
+        
+        int carry=0;
+        int sum=0;
+        unsigned int x=1;
+        for(int i=0; i<32; ++i)
+        {     
+            int aBit = a & x;
+            int bBit = b & x;
+            
+            sum = aBit ^ bBit ^ carry;
+            carry = (aBit & bBit) | (aBit & carry) | (bBit & carry);            
+            carry = (unsigned int)carry << 1;
+            ans = ans | sum;
+            
+            x = x << 1;
+        }
+                
+        
+        return ans;
+    }
+};
