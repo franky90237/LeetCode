@@ -157,3 +157,50 @@ public:
         return cur;
     }
 };
+
+//2022-10-07
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    void reorderList(ListNode* head) 
+    {        
+        ListNode* slow=head;
+        ListNode* fast=head;
+        while(fast && fast->next)
+        {
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        
+        ListNode* last=reverse_linkedList(slow);
+        ListNode* cur=head;        
+        //cout<<last->val<<endl;
+        while(last != cur && cur->next != last)
+        {
+            ListNode* cNext=cur->next;
+            ListNode* lNext=last->next;
+            
+            last->next=cur->next;
+            cur->next=last;
+            
+            cur=cNext;
+            last=lNext;            
+        }        
+    }
+    
+    ListNode* reverse_linkedList(ListNode* head)
+    {
+        ListNode* pre=NULL;
+        ListNode* cur=head;
+        while(cur)
+        {
+            ListNode* cNext=cur->next;
+            cur->next=pre;
+            pre=cur;
+            cur=cNext;
+        }
+        
+        return pre;
+    }
+};
