@@ -1,6 +1,6 @@
 //2022-10-09
 //time  : O(32*n)
-//space : O(1)
+//space : O(n)
 class Solution {
 public:
     vector<int> findArray(vector<int>& pref)
@@ -40,7 +40,7 @@ public:
 
 //2022-10-09
 //time  : O(n)
-//space : O(1)
+//space : O(n)
 class Solution {
 public:
     vector<int> findArray(vector<int>& pref)
@@ -54,5 +54,24 @@ public:
         }
         
         return ans;
+    }
+};
+
+//2022-10-09
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    vector<int> findArray(vector<int>& pref)
+    {
+        int pre=pref[0];
+        for(int i=1; i<pref.size(); ++i)
+        {
+            int tmp=pref[i];
+            pref[i] = pre ^ pref[i];
+            pre=tmp;
+        }
+        
+        return pref;
     }
 };
