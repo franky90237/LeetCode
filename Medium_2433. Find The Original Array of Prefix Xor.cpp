@@ -37,3 +37,22 @@ public:
         return res;
     }
 };
+
+//2022-10-09
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    vector<int> findArray(vector<int>& pref)
+    {
+        vector<int> ans;
+        ans.push_back(pref[0]);
+        
+        for(int i=1; i<pref.size(); ++i)
+        {            
+            ans.push_back(pref[i-1] ^ pref[i]);
+        }
+        
+        return ans;
+    }
+};
