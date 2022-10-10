@@ -36,3 +36,40 @@ public:
         return dp[r][c][sum];
     }
 };
+
+//2022-10-10
+//time  : O(m*n*k)
+//space : O(m*n*k)
+class Solution {
+public:
+    int numberOfPaths(vector<vector<int>>& grid, int k) 
+    {
+        int mod=1e9+7;
+        int m=grid.size();
+        int n=grid[0].size();
+        int dp[m+1][n+1][k+1];
+        memset(dp, 0, sizeof(int)*(m+1)*(n+1)*(k+1));
+        
+        dp[m-1][n-1][grid[m-1][n-1]%k]=1;       
+        
+        for(int i=m-1; i>=0; --i)
+        {
+            for(int x=n-1; x>=0; --x)
+            {
+                grid[i][x] %= k;
+                if(i==m-1 && x==n-1) continue;
+                
+                for(int z=0; z<k; ++z)
+                {
+                    int sum = (grid[i][x] + z) % k;
+                    dp[i][x][sum] = (dp[i][x][sum] + dp[i+1][x][z] + dp[i][x+1][z]) % mod;
+                    
+                    //cout<<dp[i][x][sum]<<" ";
+                }                
+                //cout<<" | "<<i<<","<<x<<endl;
+            }
+        }
+               
+        return dp[0][0][0];
+    }
+};
