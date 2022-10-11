@@ -77,3 +77,26 @@ public:
         return l;
     }
 };
+
+//2022-10-12
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    bool increasingTriplet(vector<int>& nums) 
+    {
+        int n=nums.size();
+        if(n<=2) return false;
+        
+        int smallest=INT_MAX;
+        int largest=INT_MAX;
+        for(int i=0; i<n; ++i)
+        {
+            if(nums[i] <= smallest) smallest=nums[i];
+            else if(nums[i] <= largest) largest=nums[i];
+            else return true;
+        }
+        
+        return false;        
+    }    
+};
