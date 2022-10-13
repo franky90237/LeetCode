@@ -37,3 +37,16 @@ public:
         delete next_node;
     }
 };
+
+//2022-10-13
+//time  : O(1)
+//space : O(1)
+class Solution {
+public:
+    void deleteNode(ListNode* node) 
+    {
+        ListNode* to_be_removed=node->next;
+        *node=*(node->next);
+        delete to_be_removed;
+    }
+};
