@@ -42,3 +42,68 @@ public:
         return true;
     }
 };
+
+//2022-10-13
+//time  : O((n-wordLen) * wordLEn)
+//space : O(wordLen)
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words)
+    {
+        unordered_map<string, int> table;
+        for(auto& word: words) ++table[word];
+        
+        vector<int> ans;        
+        int wordLen=words[0].size();
+        int allLen=wordLen*words.size();       
+        for(int i=0; i<wordLen; ++i)
+        {
+            check(s, words, table, ans, i);
+            //cout<<endl;           
+        }
+        
+        return ans;
+    }
+    
+    void check(string& s, vector<string>& words, unordered_map<string, int>& table, vector<int>& ans, int left)
+    {
+        int n=s.size();
+        int wordLen=words[0].size();
+        int allLen=wordLen*words.size();
+        
+        unordered_map<string, int> freq;
+        int right=left;
+        while(right + wordLen <= n)
+        {
+            string word=s.substr(right, wordLen);
+            //cout<<word<<endl;
+            
+            if(table.find(word) == table.end())
+            {
+                freq.clear();
+                left=right+wordLen;
+            }
+            else
+            {
+                while(freq[word] == table[word])
+                {
+                    string to_be_removed=s.substr(left, wordLen);
+                    --freq[to_be_removed];
+                    if(freq[to_be_removed] == 0) freq.erase(to_be_removed);
+                    left += wordLen;
+                }
+                
+                ++freq[word];
+                //cout<<left<<" "<<right<<endl;
+                if(right - left + wordLen == allLen)
+                {
+                    ans.push_back(left);
+                    --freq[s.substr(left, wordLen)];
+                    left += wordLen;                    
+                }
+            }
+            
+            right += wordLen;
+        }
+    }
+};
