@@ -49,3 +49,48 @@ public:
         return res;
     }
 };
+
+//2022-10-16
+//time  : O(n)
+//space : O(1)
+class Solution 
+{        
+public:
+    long long countSubarrays(vector<int>& nums, int minK, int maxK) 
+    {
+        int n=nums.size();
+        
+        long long ans=0;        
+        int left=0;
+        int right=0;
+        int minIdx=-1;
+        int maxIdx=-1;
+        while(right < n)
+        {
+            if(nums[right] < minK || nums[right] > maxK)
+            {
+                minIdx=-1;
+                maxIdx=-1;                
+                ++right;
+                left=right;
+                continue;
+            }
+                        
+            if(nums[right] == minK) minIdx=right;
+            if(nums[right] == maxK) maxIdx=right;            
+            if(minIdx == -1 || maxIdx ==- 1)
+            {
+                ++right;
+                continue;
+            }
+            
+            int totalCnt=right-left+1;
+            int excessCnt=right-min(minIdx, maxIdx);
+            ans += totalCnt-excessCnt;
+            //cout<<"("<<left<<","<<right<<") "<<totalCnt<<" "<<excessCnt<<endl;
+            ++right;
+        }
+        
+        return ans;
+    }
+};
