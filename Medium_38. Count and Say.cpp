@@ -38,3 +38,31 @@ public:
         }
     }
 };
+
+//2022-10-18
+class Solution {
+public:
+    string countAndSay(int n) 
+    {
+        if(n == 1) return "1";
+        
+        string num=countAndSay(n-1);
+        string res;
+        for(int i=0; i<num.size(); ++i)
+        {
+            int right=i;
+            while(right < num.size() && num[i] == num[right])
+            {
+                ++right;
+            }
+            
+            int cnt=right-i;
+            res = res + to_string(cnt);
+            res.push_back(num[i]);
+            
+            i=right-1;
+        }
+        
+        return res;
+    }
+};
