@@ -82,3 +82,30 @@ public:
         return ans;
     }    
 };
+
+//2022-10-20
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int minFlipsMonoIncr(string s) 
+    {
+        int oneCnt=0;
+        int flipCnt=0;
+        for(auto& c: s)
+        {
+            if(c == '1')
+            {
+                ++oneCnt;
+            }
+            else
+            {
+                int flip_c_to_1_cnt = flipCnt+1;
+                int flip_all_1_to_0_cnt=oneCnt;
+                flipCnt=min(flip_c_to_1_cnt, flip_all_1_to_0_cnt);
+            }
+        }
+        
+        return flipCnt;
+    }    
+};
