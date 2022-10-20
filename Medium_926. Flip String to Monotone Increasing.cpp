@@ -38,3 +38,47 @@ public:
         return flips;
     }
 };
+
+//2022-10-20
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int minFlipsMonoIncr(string s) 
+    {
+        const int n=s.size();
+        int diffZeros[n];
+        diffZeros[0]=(s[0] != '0') ? 1 : 0;
+        for(int i=1; i<n; ++i)
+        {
+            diffZeros[i]=diffZeros[i-1];
+            if(s[i] != '0') ++diffZeros[i];
+            //cout<<diffZeros[i]<<" ";
+        }
+        
+        //cout<<endl;
+        
+        int diffOnes[n];
+        diffOnes[n-1]=(s[n-1] != '1') ? 1 : 0;        
+        for(int i=n-2; i>=0; --i)
+        {
+            diffOnes[i]=diffOnes[i+1];
+            if(s[i] != '1') ++diffOnes[i];
+            //cout<<diffOnes[i]<<" ";
+        }
+        
+        int ans=INT_MAX;        
+        for(int i=-1; i<n; ++i)
+        {
+            //int flips=calculate(s, zeros);
+            int diff0=(i == -1) ? 0 : diffZeros[i];
+            int diff1=(i+1 == n) ? 0 : diffOnes[i+1];            
+            int flips=diff0+diff1;            
+            if(flips == 0) return 0;
+            //cout<<i<<" "<<diff0<<" "<<diff1<<endl;
+            ans=min(ans, flips);
+        }
+        
+        return ans;
+    }    
+};
