@@ -66,3 +66,35 @@ public:
         return false;
     }
 };
+
+//2022-10-22
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) 
+    {
+        unordered_set<int> table;
+        
+        int n=nums.size();
+        int left=0;
+        int right=0;
+        while(right < n)
+        {         
+            if(right-left > k)
+            {
+                table.erase(nums[left]);
+                ++left;
+            }
+            
+            if(table.find(nums[right]) !=table.end()) return true;
+            table.insert(nums[right]);
+            
+            //for(auto& i: table)cout<<i<<" ";
+            //cout<<endl;
+            ++right;
+        }
+        
+        return false;
+    }
+};
