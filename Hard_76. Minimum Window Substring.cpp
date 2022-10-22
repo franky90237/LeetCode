@@ -193,3 +193,59 @@ public:
         return (window_start==-1) ? "" : s.substr(window_start,len);
     }
 };
+
+//2022-10-22
+//time  : O(n+m)
+//spcae : O(m)
+class Solution {
+public:
+    string minWindow(string s, string t) 
+    {
+        unordered_map<char, int> pattern;
+        unordered_map<char, int> window;
+        for(auto& c: t)
+        {
+            ++pattern[c];
+            window[c]=0;
+        }
+        
+        int n=s.size();
+        int ansLeft=0;
+        int ansRight=n+1;
+        int cnt=0;
+        int left=0;
+        for(int right=0; right<n; ++right)
+        {
+            //cout<<left<<" "<<right<<endl;
+            
+            if(pattern.find(s[right]) != pattern.end())
+            {
+                ++window[s[right]];
+                if(window[s[right]] <= pattern[s[right]]) ++cnt;
+            }
+            
+            
+            while(cnt == t.size() && left <= right)
+            {                                
+                if(window.find(s[left]) != window.end())
+                {
+                    --window[s[left]];
+                    if(window[s[left]] < pattern[s[left]]) 
+                    {
+                        if(right-left+1 < ansRight-ansLeft+1)
+                        {
+                            ansLeft=left;
+                            ansRight=right;
+                        }
+                        
+                        --cnt;
+                    }
+                }
+                
+                ++left;
+            }                        
+        }
+                
+        return (ansRight==n+1) ? "" : s.substr(ansLeft, ansRight-ansLeft+1);        
+    }
+};
