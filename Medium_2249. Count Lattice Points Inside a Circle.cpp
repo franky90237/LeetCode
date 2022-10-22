@@ -31,3 +31,36 @@ public:
         return point.size();
     }
 };
+
+//2022-10-21
+//time  : O(n*200*200)
+//space : O(1)
+class Solution {
+public:
+    int countLatticePoints(vector<vector<int>>& circles) 
+    {
+        int ans=0;
+        for(int x=0; x<=200; ++x)
+        {
+            for(int y=0; y<=200; ++y)
+            {
+                for(auto& circle: circles)
+                {
+                    int cx=circle[0];
+                    int cy=circle[1];
+                    int r=circle[2];
+                    
+                    int dist=(x-cx)*(x-cx)+(y-cy)*(y-cy);
+                    if(dist <= r*r) 
+                    {
+                        //cout<<x<<", "<<y<<" | "<<cx<<", "<<cy<<" : "<<r<<endl;
+                        ++ans;
+                        break;
+                    }
+                }
+            }                        
+        }
+        
+        return ans;           
+    }
+};
