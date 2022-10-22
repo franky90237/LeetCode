@@ -249,3 +249,46 @@ public:
         return (ansRight==n+1) ? "" : s.substr(ansLeft, ansRight-ansLeft+1);        
     }
 };
+
+//2022-10-22
+//time  : O(n+m)
+//spcae : O(128)
+class Solution {
+public:
+    string minWindow(string s, string t) 
+    {
+        vector<int> pattern(128, 0);        
+        for(auto& c: t) ++pattern[c];        
+        
+        int n=s.size();
+        int ansLeft=0;
+        int ansRight=n+1;
+        int cnt=t.size();
+        int left=0;
+        for(int right=0; right<n; ++right)
+        {
+            //cout<<left<<" "<<right<<endl;
+            
+            --pattern[s[right]];
+            if(pattern[s[right]] >= 0) --cnt;
+            
+            while(cnt == 0)
+            {
+                ++pattern[s[left]];
+                if(pattern[s[left]] >= 1)
+                {
+                    if(right-left+1 < ansRight-ansLeft+1)
+                    {
+                        ansLeft=left;
+                        ansRight=right;
+                    }
+                    ++cnt;
+                }
+                
+                ++left;
+            }                                                    
+        }
+                
+        return (ansRight==n+1) ? "" : s.substr(ansLeft, ansRight-ansLeft+1);        
+    }
+};
