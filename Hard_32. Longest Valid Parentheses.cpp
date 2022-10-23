@@ -59,3 +59,45 @@ public:
         return idx;
     }
 };
+
+//2022-10-23
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int longestValidParentheses(string s) 
+    {
+        int n=s.size();
+        if(n <= 1) return 0;
+        
+        vector<int> dp(n, 0);        
+        if(s[0] == '(' && s[1]==')') dp[1]=2;
+        
+        int ans=dp[1];
+        for(int i=2; i<n; ++i)
+        {
+            if(s[i] == '(')
+            {
+                dp[i]=0;
+            }
+            else if(s[i-1] == '(' && s[i] == ')')
+            {
+                dp[i]=dp[i-2]+2;
+            }
+            else // ))
+            {
+                int len=dp[i-1];
+                int preIdx=i-1-len;
+                if(preIdx >= 0 && s[preIdx] == '(')
+                {
+                    if(preIdx-1 >= 0) dp[i]=dp[preIdx-1]+dp[i-1]+2;
+                    else dp[i]=dp[i-1]+2;
+                }
+            }
+            
+            ans=max(ans, dp[i]);
+        }
+        
+        return ans;
+    }
+};
