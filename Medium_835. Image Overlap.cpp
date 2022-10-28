@@ -1,0 +1,50 @@
+//2022-10-28
+//time  : O(n*n*n*n)
+//spcae : O(1)
+class Solution {
+public:
+    int largestOverlap(vector<vector<int>>& img1, vector<vector<int>>& img2) 
+    {
+        /*
+        [3][3] [3][2] [3][1]
+        [2][3] [1][2] [2][1]
+        [1][3] [2][2] [1][1]
+        [0][3] [0][2] [0][1] [0][0] [0][1] [0][2]
+        [1][3] [1][2] [1][1] [1][0] [1][1] [1][2]
+        [2][3] [2][2] [2][1] [2][0] [2][1] [2][2]
+                                                  [3][3] [3][4] [3][5]
+                                                  [4][3] [4][4] [4][5]
+                                                  [5][3] [5][4] [5][5]
+        */
+        
+        int n=img1.size();           
+        
+        int ans=0;
+        for(int r=0-n; r<n; ++r)
+        {
+            for(int c=0-n+1; c<n; ++c)
+            {
+                //cout<<"("<<r<<","<<c<<") ";
+                //n*n
+                int cnt=0;                          
+                for(int r1=r, r2=0; r2<n; ++r2, ++r1)
+                {                    
+                    for(int c1=c, c2=0; c2<n; ++c2, ++c1)
+                    {                      
+                        //cout<<"("<<r1<<","<<c1<<") ";
+                        if(r1<0 || r1>=n || c1<0 || c1>=n || img1[r1][c1] == 0 || img2[r2][c2] == 0) continue;
+                        ++cnt;
+                    }
+                    //cout<<endl;
+                }
+                               
+                ans=max(ans, cnt);
+                //cout<<":"<<cnt<<" ";
+            }
+            
+            //cout<<endl;
+        }                                
+        
+        return ans;
+    }
+};
