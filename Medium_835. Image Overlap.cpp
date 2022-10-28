@@ -48,3 +48,44 @@ public:
         return ans;
     }
 };
+
+//2022-10-28
+//time  : O(n*n*n*n)
+//spcae : O(n*n)
+class Solution {
+public:
+    int largestOverlap(vector<vector<int>>& img1, vector<vector<int>>& img2) 
+    {
+        int n=img1.size();
+        
+        unordered_set<int> pos1;
+        unordered_set<int> pos2;
+        for(int r=0; r<n; ++r)
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(img1[r][c] == 1) pos1.insert(r*n+c);
+                if(img2[r][c] == 1) pos2.insert(r*n+c);
+            }
+        }
+        
+        int ans=0;
+        map<pair<int, int>, int> shift;
+        for(auto& it1: pos1)
+        {
+            for(auto& it2: pos2)
+            {
+                int r1=it1/n, c1=it1%n;
+                int r2=it2/n, c2=it2%n;
+                
+                int rDif=r2-r1;
+                int cDif=c2-c1;                
+                ++shift[{rDif, cDif}];
+                
+                ans=max(ans, shift[{rDif, cDif}]);
+            }
+        }
+        
+        return ans;
+    }
+};
