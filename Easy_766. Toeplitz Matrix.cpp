@@ -39,3 +39,25 @@ public:
         return true;
     }
 };
+
+//2022-11-01
+//time  : O(m*n)
+//space : O(1)
+class Solution {
+public:
+    bool isToeplitzMatrix(vector<vector<int>>& matrix) 
+    {
+        int m=matrix.size();
+        int n=matrix[0].size();
+        
+        for(int r=0; r<m-1; ++r)
+        {
+            for(int c=0; c<n-1; ++c)
+            {
+                if(matrix[r][c] != matrix[r+1][c+1]) return false;
+            }
+        }
+                
+        return true;
+    }
+};
