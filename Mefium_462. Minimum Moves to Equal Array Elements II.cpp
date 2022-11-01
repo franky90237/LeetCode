@@ -1,6 +1,6 @@
 //2022-11-01
 //time  : O(nlog(n))
-//space : O(1)
+//space : O(n)
 class Solution {
 public:
     int minMoves2(vector<int>& nums) 
@@ -28,6 +28,27 @@ public:
             long long right = (long long)(prefixSum[n]-prefixSum[i+1]) - (long long)(n-1-i)*nums[i];
             long long move = left+right;
             ans=min(ans, move);
+        }
+        
+        return ans;
+    }
+};
+
+//2022-11-01
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    int minMoves2(vector<int>& nums) 
+    {                
+        sort(nums.begin(), nums.end());
+        
+        int n=nums.size();
+        int median=nums[n/2];
+        int ans=0;
+        for(int i=0; i<n; ++i)
+        {
+            ans += abs(nums[i]-median);
         }
         
         return ans;
