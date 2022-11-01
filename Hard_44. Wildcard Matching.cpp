@@ -57,3 +57,49 @@ public:
         return ans;
     }
 };
+
+//2022-11-02
+//time  : O(m*n)
+//space : O(1)
+class Solution {
+public:
+    bool isMatch(string s, string p)
+    {
+        int n=s.size();
+        int is=0;
+        int ip=0;
+        int matchToAsterisk=-1;
+        int asterisk=-1;
+        while(is < s.size())
+        {
+            if(s[is] == p[ip] || p[ip] == '?')
+            {
+                ++is;
+                ++ip;
+            }
+            else if(ip < p.size() && p[ip] == '*')
+            {
+                matchToAsterisk=is;
+                asterisk=ip;
+                ++ip;
+            }
+            else if(asterisk != -1)
+            {
+                is=matchToAsterisk+1;
+                ip=asterisk;         
+            }
+            else 
+            {
+                return false;
+            }
+        }
+        
+        while(ip < p.size())
+        {
+            if(p[ip] != '*') return false;
+            ++ip;
+        }
+        
+        return true;
+    }
+};
