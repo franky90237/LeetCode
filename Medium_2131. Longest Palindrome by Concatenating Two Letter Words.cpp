@@ -42,3 +42,51 @@ public:
         return ans;
     }
 };
+
+//2022-11-03
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int longestPalindrome(vector<string>& words) 
+    {
+        unordered_map<string, int> table;
+        int toBeMatched=0;
+        int ans=0;
+        for(auto& word: words)
+        {
+            if(word[0] == word[1])
+            {
+                if(table[word] > 0)
+                {
+                    ans+=4;
+                    --table[word];
+                    --toBeMatched;
+                }
+                else
+                {
+                    ++table[word];
+                    ++toBeMatched;
+                }
+            }
+            else
+            {
+                string wordRev;
+                wordRev.push_back(word[1]);
+                wordRev.push_back(word[0]);
+                if(table[wordRev] > 0)                    
+                {
+                    ans+=4;
+                    --table[wordRev];
+                }
+                else
+                {
+                    ++table[word];                    
+                }
+            }
+        }
+        
+        if(toBeMatched > 0) ans += 2;
+        return ans;
+    }
+};
