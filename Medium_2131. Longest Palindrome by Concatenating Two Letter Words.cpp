@@ -90,3 +90,41 @@ public:
         return ans;
     }
 };
+
+//2022-11-03
+//time  : O(n)
+//space : O(26*26)
+class Solution {
+public:
+    int longestPalindrome(vector<string>& words) 
+    {        
+        int ans=0;
+        vector<vector<int>> table(26, vector<int>(26, 0));
+        for(auto& word: words)
+        {
+            int r=word[0]-'a';
+            int c=word[1]-'a';
+            
+            if(table[c][r] > 0)
+            {
+                ans+=4;
+                --table[c][r];
+            }
+            else
+            {
+                ++table[r][c];
+            }
+        }
+        
+        for(int i=0; i<26; ++i)
+        {
+            if(table[i][i] > 0) 
+            {
+                ans+=2;
+                break;
+            }
+        }
+        
+        return ans;
+    }
+};
