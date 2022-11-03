@@ -45,3 +45,114 @@ public:
         return push;
     }
 };
+
+//2022-11-03
+//time  : O(n*n), n is the bank size
+//spcae : O(n)
+class Solution {
+public:
+    int minMutation(string start, string end, vector<string>& bank) 
+    {
+        unordered_set<string> bankSet(bank.begin(), bank.end());
+        if(bankSet.count(end) == 0) return -1;
+        
+        unordered_set<string> visited;
+        queue<string> q;
+        
+        int ans=0;
+        visited.insert(start);
+        q.push(start);
+        while(!q.empty())
+        {
+            int size=q.size();
+            while(size > 0)
+            {
+                string cur=q.front();
+                q.pop();
+                if(cur == end) return ans;
+                
+                for(auto& gene: bankSet)
+                {
+                    if(visited.count(gene) == 0 && difference(cur, gene) == 1)
+                    {
+                        visited.insert(gene);
+                        q.push(gene);
+                    }
+                }
+                
+                --size;
+            }
+            
+            ++ans;
+        }
+                        
+        return -1;
+    }    
+    
+    int difference(const string& a, const string& b)
+    {
+        int diff=0;
+        for(int i=0; i<a.size(); ++i)
+        {
+            if(a[i] != b[i])
+            {
+                ++diff;
+                if(diff >= 2) break;
+            }
+        }
+        
+        return diff;
+    }        
+};
+
+//2022-11-03
+//time  : O(n*n), n is the bank size
+//spcae : O(n)
+class Solution {
+public:
+    int minMutation(string start, string end, vector<string>& bank) 
+    {
+        unordered_set<string> bankSet(bank.begin(), bank.end());
+        if(bankSet.count(end) == 0) return -1;
+        
+        unordered_set<string> visited;
+        queue<string> q;
+        
+        int ans=0;
+        visited.insert(start);
+        q.push(start);
+        while(!q.empty())
+        {
+            int size=q.size();
+            while(size > 0)
+            {
+                string cur=q.front();
+                q.pop();
+                if(cur == end) return ans;
+                                               
+                for(int i=0; i<cur.size(); ++i)
+                {                    
+                    char original=cur[i];
+                    
+                    for(char c: "ATCG")
+                    {                        
+                        cur[i]=c;
+                        if(visited.count(cur) == 0 && bankSet.count(cur) > 0)
+                        {
+                            visited.insert(cur);
+                            q.push(cur);
+                        }
+                    }
+                    
+                    cur[i]=original;
+                }                
+                
+                --size;
+            }
+            
+            ++ans;
+        }
+                        
+        return -1;
+    }              
+};
