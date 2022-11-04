@@ -238,7 +238,7 @@ public:
             {
                 int level=table[num].level;
                 int horizen=hierarchy[level].size();
-                int vertical=log(level)/log(2);
+                int vertical=level;
                 
                 int height;
                 if(horizen < vertical) height=getHeightHorizental(root->val, num, table, hierarchy);
