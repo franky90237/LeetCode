@@ -189,3 +189,41 @@ public:
         return a[1]>b[0];
     }
 };
+
+//2022-11-14
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals)
+    {
+        sort(intervals.begin(), intervals.end());
+        
+        int n=intervals.size();
+        int ans=0;
+        int pre=0;
+        for(int i=1; i<n; ++i)
+        {
+            if(overlapping(intervals, pre, i))
+            {
+                if(intervals[pre][1] > intervals[i][1])
+                {
+                    pre=i;
+                }
+                
+                ++ans;
+            }
+            else
+            {
+                pre=i;
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool overlapping(vector<vector<int>>& intervals, int pre, int cur)
+    {
+        return intervals[pre][1]>intervals[cur][0];
+    }
+};
