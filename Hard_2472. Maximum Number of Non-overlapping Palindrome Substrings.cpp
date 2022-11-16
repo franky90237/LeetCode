@@ -59,3 +59,61 @@ public:
         }
     }   
 };
+
+//2022-11-16
+//time  : O(n*n)
+//space : O(n*n)
+class Solution {
+public:
+    int maxPalindromes(string s, int k) 
+    {
+        if(k == 1) return s.size();
+        
+        vector<vector<int>> p;
+        searchPalindrome(s, k, p);               
+        
+        int n=p.size();
+        int ans=0;
+        int pre_end=-1;
+        for(int cur=0; cur<n; ++cur)
+        {
+            int cur_start=p[cur][0];            
+            if(pre_end < cur_start) 
+            {
+                pre_end=p[cur][1];
+                ++ans;                
+            }
+            else
+            {
+                pre_end=min(pre_end, p[cur][1]);
+            }
+        }
+        
+        return ans;
+    }
+    
+    void searchPalindrome(string s, int k, vector<vector<int>>& p)
+    {
+        int n=s.size();
+        for(int i=0; i<n; ++i)
+        {
+            int l=i;
+            int r=i;
+            while(l >= 0 && r < n && s[l] == s[r])
+            {
+                if(r-l+1 >= k) p.push_back({l, r});
+                --l;
+                ++r;
+            }                      
+            
+            l=i;
+            r=i+1;
+            while(l >= 0 && r < n && s[l] == s[r])
+            {
+                if(r-l+1 >= k) p.push_back({l, r});
+                --l;
+                ++r;
+            }            
+        }
+    }
+};
