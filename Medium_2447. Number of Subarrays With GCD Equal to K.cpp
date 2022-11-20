@@ -69,3 +69,51 @@ public:
         return ans;
     }
 };
+
+//2022-11-20
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    long long minimumFuelCost(vector<vector<int>>& roads, int seats) 
+    {
+        int n=roads.size();
+        if(n == 0) return 0;
+        
+        vector<vector<int>> graph(100001);        
+        createGraph(roads, graph);                
+        
+        vector<bool> visited(100001, false);
+        long long ans=0;
+        dfs(graph, 0, seats, visited, ans);
+        return ans;
+    }
+    
+    int dfs(vector<vector<int>>& graph, int cur, int seats, vector<bool>& visited, long long& ans)
+    {    
+        if(visited[cur]) return 0;
+        visited[cur]=true;
+        
+        int cnt=1;
+        for(auto& neighbor: graph[cur])
+        {            
+            cnt+=dfs(graph, neighbor, seats, visited, ans);
+        }
+        if(cur != 0) ans += ceil(cnt/(double)seats);
+        
+        visited[cur]=false;
+        return cnt;
+    }       
+    
+    void createGraph(vector<vector<int>>& roads, vector<vector<int>>& graph)
+    {        
+        for(auto road: roads)
+        {
+            int a=road[0];
+            int b=road[1];
+            graph[a].push_back(b);
+            graph[b].push_back(a);            
+        }
+        
+    }
+};
