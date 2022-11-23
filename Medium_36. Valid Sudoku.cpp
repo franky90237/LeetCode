@@ -57,3 +57,79 @@ public:
         return true;
     }
 };
+
+//2022-11-23
+//time  : O(n*n)
+//space : O(n)
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) 
+    {
+        int n=board.size();
+        for(int i=0; i<n; ++i)
+        {
+            //cout<<i<<endl;
+            if(!checkRow(board, i) || !checkColumn(board, i) || !checkArea(board, i)) return false;
+        }
+        
+        return true;
+    }
+    
+    bool checkRow(vector<vector<char>>& board, int r) 
+    {
+        int n=board.size();
+        vector<bool> visited(10, false);
+        for(int c=0; c<n; ++c)
+        {
+            //cout<<c<<" ";
+            
+            char ch=board[r][c];
+            if(ch == '.') continue;
+            if(visited[ch-'0']) return false;
+            visited[ch-'0']=true;
+        }
+        
+        //cout<<endl;
+        return true;
+    }
+    
+    bool checkColumn(vector<vector<char>>& board, int c) 
+    {        
+        int n=board.size();
+        vector<bool> visited(10, false);
+        for(int r=0; r<n; ++r)
+        {
+            //cout<<r<<" ";
+            
+            char ch=board[r][c];
+            if(ch == '.') continue;
+            if(visited[ch-'0']) return false;
+            visited[ch-'0']=true;
+        }
+        
+        //cout<<endl;
+        return true;
+    }
+    
+    bool checkArea(vector<vector<char>>& board, int a) 
+    {               
+        int n=board.size();
+        vector<bool> visited(10, false);
+        for(int r=(a/3)*3; r<(a/3)*3+3; ++r)
+        {
+            for(int c=(a%3)*3 ; c<(a%3)*3+3; ++c)
+            {
+                //cout<<"("<<r<<", "<<c<<") ";
+                
+                char ch=board[r][c];
+                if(ch == '.') continue;
+                if(visited[ch-'0']) return false;
+                visited[ch-'0']=true;
+            }
+            
+            //cout<<endl;
+        }
+        
+        return true;
+    }    
+};
