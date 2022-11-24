@@ -116,7 +116,7 @@ public:
 
 //2022-11-24
 //time  : O(m*n)
-//space : O(1)
+//space : O(m*n)
 class Solution {
 public:
     bool exist(vector<vector<char>>& board, string word) 
