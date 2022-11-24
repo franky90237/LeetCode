@@ -113,3 +113,48 @@ public:
         return false;
     }
 };
+
+//2022-11-24
+//time  : O(m*n)
+//space : O(1)
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) 
+    {
+        int m=board.size();
+        int n=board[0].size();        
+        for(int r=0; r<m; ++r)
+        {
+            for(int c=0; c<n;++c)
+            {                            
+                if(dfs(board, word, r, c, 0)) return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    bool dfs(vector<vector<char>>& board, string& word, int r, int c, int cur)
+    {
+        int m=board.size();
+        int n=board[0].size();
+        
+        if(r < 0 || r >= m || c < 0 || c >= n || board[r][c] != word[cur] || board[r][c] == '*') return false;
+        if(cur == word.size()-1) return true;         
+        
+        char tmp=board[r][c];
+        board[r][c]='*';
+        
+        bool find=false;
+        if(dfs(board, word, r-1, c, cur+1) ||
+           dfs(board, word, r+1, c, cur+1) ||
+           dfs(board, word, r, c-1, cur+1) ||
+           dfs(board, word, r, c+1, cur+1))
+        {
+            find=true;
+        }
+        
+        board[r][c]=tmp;
+        return find;
+    }
+};
