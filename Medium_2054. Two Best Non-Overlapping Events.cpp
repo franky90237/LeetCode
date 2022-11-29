@@ -1,4 +1,4 @@
-//2022-11-29
+//2022-11-28
 //time  : O(nlog(n))
 //sapce : O(n)
 class Solution {
@@ -59,5 +59,54 @@ public:
                 
         if(target < events[l][0]) return l;
         return -1;
+    }
+};
+
+//2022-11-29
+//time  : O(nlog(n))
+//sapce : O(n)
+class Solution {
+private:
+    struct Item
+    {
+        int time;
+        bool isBegin;
+        int value;
+    };
+    
+public:
+    int maxTwoEvents(vector<vector<int>>& events)
+    {
+        vector<Item> nodes;        
+        for(auto& event: events)
+        {
+            Item item1={event[0], true, event[2]}; 
+            Item item2={event[1], false, event[2]};
+            nodes.push_back(item1);
+            nodes.push_back(item2);
+        }
+        
+        sort(nodes.begin(), nodes.end(), [](Item& a, Item& b)
+             {
+                 if(a.time == b.time) return a.isBegin > b.isBegin;
+                 return a.time < b.time;
+             });
+        
+        int ans=0;
+        int preMax=0;
+        for(auto& node: nodes)
+        {
+            //cout<<ans<<" "<<preMax<<endl;
+            if(node.isBegin)
+            {
+                ans=max(ans, preMax+node.value);
+            }
+            else
+            {
+                preMax=max(preMax, node.value);
+            }
+        }
+        
+        return ans;
     }
 };
