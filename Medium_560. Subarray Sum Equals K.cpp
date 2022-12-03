@@ -109,3 +109,39 @@ public:
         return ans;
     }
 };
+
+//2022-12-03
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) 
+    {        
+        /*
+        sum(0:i) - sum(0:x) = k
+        sum(0:x) = sum(0:i) - k
+
+        sum(0:i) = sum(0:x) + sum(x+1:i)
+
+        */
+        unordered_map<int, int> prefix_sum;
+        prefix_sum[0]=1;
+        
+        int ans=0;
+        int sum=0;
+        for(int i=0; i<nums.size(); ++i)
+        {
+            sum += nums[i];
+            
+            int target_prefix_sum = sum - k;
+            if(prefix_sum.find(target_prefix_sum) != prefix_sum.end()) 
+            {
+                ans += prefix_sum[target_prefix_sum];
+            }
+            
+            ++prefix_sum[sum];
+        }
+        
+        return ans;
+    }
+};
