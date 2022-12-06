@@ -156,3 +156,53 @@ public:
         return ans;
     }
 };    
+
+//2022-12-07
+//time  : O(m*n)
+//space : O(m*n)
+class Solution 
+{
+private:
+    int dp[1000][1000];
+    
+public:
+    int findLength(vector<int>& nums1, vector<int>& nums2) 
+    {
+        int m=nums1.size();
+        int n=nums2.size();
+        
+        int ans=0;
+        
+        for(int r=0; r<m; ++r)
+        {
+            if(nums1[r] == nums2[0]) 
+            {
+                dp[r][0]=1;
+                ans=1;
+            }
+        }
+        
+        for(int c=0; c<n; ++c)
+        {
+            if(nums1[0] == nums2[c]) 
+            {
+                dp[0][c]=1;
+                ans=1;
+            }
+        }
+                
+        for(int r=1; r<m; ++r)
+        {
+            for(int c=1; c<n; ++c)
+            {
+                if(nums1[r] == nums2[c]) 
+                {
+                    dp[r][c] = 1 + dp[r-1][c-1];
+                    ans = max(ans, dp[r][c]);
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
