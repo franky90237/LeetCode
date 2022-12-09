@@ -206,3 +206,66 @@ public:
         return ans;
     }
 };
+
+//2022-12-09
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    int findLength(vector<int>& nums1, vector<int>& nums2)
+    {               
+        int m=nums1.size();
+        int n=nums2.size();
+                
+        int l=0;
+        int r=min(m, n);
+        while(l < r)
+        {
+            int mid=r-(r-l)/2;
+            //cout<<l<<" "<<mid<<" "<<r<<endl;            
+            if(check_length(nums1, nums2, mid)) l=mid;
+            else r=mid-1;
+        }
+        
+        return l;
+    }
+    
+    bool check_length(vector<int>& nums1, vector<int>& nums2, int len)
+    {
+        int m=nums1.size();
+        int n=nums2.size();
+        
+        int x=101;
+        int mod=INT_MAX;
+        
+        unordered_set<long long> table;
+        long power=1;
+        long hash_value=0;
+        for(int i=0; i<m; ++i)
+        {
+            if(i < len-1) power = (power * x) % mod;
+            
+            //hash_value = (hash_value * x + nums1[i]) % mod;
+            if(i >= len) hash_value = (hash_value + mod - (nums1[i-len] * power) % mod) % mod;
+            hash_value = (hash_value * x + nums1[i]) % mod;
+            if(i >= len-1) table.insert(hash_value);
+            
+            //if(len == 6) cout<<i<<" "<<power<<" | "<<hash_value<<endl;
+        }
+                
+        hash_value=0;
+        for(int i=0; i<n; ++i)
+        {                    
+            //hash_value = (hash_value * x + nums2[i]) % mod;
+            //if(len == 6) cout<<i<<" "<<power<<" | "<<hash_value<<endl;
+            
+            if(i >= len) hash_value = (hash_value + mod - (nums2[i-len] * power) % mod) % mod;
+            hash_value = (hash_value * x + nums2[i]) % mod;
+            if(i >= len-1 && table.count(hash_value)) return true;
+            
+            //if(len == 6) cout<<i<<" "<<power<<" | "<<hash_value<<endl;
+        }
+        
+        return false;
+    }
+};
