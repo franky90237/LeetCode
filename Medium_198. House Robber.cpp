@@ -16,7 +16,6 @@ public:
 };
 
 //2022-04-15
-//TLE
 //dp recursive
 class Solution {
 public:
@@ -82,5 +81,34 @@ public:
         }    
         
         return money1;
+    }
+};
+
+//2022-12-15
+//time  : O(n)
+//spcae : O(n)
+class Solution 
+{
+private:
+    int dp[101];
+    
+public:
+    int rob(vector<int>& nums) 
+    {
+        memset(dp, -1, sizeof(dp));
+        return dfs(nums, 0);
+    }
+    
+    int dfs(vector<int>& nums, int cur)
+    {
+        int n=nums.size();
+        if(cur >= n) return 0;
+        if(dp[cur] != -1) return dp[cur];
+            
+        int steal=nums[cur]+dfs(nums, cur+2);
+        int not_steal=dfs(nums, cur+1);
+        
+        dp[cur]=max(steal, not_steal);
+        return dp[cur];
     }
 };
