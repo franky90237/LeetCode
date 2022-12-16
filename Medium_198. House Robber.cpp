@@ -112,3 +112,27 @@ public:
         return dp[cur];
     }
 };
+
+//2022-12-15
+//time  : O(n)
+//spcae : O(n)
+class Solution 
+{
+private:
+    int dp[102];
+    
+public:
+    int rob(vector<int>& nums) 
+    {        
+        int n=nums.size();
+        dp[n]=0;
+        dp[n+1]=0;
+        
+        for(int i=n-1; i>=0; --i)
+        {
+            dp[i]=max(nums[i]+dp[i+2], dp[i+1]);
+        }
+        
+        return dp[0];
+    }       
+};
