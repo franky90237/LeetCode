@@ -1,5 +1,5 @@
 //2022-12-19
-//time  : O(mlog(n))
+//time  : O(mn)
 //space : O(m)
 class Solution {
 public:
@@ -63,4 +63,41 @@ public:
         node_level[ancestor]=level_ancestor;
         return 1 + level_a - level_ancestor + level_b - level_ancestor;
     }
+};
+
+//2022-12-20
+//time  : O(mn)
+//space : O(m)
+class Solution {
+public:
+    vector<int> cycleLengthQueries(int n, vector<vector<int>>& queries) 
+    {                
+        int m=queries.size();
+        vector<int> ans(m);        
+        for(int i=0; i<m; ++i)
+        {
+            int a=queries[i][0];
+            int b=queries[i][1];            
+            
+            int len_a=0;
+            int len_b=0;
+            while(a != b)
+            {
+                if(a > b)
+                {
+                    a /= 2;
+                    ++len_a;
+                }
+                else
+                {
+                    b /= 2;
+                    ++len_b;
+                }
+            }
+            
+            ans[i] = 1 + len_a + len_b;
+        }
+        
+        return ans;
+    }    
 };
