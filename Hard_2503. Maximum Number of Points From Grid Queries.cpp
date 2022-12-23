@@ -250,3 +250,62 @@ public:
         return ans;
     }
 };
+
+//2022-12-23
+//time  : O(k + m*n)
+//space : O(k + m*n)
+class Solution {
+public:
+    vector<int> maxPoints(vector<vector<int>>& grid, vector<int>& queries)
+    {
+        int m=grid.size();
+        int n=grid[0].size();        
+        int k=queries.size();
+        
+        vector<vector<int>> queries_sorting(k);
+        for(int i=0; i<k; ++i)
+        {
+            queries_sorting[i]={queries[i], i};
+        }
+        sort(queries_sorting.begin(), queries_sorting.end());                
+        
+        int dir[4][2]={{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        int cnt=0;
+        vector<int> ans(k, 0);
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> minHeap;
+        
+        visited[0][0]=true;
+        minHeap.push({grid[0][0], 0, 0});        
+        for(int i=0; i<k; ++i)
+        {
+            int threshold=queries_sorting[i][0];
+            int idx=queries_sorting[i][1];            
+            
+            while(!minHeap.empty() &&  minHeap.top()[0] < threshold)
+            {
+                int val=minHeap.top()[0];
+                int r=minHeap.top()[1];
+                int c=minHeap.top()[2];
+                minHeap.pop();                              
+                
+                for(int j=0; j<4; ++j)
+                {
+                    int nr=r+dir[j][0];
+                    int nc=c+dir[j][1];
+                    
+                    if(nr < 0 || nr >= m || nc < 0 || nc >= n || visited[nr][nc]) continue;
+                    
+                    minHeap.push({grid[nr][nc], nr, nc});
+                    visited[nr][nc]=true;
+                }
+                
+                ++cnt;
+            }
+            
+            ans[idx]=cnt;
+        }
+        
+        return ans;
+    }
+};
