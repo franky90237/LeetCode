@@ -191,3 +191,29 @@ public:
         return true;
     }
 };
+
+//2022-01-05
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int countPrimes(int n)
+    {
+        if(n <= 2) return 0;
+        
+        vector<bool> prime(n, true);
+        int ans=0;
+        for(int i=2; i<n; ++i)
+        {
+            if(!prime[i]) continue;
+            
+            ++ans;
+            for(int k=2; i*k<n; ++k)
+            {
+                prime[i*k]=false;
+            }
+        }
+        
+        return ans;
+    }
+};
