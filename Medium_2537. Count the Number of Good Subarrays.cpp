@@ -77,3 +77,58 @@ public:
         return ans;
     }
 };
+
+//2023-01-18
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    long long countGood(vector<int>& nums, int k)
+    {        
+        /*
+        1
+        3 = 1+2
+        6 = 1+2+3
+        10 = 1+2+3+4
+        15 = 1+2+3+4+5
+        21 = 1+2+3+4+5+6
+
+        C(n, 2) = n-1 + C(n-1, 2)
+
+        n*(n-1) /2 = n-1 + (n-1)*(n-2)/2;
+        n*(n-1) = 2n-2 + (n-1)*(n-2)
+        n*n-n=n*n-3n+2+2n-2 
+
+        n*n-n | n*n-3n+2 + 2x
+
+        2x = 2n-2
+        x = n-1
+        */
+        
+        int n=nums.size();
+        int l=0;
+        int r=0;
+        unordered_map<int, int> table;
+        long long pairs=0;
+        long long ans=0;
+        
+        while(r < n)
+        {
+            ++table[nums[r]];
+            pairs += table[nums[r]]-1;
+            
+            while(pairs >= k)
+            {
+                ans += n-r;
+                --table[nums[l]];
+                pairs -= table[nums[l]];
+                
+                ++l;
+            }
+            
+            ++r;
+        }
+        
+        return ans;
+    }
+};
