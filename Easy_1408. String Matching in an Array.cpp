@@ -33,7 +33,6 @@ public:
 //2023-02-14
 //time  : O(n*s*s*s)
 //space : O(n*s)
-
 class TrieNode
 {
 public:
@@ -141,6 +140,96 @@ public:
             {
                 ans.push_back(word);
             }            
+        }
+        
+        return ans;
+    }
+};
+
+//2023-02-14
+//time  : O(n*s*s)
+//space : O(n*s)
+class TrieNode
+{
+public:
+    vector<TrieNode*> next;
+    int cnt;
+    
+    TrieNode()
+    {        
+        next.resize(26, NULL);
+        cnt=0;
+    }
+};
+
+class Trie
+{
+public:
+    TrieNode* root;
+
+    Trie()
+    {
+        root = new TrieNode;
+    }
+    
+    void insert(string& s)
+    {
+        TrieNode* cur=root;
+        
+        for(auto c: s)
+        {
+            if(!cur->next[c-'a'])
+            {
+                TrieNode* node=new TrieNode;
+                cur->next[c-'a']=node;
+            }
+            
+            cur=cur->next[c-'a'];
+            ++(cur->cnt);
+        }                
+    }
+    
+    bool find(string s)
+    {
+        TrieNode* cur=root;
+        
+        for(auto c: s)
+        {
+            if(!cur->next[c-'a'])
+            {
+                return false;
+            }
+            
+            cur=cur->next[c-'a'];
+        }
+        
+        return cur->cnt >= 2;
+    }    
+};
+
+class Solution 
+{   
+public:
+    vector<string> stringMatching(vector<string>& words) 
+    {                
+        Trie trie;        
+        for(auto word: words)
+        {            
+            for(int l=0; l<word.size(); ++l)
+            {
+                string subword;                
+                subword = word.substr(l);
+                trie.insert(subword);                
+            }
+        }
+        
+        vector<string> ans;
+        for(auto word: words)
+        {
+            if(trie.find(word))
+            {
+                ans.push_back(word);
+            }
         }
         
         return ans;
