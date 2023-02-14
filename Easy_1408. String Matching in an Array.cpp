@@ -1,5 +1,5 @@
 //2023-02-14
-//time  : O(n*n)
+//time  : O(n*n*s)
 //space : O(n)
 class Solution {
 public:
