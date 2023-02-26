@@ -45,3 +45,28 @@ public:
         return cnt==0;
     }
 };
+
+//2023-02-26
+//time  : O(nlog(n)
+//space : O(1)
+class Solution {
+public:
+    int maxNumOfMarkedIndices(vector<int>& nums)
+    {
+        sort(nums.begin(), nums.end());
+        
+        int n=nums.size();
+        int l=0;
+        int ans=0;
+        for(int i=(n+1)/2; i<n; ++i)
+        {
+            if(nums[l]*2 <= nums[i])
+            {
+                ++l;
+                ans += 2;
+            }
+        }
+        
+        return ans;
+    }
+};
