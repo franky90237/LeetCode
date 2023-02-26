@@ -87,3 +87,32 @@ public:
         return len;
     }
 };
+
+//2023-02-26
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) 
+    {        
+        unordered_map<char, int> table;
+        
+        int l=0;
+        int ans=0;
+        for(int i=0; i<s.size(); ++i)
+        {                        
+            if(table.find(s[i]) != table.end() && table[s[i]] >= l)
+            {
+                l=table[s[i]]+1;
+            }
+            else
+            {
+                ans=max(ans, i-l+1);
+            }
+                        
+            table[s[i]]=i;
+        }
+                
+        return ans;
+    }
+};
