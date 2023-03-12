@@ -174,3 +174,43 @@ public:
         return s;
     }    
 };
+
+//2023-03-12
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    string convert(string s, int numRows) 
+    {
+        if(numRows == 1)
+        {
+            return s;
+        }
+        
+        int n=s.size();
+        string ans;
+        for(int r=0; r<numRows; ++r)
+        {
+            int cur=r;
+            while(cur < n)
+            {
+                ans.push_back(s[cur]);                
+                if(cur % (numRows-1) != 0)
+                {
+                    int next=cur+2*(numRows-1-r);
+                    if(next >= n)
+                    {
+                        break;
+                    }
+                    
+                    ans.push_back(s[next]);
+                }
+                
+                //cout<<"******"<<r<<" "<<ans<<endl;
+                cur += 2*(numRows-1);
+            }
+        }
+        
+        return ans;
+    }
+};
