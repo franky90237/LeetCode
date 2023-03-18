@@ -387,3 +387,49 @@ public:
         return ans;
     }    
 };
+
+//2023-03-18
+//time  : O(n*n)
+//spcae : O(1)
+class Solution {
+public:
+    string longestPalindrome(string s)
+    {
+        int n=s.size();
+        int ansL=0;
+        int ansR=0;
+        
+        for(int left=0; left<n; ++left)
+        {
+            for(int right=left+1; right<n; ++right)
+            {
+                if(isPalindrome(s, left, right))
+                {
+                    if(right-left+1 > ansR-ansL+1)
+                    {
+                        ansL=left;
+                        ansR=right;
+                    }
+                }
+            }
+        }
+        
+        return s.substr(ansL, ansR-ansL+1);
+    }
+    
+    bool isPalindrome(string& s, int left, int right)
+    {
+        while(left < right)
+        {
+            if(s[left] != s[right])
+            {
+                return false;
+            }
+            
+            ++left;
+            --right;
+        }
+        
+        return true;
+    }
+};
