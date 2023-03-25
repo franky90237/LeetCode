@@ -47,3 +47,66 @@ public:
         return res;
     }
 };
+
+//2023-03-25
+//time  : O(32)
+//space : O(1)
+class Solution {
+public:
+    int reverse(int x) 
+    {
+        if(x == INT_MAX || x == INT_MIN)
+        {
+            return 0;
+        }        
+        
+        if(x >= 0) return reservePositive(x);
+        return reserveNegative(x);
+    }
+    
+    int reservePositive(int num)
+    {
+        int ans=0;
+        
+        while(num != 0)
+        {
+            int right=num%10;
+            
+            if(ans > (INT_MAX-right)/10)
+            {
+                return 0;
+            }
+            
+            ans = 10*ans + right;
+            num /= 10;
+        }
+        
+        return ans;
+    }
+    
+    int reserveNegative(int num)
+    {        
+        int ans=0;
+        
+        while(num != 0)
+        {
+            int right=-((-num)%10);
+            //cout<<num<<" "<<right<<endl;
+            
+            if(ans < (INT_MIN-right)/10)
+            {
+                return 0;
+            }
+            
+            ans = 10*ans + right;
+            if(ans > 0)
+            {
+                ans = -ans;
+            }
+            
+            num /= 10;
+        }
+        
+        return ans;
+    } 
+};
