@@ -43,3 +43,32 @@ public:
         return nums[right]-nums[left];
     }
 };
+
+//2023-04-13
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    int minDifference(vector<int>& nums)
+    {
+        int n=nums.size();
+        if(n <= 4)
+        {
+            return 0;
+        }
+        
+        sort(nums.begin(), nums.end());
+        
+        int l=0;
+        int r=n-4;
+        int ans=INT_MAX;
+        while(r < n)
+        {
+            ans = min(ans, nums[r]-nums[l]);
+            ++l;
+            ++r;
+        }
+        
+        return ans;
+    }
+};
