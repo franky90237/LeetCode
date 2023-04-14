@@ -91,3 +91,39 @@ public:
         return accumulate(cardPoints.begin(),cardPoints.end(),0)-min_sum;
     }    
 };
+
+//2023-04-14
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int maxScore(vector<int>& cardPoints, int k)
+    {                
+        int sum=0;
+        int left=0;
+        while(left<k)
+        {
+            sum += cardPoints[left];
+            ++left;
+        }
+        
+        int n=cardPoints.size();
+        if(n == k)
+        {
+            return sum;
+        }
+        
+        --left;
+        int right=n-1;
+        int ans=sum;
+        while(left >= 0)
+        {
+            sum = sum - cardPoints[left] + cardPoints[right];
+            ans = max(ans, sum);
+            --left;
+            --right;
+        }
+        
+        return ans;
+    }
+};
