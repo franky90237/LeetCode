@@ -81,3 +81,61 @@ public:
         cout<<endl;
     }
 };
+
+//2023-04-15
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    int minDeletions(string s)
+    {                
+        unordered_map<char, int> character;
+        for(auto c: s)
+        {
+            ++character[c];
+        }
+        
+        map<int, int> freqs;
+        //int maxFreq=1;
+        for(auto& it: character)
+        {
+            ++freqs[it.second];
+            //maxFreq = max(maxFreq, freqs[it.second]);
+        }
+                
+        set<int> validFreq;
+        validFreq.insert(0);
+        
+        int ans=0;
+        int pre=0;
+        for(auto& it: freqs)
+        {
+            int freq=it.first;
+            int cnt=it.second;
+            
+            for(int i=pre+1; i<freq; ++i)
+            {
+                validFreq.insert(i);
+            }
+            
+            while(cnt > 1)
+            {
+                if(validFreq.size() == 1)
+                {
+                    ans += freq - 0;
+                }
+                else
+                {
+                    ans += freq - *(validFreq.rbegin());
+                    validFreq.erase(std::prev(validFreq.end()));
+                }
+                
+                --cnt;
+            }
+            
+            pre=freq;
+        }
+        
+        return ans;
+    }
+};
