@@ -94,3 +94,47 @@ public:
         return 3*ans - (int)word.size();
     }
 };
+
+//2023-04-21
+//time  : O(n)
+//spcae : O(1)
+class Solution {
+public:
+    int addMinimum(string word) 
+    {
+        int n=word.size();
+        int ans=0;
+        int i=0;
+        while(i < n)
+        {
+            if(word[i] != 'a')
+            {
+                ++ans;
+            }
+            else 
+            {
+                ++i;                
+            }
+            
+            if(i >= n || word[i] != 'b')
+            {
+                ++ans;
+            }
+            else
+            {
+                ++i;
+            }
+            
+            if(i >= n || word[i] != 'c')
+            {
+                ++ans;
+            }
+            else
+            {
+                ++i;
+            }
+        }
+        
+        return ans;
+    }
+};
