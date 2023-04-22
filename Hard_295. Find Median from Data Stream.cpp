@@ -69,3 +69,62 @@ public:
         return left;
     }
 };
+
+//2023-04-22
+//timee  : O(nlog(n))
+//space  : O(n)
+class MedianFinder 
+{
+private:
+    priority_queue<int, vector<int>, less<int>> maxHeap;
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    
+public:
+    MedianFinder()
+    {
+        maxHeap.push(INT_MIN);
+        minHeap.push(INT_MAX);
+    }
+    
+    void addNum(int num)
+    {
+        if(maxHeap.size() <= minHeap.size())
+        {
+            if(num > minHeap.top())
+            {
+                int right = minHeap.top();
+                minHeap.pop();
+                maxHeap.push(right);
+                minHeap.push(num);
+            }
+            else
+            {
+                maxHeap.push(num);
+            }
+        }
+        else
+        {                    
+            if(num < maxHeap.top())
+            {
+                int left = maxHeap.top();
+                maxHeap.pop();
+                minHeap.push(left);
+                maxHeap.push(num);
+            }
+            else
+            {
+                minHeap.push(num);
+            }
+        }
+    }
+    
+    double findMedian()
+    {        
+        if(maxHeap.size() > minHeap.size())
+        {
+            return maxHeap.top();
+        }
+        
+        return (maxHeap.top() + minHeap.top()) / 2.0;
+    }
+};
