@@ -74,3 +74,47 @@ public:
         return min(notChange, min(changeFirst, changeSecond));
     }
 };
+
+//2023-04-26
+//time  : O(n*n)
+//sapce : O(1)
+class Solution {
+public:
+    int minOperations(vector<int>& nums) 
+    {
+        int n=nums.size();
+        bool hasOne=false;
+        int cnt=0;
+        for(auto& num: nums)
+        {
+            if(num == 1)
+            {
+                ++cnt;
+                hasOne=true;
+            }            
+        }
+        
+        if(hasOne)
+        {
+            return n-cnt;
+        }
+                
+        int ans=INT_MAX;
+        for(int left=0; left<n; ++left)
+        {                        
+            int gcd=nums[left];            
+            for(int right=left+1; right<n; ++right)
+            {
+                gcd=__gcd(gcd, nums[right]);                
+                if(gcd == 1)
+                {
+                    int subArrayLen=right-left+1;
+                    ans=min(ans, subArrayLen-1+n-1);
+                    break;
+                }
+            }
+        }
+        
+        return ans==INT_MAX ? -1 : ans;
+    }
+};
