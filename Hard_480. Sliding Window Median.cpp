@@ -80,3 +80,107 @@ public:
         return ans;
     }
 };
+
+//2023-04-28
+//time  : O(nlog(k))
+//space : O(k)
+class Solution {
+public:
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) 
+    {
+        vector<double> ans;
+        
+        auto compLower = [&](const int a, const int b)
+        {            
+            return nums[a] > nums[b];
+        };
+        multiset<int, decltype(compLower)> lower(compLower);
+        
+        /*
+        lower.insert(0);
+        lower.insert(1);
+        for(auto& it: lower) cout<<nums[it]<<" "; cout<<endl;
+        cout<<endl;
+        lower.erase(0);
+        for(auto& it: lower) cout<<nums[it]<<" "; cout<<endl;
+        return ans;
+        */
+        
+        auto compUpper = [&](const int a, const int b)
+        {
+            return nums[a] < nums[b];
+        };
+        multiset<int, decltype(compUpper)> upper(compUpper);
+                
+        auto balance = [&]()
+        {
+            int maxCntLower=(k+1)/2;
+            if(lower.size() > maxCntLower)
+            {  
+                int target=*(lower.begin());
+                lower.erase(lower.begin());
+                upper.insert(target);
+            }
+            
+            if(!upper.empty() && nums[*(lower.begin())] > nums[*(upper.begin())])
+            {                
+                int target=*(lower.begin());
+                lower.erase(lower.begin());
+                upper.insert(target);
+                                
+                target=*(upper.begin());
+                upper.erase(upper.begin());
+                lower.insert(target);
+            }
+        };
+        
+        int cnt=0;
+        int n=nums.size();
+        int left=0;
+        for(int right=0; right<n; ++right)
+        {
+            int len=right-left+1;
+            if(len > k)
+            {
+                if(lower.find(left) != lower.end())
+                {
+                    lower.erase(lower.find(left));
+                }
+                else
+                {
+                    upper.erase(upper.find(left));
+                }
+                
+                ++left;
+            }
+                        
+            lower.insert(cnt++);
+            balance();
+            
+            if(len >= k)
+            {
+                if(k % 2 == 1)
+                {
+                    ans.push_back(nums[*(lower.begin())]);
+                }
+                else
+                {
+                    long long lPart=nums[*(lower.begin())];
+                    long long rPart=nums[*(upper.begin())];
+                    double median = (lPart + rPart) / 2.0;
+                    ans.push_back(median);
+                }
+            }
+            
+            /*
+            cout<<right<<"***"<<endl;
+            for(auto& it: lower) cout<<nums[it]<<" ";
+            cout<<endl;
+            for(auto& it: upper) cout<<nums[it]<<" ";
+            cout<<endl;
+            */          
+        }
+        
+        return ans;
+    }
+};
