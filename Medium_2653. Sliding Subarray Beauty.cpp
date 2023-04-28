@@ -151,3 +151,80 @@ public:
 2
 2
 */
+
+//2023-04-28
+//time  : O(nlog(k))
+//spcae : O(k)
+class Solution {
+public:
+    vector<int> getSubarrayBeauty(vector<int>& nums, int k, int x) 
+    {
+        int n=nums.size();
+        vector<int> ans;
+        multiset<int> lower;
+        multiset<int> upper;
+        
+        int left=0;
+        for(int right=0; right<n; ++right)
+        {                        
+            int len=right-left+1;
+            if(len > k)
+            {
+                auto it=upper.find(nums[left]);
+                if(it != upper.end())
+                {
+                    upper.erase(it);
+                }
+                else
+                {
+                    it = lower.find(nums[left]);
+                    if(it != lower.end())
+                    {
+                        lower.erase(it);                     
+                    }
+                }
+                
+                ++left;
+            }
+            
+            if(nums[right] < 0)
+            {
+                upper.insert(nums[right]);                                              
+            }
+            
+            if(lower.size() < x && !upper.empty())
+            {
+                int target=*(upper.begin());
+                upper.erase(upper.begin());
+                lower.insert(target);
+            }
+            
+            if(lower.size() == x && !upper.empty() && *(lower.rbegin()) > *(upper.begin()))
+            {
+                int target=*(lower.rbegin());
+                lower.erase(std::prev(lower.end(), 1));
+                upper.insert(target);
+                
+                target=*(upper.begin());
+                upper.erase(upper.begin());
+                lower.insert(target);                
+            }
+                                    
+            if(len >= k)
+            {
+                if(lower.size() == x) ans.push_back(*(lower.rbegin()));
+                else ans.push_back(0);
+            }
+            
+            /*
+            cout<<right<<"****"<<endl;
+            for(auto& it: lower) cout<<it<<" ";
+            cout<<endl;
+            for(auto& it: upper) cout<<it<<" ";
+            cout<<endl;
+            */
+        }
+        
+        return ans;
+    }
+};
