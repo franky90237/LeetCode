@@ -1,5 +1,5 @@
 //2023-05-01
-//time  : O(n*n), where n is the number of nodes
+//time  : O(n*nlog(n)), where n is the number of nodes
 //sapce : O(n*n)
 class Solution 
 {
@@ -114,4 +114,62 @@ public:
         //cout<<minHeap.size()<<" | "<<cur<<" : "<<end<<endl;
         return cost[begin][end];        
     }    
+};
+
+//2023-05-04
+//time  : O(n*nlog(n))
+//space : O(n)
+class Solution {
+public:
+    int minimumCost(vector<int>& start, vector<int>& target, vector<vector<int>>& specialRoads)
+    {
+        
+        int n=specialRoads.size();
+        //specialRoads.push_back({start[0], start[1], target[0], target[1], abs(target[0] - start[0]) + abs(target[1] - start[1])});
+        
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> minHeap;
+        for(int i=0; i<n; ++i)
+        {
+            int distance = abs(specialRoads[i][0] - start[0]) + abs(specialRoads[i][1] - start[1]) + specialRoads[i][4];
+            minHeap.push({distance, i});
+        }
+                
+        vector<int> start_to_node(n, INT_MAX);
+        while(!minHeap.empty())
+        {
+            int cur = minHeap.top()[1];
+            int start_to_cur = minHeap.top()[0];            
+            minHeap.pop();
+            //if(specialRoads[cur][2] == target[0] && specialRoads[cur][3] == target[1]) break;
+            if(start_to_cur > start_to_node[cur]) continue;
+            start_to_node[cur] = start_to_cur;
+            
+            
+            //cout<<cur<<" | "<<start_to_cur<<endl;
+            //ans = min(ans, start_to_cur + abs(target[0] - specialRoads[cur][2]) + abs(target[1] - specialRoads[cur][3]));
+            
+            for(int nei=0; nei<n; ++nei)
+            {
+                if(nei == cur) continue;
+                
+                int cur_to_nei = abs(specialRoads[nei][0] - specialRoads[cur][2]) + abs(specialRoads[nei][1] - specialRoads[cur][3]) + specialRoads[nei][4];
+                if(start_to_cur + cur_to_nei < start_to_node[nei])
+                {
+                    start_to_node[nei] = start_to_cur + cur_to_nei;
+                    minHeap.push({start_to_node[nei], nei});
+                }
+            }
+        }
+        
+        //return start_to_node.back();
+        int ans = abs(target[0] - start[0]) + abs(target[1] - start[1]);
+        for(int i=0; i<n; ++i)
+        {
+            //cout<<i<<" : "<<start_to_node[i]<<endl;
+            int node_to_target = abs(target[0] - specialRoads[i][2]) + abs(target[1] - specialRoads[i][3]);
+            ans = min(ans, start_to_node[i] + node_to_target);
+        }
+        
+        return ans;
+    }
 };
