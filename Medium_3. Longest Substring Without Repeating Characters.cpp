@@ -116,3 +116,30 @@ public:
         return ans;
     }
 };
+
+//2023-05-09
+//time  : O(n)
+//psace : O(n)
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s)
+    {        
+        set<char> table;
+        int n=s.size();
+        int ans=0;
+        int left=0;
+        for(int right=0; right<n; ++right)
+        {
+            while(table.count(s[right]))
+            {
+                table.erase(s[left]);
+                ++left;
+            }
+            
+            table.insert(s[right]);
+            ans=max(ans, right-left+1);
+        }
+        
+        return ans;
+    }
+};
