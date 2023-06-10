@@ -72,3 +72,57 @@ public:
         return sum;
     }
 };
+
+//2023-06-10
+//time  : O(log(maxSum))
+//space : O(1)
+class Solution {
+public:
+    int maxValue(int n, int index, int maxSum)
+    {
+        int low=maxSum/n;
+        int high=maxSum;
+        int ans=low;
+        while(low <= high)
+        {
+            int mid=low+(high-low)/2;
+            
+            if(check(n, index, maxSum, mid))
+            {
+                ans=mid;
+                low=mid+1;
+            }
+            else
+            {
+                high=mid-1;
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool check(int n, int index, int maxSum, int num)
+    {
+        long long sum=num;                
+        long long leftSum=getRangeSum(index, num-1);
+        long long rightSum=getRangeSum(n-index-1, num-1);
+        sum += leftSum + rightSum;
+        
+        //cout<<num<<" : "<<leftSum<<", "<<rightSum<<" : "<<sum<<endl;
+        return sum <= maxSum;
+    }
+    
+    
+    long long getRangeSum(int cnt, int high)
+    {
+        long long sum=0;
+        long long low=1;
+        long long rest=0;
+    
+        if(high-cnt+1 >= 1) low=high-cnt+1;
+        else rest=cnt-high;
+    
+        sum = rest+(low+high)*(high-low+1)/2;
+        return sum;
+    }
+};
