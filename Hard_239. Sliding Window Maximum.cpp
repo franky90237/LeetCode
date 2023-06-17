@@ -373,3 +373,36 @@ public:
         return ans;
     }
 };
+
+//2023-06-17
+//time  : O(n)
+//space : O(k)
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k)
+    {
+        int n=nums.size();
+        vector<int> ans;
+        deque<vector<int>> monoStack;
+        for(int i=0; i<n; ++i)
+        {
+            while(!monoStack.empty() && (i-monoStack.front()[1] >= k || monoStack.front()[0] <= nums[i]))
+            {
+                monoStack.pop_front();
+            }
+            
+            while(!monoStack.empty() && monoStack.back()[0] <= nums[i])
+            {
+                monoStack.pop_back();
+            }
+            
+            monoStack.push_back({nums[i], i});
+            if(i >= k-1)
+            {
+                ans.push_back(monoStack.front()[0]);
+            }
+        }
+        
+        return ans;
+    }
+};
