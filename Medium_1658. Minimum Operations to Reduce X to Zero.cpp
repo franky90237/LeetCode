@@ -95,3 +95,39 @@ public:
         return ans==INT_MAX ? -1 : ans;
     }
 };
+
+//2023-06-28
+//time  : O(n)
+//spcae : O(n)
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int x)
+    {
+        int n=nums.size();
+                        
+        unordered_map<int, int> prefixSum;
+        prefixSum[0]=-1;
+        
+        int sum=0;
+        for(int i=0; i<n; ++i)
+        {
+            sum += nums[i];
+        }
+        
+        int ans=INT_MAX;
+        int target=sum-x;
+        int curSum=0;
+        for(int i=0; i<n; ++i)
+        {
+            curSum += nums[i];
+            prefixSum[curSum]=i;
+            int diff=curSum-target;            
+            if(prefixSum.find(diff) != prefixSum.end())
+            {
+                ans = min(ans, n-(i-prefixSum[diff]));
+            }                        
+        }
+        
+        return ans==INT_MAX ? -1 : ans;
+    }
+};
