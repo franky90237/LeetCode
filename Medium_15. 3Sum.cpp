@@ -492,3 +492,56 @@ public:
         }
     }
 };
+
+//2023-07-01
+//time  : O(n*n)
+//spcae : O(1)
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) 
+    {
+        vector<vector<int>> ans;
+        sort(nums.begin(), nums.end());
+        int n=nums.size();
+        for(int i=0; i<n-2; ++i)
+        {            
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            if(nums[i]+nums[i+1]+nums[i+2] > 0) break;
+            if(nums[i]+nums[n-2]+nums[n-1] < 0) continue;
+            twoSum(nums, i, ans);
+        }
+        
+        return ans;
+    }
+    
+    void twoSum(vector<int>& nums, int cur, vector<vector<int>>& ans)
+    {
+        int n=nums.size();
+        int target=-nums[cur];
+        int left=cur+1;
+        int right=n-1;
+        while(left < right)
+        {
+            int sum=nums[left]+nums[right];
+            if(sum == target)
+            {
+                //cout<<cur<<" "<<left<<" "<<right<<" | "<<sum<<" "<<target<<endl;
+                ans.push_back({nums[cur], nums[left], nums[right]});
+                
+                --right;                
+                while(right > left && nums[right] == nums[right+1]) --right;
+                
+                ++left;
+                while(left < right && nums[left] == nums[left-1]) ++left;
+            }
+            else if(sum > target)
+            {
+                --right;
+            }
+            else
+            {
+                ++left;
+            }
+        }
+    }
+};
