@@ -1,5 +1,5 @@
 //2023-07-08
-//time  : O(n)
+//time  : O(nlogn)
 //space : O(nlogn)
 class Solution {
 public:
@@ -38,4 +38,28 @@ public:
         if(it->second <= val && val <= it->first) return it;
         return subseq.end();
     }
+};
+
+//2023-07-08
+//time  : O(nlogn)
+//space : O(nlogn)
+class Solution {
+public:
+    int partitionArray(vector<int>& nums, int k) 
+    {
+        sort(nums.begin(), nums.end());
+        
+        int n=nums.size();        
+        int ans=1;
+        for(int left=0, right=0; right<n; ++right)
+        {
+            if(nums[right]-nums[left] > k)
+            {
+                ++ans;
+                left=right;
+            }
+        }
+        
+        return ans;
+    }     
 };
