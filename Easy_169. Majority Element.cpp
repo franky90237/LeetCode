@@ -115,3 +115,31 @@ public:
         return ans;
     }
 };
+
+//2023-07-17
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) 
+    {
+        int n=nums.size();
+        int ans=nums[0];
+        int cnt=1;
+        int left=0;
+        for(int i=1; i<n; ++i)
+        {
+            if(ans == nums[i]) ++cnt;
+            
+            int len=i-left+1;
+            if(cnt <= len/2)
+            {
+                ans=nums[i];
+                cnt=1;
+                left=i;
+            }
+        }
+        
+        return ans;
+    }
+};
