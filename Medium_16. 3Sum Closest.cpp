@@ -213,3 +213,51 @@ public:
         return ans;
     }
 };
+
+//2023-07-25
+//time  : O(n*n)
+//space : O(1)
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target)
+    {
+        sort(nums.begin(), nums.end());
+        int ans=nums[0]+nums[1]+nums[2];
+        int n=nums.size();
+        for(int i=0; i<n-2; ++i)
+        {
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            
+            int sum=nums[i];
+            twoSumCloset(nums, target, sum, i+1);
+            if(abs(sum-target) < abs(ans-target))
+            {
+                ans=sum;
+                if(ans-target == 0) break;
+            }
+        }
+        
+        return ans;
+    }
+    
+    void twoSumCloset(vector<int>& nums, int target, int& sum, int left)
+    {
+        int n=nums.size();
+        int right=n-1;
+        int ans=nums[left]+nums[right]+sum;
+        while(left < right)
+        {
+            int cur=nums[left]+nums[right]+sum;
+            
+            if(cur > target) --right;
+            else ++left;
+            
+            if(abs(cur-target) < abs(ans-target))
+            {
+                ans=cur;
+            }
+        }
+        
+        sum=ans;
+    }
+};
