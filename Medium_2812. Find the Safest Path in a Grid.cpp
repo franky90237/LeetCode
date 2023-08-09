@@ -119,3 +119,93 @@ public:
         return false;
     }
 };
+
+//2023-08-09
+//time  : O(n*n*log(n*n))
+//space : O(n*n)
+class Solution {
+public:
+    int maximumSafenessFactor(vector<vector<int>>& grid)
+    {
+        int n=grid.size();
+        queue<vector<int>> q;
+        for(int r=0; r<n; ++r)
+        {
+            for(int c=0; c<n; ++c)
+            {
+                if(grid[r][c] == 1) 
+                {
+                    q.push({r, c});
+                    grid[r][c]=0;
+                }
+                else 
+                {
+                    grid[r][c]=INT_MAX;
+                }
+            }
+        }
+
+        calculateNodeSF(grid, q);        
+
+        int dir[4][2]={{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int ans=grid[0][0];
+        
+        vector<vector<bool>> vis(n, vector<bool>(n, false));
+        vis[0][0]=true;
+        
+        priority_queue<vector<int>, vector<vector<int>>, less<vector<int>>> pq;
+        pq.push({grid[0][0], 0, 0});
+        
+        while(!pq.empty())
+        {
+            ans=min(ans, pq.top()[0]);
+            int r=pq.top()[1];
+            int c=pq.top()[2];
+            pq.pop();
+            //cout<<endl<<ans<<" | "<<r<<" "<<c<<endl;
+            if(r == n-1 && c == n-1) break;
+
+            for(int i=0; i<4; ++i)
+            {
+                int nr=r+dir[i][0];
+                int nc=c+dir[i][1];
+                if(nr < 0 || nr >= n || nc < 0 || nc >= n || vis[nr][nc]) continue;
+                vis[nr][nc]=true;
+                //cout<<"**"<<nr<<" "<<nc<<endl;
+                pq.push({grid[nr][nc], nr, nc});
+            }
+        }
+
+        return ans;
+    }
+
+    void calculateNodeSF(vector<vector<int>>& grid, queue<vector<int>>& q)
+    {
+        int dir[4][2]={{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int n=grid.size();        
+        int dis=1;
+        while(!q.empty())
+        {
+            int size=q.size();
+            while(size > 0)
+            {
+                int r=q.front()[0];
+                int c=q.front()[1];
+                q.pop();
+
+                for(int i=0; i<4; ++i)
+                {
+                    int nr=r+dir[i][0];
+                    int nc=c+dir[i][1];
+                    if(nr < 0 || nr >= n || nc < 0 || nc >= n || grid[nr][nc] <= dis) continue;
+                    grid[nr][nc]=dis;
+                    q.push({nr, nc});
+                }
+
+                --size;
+            }
+
+            ++dis;
+        }    
+    }
+};
