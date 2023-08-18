@@ -36,7 +36,7 @@ public:
 };
 
 //2023-08-18
-//time  : O(n)
+//time  : O(n*n)
 //space : O(n)
 class Solution 
 {
@@ -74,4 +74,28 @@ public:
         dp[cnt]=ans;
         return ans;
     }
+};
+
+//2023-08-18
+//time  : O(n*n)
+//space : O(n)
+class Solution {    
+public:
+    int minSteps(int n) 
+    {                
+        if(n == 1) return 0;
+        
+        vector<long> dp(n+1, INT_MAX);        
+        dp[n]=0;
+        for(int i=n-1; i>=1; --i)
+        {
+            for(int cnt=2; cnt*i <= n; ++cnt)
+            {
+                dp[i]=min(dp[i], dp[i*cnt]+cnt);
+            }                    
+        }
+        
+        //for(auto i: dp) cout<<i<<" "; cout<<endl;
+        return dp[1];
+    }    
 };
