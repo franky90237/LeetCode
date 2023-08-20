@@ -75,3 +75,30 @@ public:
         return ans;
     }
 };
+
+//2023-08-20
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int characterReplacement(string s, int k) 
+    {
+        unordered_map<int, int> freq;
+        int n=s.size();
+        int ans=0;
+        int left=0;
+        int right=0;
+        for(; right<n; ++right)
+        {
+            ++freq[s[right]];
+            ans=max(ans, freq[s[right]]);
+            if(right-left+1-ans > k)
+            {
+                --freq[s[left]];
+                ++left;                
+            }            
+        }
+        
+        return right-left;
+    }
+};
