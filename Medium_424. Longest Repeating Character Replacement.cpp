@@ -102,3 +102,80 @@ public:
         return right-left;
     }
 };
+
+//2023-08-21
+//time  : O(nlog(n))
+//space : O(n)
+class MaxChar
+{
+private:
+    unordered_map<char, int> charFreq;
+    map<int, int> maxFreq;
+    
+public:
+    MaxChar()
+    {
+        
+    }
+    
+    void insert(char c)
+    {
+        if(charFreq.find(c) == charFreq.end())
+        {
+            charFreq[c]=1;
+            ++maxFreq[1];
+        }
+        else
+        {
+            int preCnt=charFreq[c];
+            ++charFreq[c];
+            ++maxFreq[preCnt+1];
+            --maxFreq[preCnt];
+            if(maxFreq[preCnt] <= 0) maxFreq.erase(preCnt);
+        }
+    }
+    
+    void remove(char c)
+    {
+        int preCnt=charFreq[c];
+        --charFreq[c];
+        ++maxFreq[preCnt-1];
+        --maxFreq[preCnt];
+        if(maxFreq[preCnt] <= 0) maxFreq.erase(preCnt);
+    }
+    
+    int most()
+    {        
+        return (maxFreq.rbegin())->first;
+    }
+};
+
+class Solution {
+public:
+    int characterReplacement(string s, int k) 
+    {        
+        int n=s.size();
+        MaxChar mc;
+        
+        int ans=0;
+        int left=0;
+        int right=0;
+        for(; right<n; ++right)
+        {
+            mc.insert(s[right]);
+            int most=mc.most();
+            //cout<<left<<" "<<right<<" | "<<most<<endl;
+            
+            while(right-left+1-most > k)
+            {
+                mc.remove(s[left]);
+                ++left;
+                most=mc.most();                
+            }
+            
+            ans=max(ans, right-left+1);
+        }
+        
+        return ans;
+    }
+};
