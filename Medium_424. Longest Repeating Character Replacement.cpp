@@ -179,3 +179,60 @@ public:
         return ans;
     }
 };
+
+//2023-08-22
+//time  : O(nlog(n))
+//spcae : O(n)
+class Solution {
+public:
+    int characterReplacement(string s, int k) 
+    {
+        int n=s.size();
+        int ans=0;
+        int left=0;
+        int right=n;
+        
+        while(left <= right)
+        {
+            int mid=left+(right-left)/2;
+            if(check(s, k, mid))
+            {
+                ans=mid;
+                left=mid+1;
+            }
+            else
+            {
+                right=mid-1;
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool check(string& s, int k, int target)
+    {
+        int n=s.size();
+        unordered_map<char, int> freq;
+        int most=0;
+        int left=0;
+        int right=0;
+        for(; right<n; ++right)
+        {
+            ++freq[s[right]];
+            
+            if(right-left+1 > target)
+            {
+                --freq[s[left]];
+                ++left;
+            }
+            
+            most=max(most, freq[s[right]]);
+            if(target-most <= k)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+};
