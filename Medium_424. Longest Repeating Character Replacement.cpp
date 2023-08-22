@@ -236,3 +236,37 @@ public:
         return false;
     }
 };
+
+//2023-08-22
+//time  : O(26*n)
+//space : O(26)
+class Solution {
+public:
+    int characterReplacement(string s, int k) 
+    {
+        unordered_set<char> character(s.begin(), s.end());
+        int n=s.size();
+        int ans=0;
+        for(auto& it: character)
+        {
+            char c=it;
+            int cnt=0;
+            int left=0;
+            int right=0;
+            for(; right<n; ++right)
+            {
+                if(s[right] == c) ++cnt;                
+                
+                while(right-left+1-cnt > k)
+                {
+                    if(s[left] == c) --cnt;                        
+                    ++left;
+                }
+                
+                ans=max(ans, right-left+1);
+            }
+        }
+        
+        return ans;
+    }
+};
