@@ -58,3 +58,54 @@ public:
         return true;
     }
 };
+
+//2023-08-24
+//time  : O(m*n*m)
+//space : O(m*n)
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) 
+    {
+        int m=matrix.size();
+        int n=matrix[0].size();
+        
+        vector<vector<int>> rightOnes(m, vector<int>(n, 0));
+        for(int r=0; r<m; ++r)
+        {
+            rightOnes[r][n-1]=matrix[r][n-1]-'0';
+            for(int c=n-2; c>=0; --c)
+            {
+                if(matrix[r][c] == '1')
+                {
+                    rightOnes[r][c]=1+rightOnes[r][c+1];
+                }
+                //cout<<rightOnes[r][c]<<" ";
+            }
+            //cout<<endl;
+        }
+        
+        int ans=0;
+        for(int r=0; r<m; ++r)
+        {                                  
+            for(int c=0; c<n; ++c)
+            {
+                //if(matrix[r][c] == '0') continue;
+                
+                int length=rightOnes[r][c];
+                int i=r;
+                for(; i<m; ++i)
+                {
+                    if(matrix[i][c] == '0') break;
+                    length=min(length, rightOnes[i][c]);
+                    ans=max(ans, length*(i-r+1));
+                }
+                
+                //cout<<length*(i-r)<<" ";
+                //ans=max(ans, length*(i-r));
+            }
+            //cout<<endl;
+        }
+                
+        return ans;
+    }
+};
