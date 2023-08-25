@@ -124,3 +124,39 @@ public:
         return ans;
     }
 };
+
+//2023-08-25
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) 
+    {
+        int n=heights.size();
+        stack<int> monoStack;
+        monoStack.push(-1);
+        int ans=0;
+        for(int i=0; i<n; ++i)
+        {
+            while(monoStack.top() != -1 && heights[monoStack.top()] > heights[i])
+            {
+                int height=heights[monoStack.top()];                
+                monoStack.pop();
+                int length=i-monoStack.top()-1;
+                ans=max(ans, height*length);
+            }
+            
+            monoStack.push(i);
+        }
+        
+        while(monoStack.top() != -1)
+        {
+            int height=heights[monoStack.top()];                
+            monoStack.pop();
+            int length=n-monoStack.top()-1;
+            ans=max(ans, height*length);
+        }
+        
+        return ans;
+    }
+};
