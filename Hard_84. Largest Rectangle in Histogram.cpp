@@ -72,3 +72,55 @@ public:
         return max_size;
     }    
 };
+
+//2023-08-25
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights)
+    {
+        int n=heights.size();
+        vector<int> left(n);
+        vector<int> right(n);
+        
+        left[0]=0;
+        for(int i=1; i<n; ++i)
+        {
+            if(heights[i] > heights[i-1]) left[i]=i;
+            else 
+            {
+                int cur=i-1;
+                do
+                {
+                    left[i]=left[cur];
+                    cur=left[i]-1;
+                } while(cur >= 0 && heights[cur] >= heights[i]);
+            }
+        }
+        
+        right[n-1]=n-1;
+        for(int i=n-2; i>=0; --i)
+        {
+            if(heights[i] > heights[i+1]) right[i]=i;
+            else 
+            {
+                int cur=i+1;
+                do
+                {
+                    right[i]=right[cur];
+                    cur=right[i]+1;
+                } while(cur < n && heights[cur] >= heights[i]);
+            }
+        }
+        
+        int ans=0;
+        for(int i=0; i<n; ++i)
+        {
+            int area=heights[i]*(right[i]-left[i]+1);
+            ans=max(ans, area);
+        }
+        
+        return ans;
+    }
+};
