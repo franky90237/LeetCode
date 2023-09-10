@@ -1,9 +1,11 @@
+//2023-09-10
+//time  : O(4^3)
+//space : O(3*3*3)
 class Solution 
 {
 private:
     vector<vector<int>> begin;
-    vector<vector<int>> end;
-    vector<vector<bool>> vis;
+    vector<vector<int>> end;    
     
 public:
     int minimumMoves(vector<vector<int>>& grid) 
@@ -15,10 +17,9 @@ public:
                 if(grid[r][c] == 0) end.push_back({r, c});
                 else if(grid[r][c] >= 2) begin.push_back({r, c});
             }
-        }
-        
+        }        
         if(begin.size() == 0) return 0;
-        vis.resize(3, vector<bool>(3, false));
+        
         return solve(grid, 0, grid[begin[0][0]][begin[0][1]]);
     }
     
@@ -33,8 +34,8 @@ public:
         for(int i=0; i<end.size(); ++i)
         {
             int tr=end[i][0], tc=end[i][1];
-            if(vis[tr][tc]) continue;
-            vis[tr][tc]=true;
+            if(grid[tr][tc] == 1) continue;
+            grid[tr][tc] = 1;
             
             int dis=abs(tr-sr)+abs(tc-sc);
             //cout<<cur<<" "<<dis<<endl;
@@ -49,9 +50,52 @@ public:
             res=min(res, dis);
             
             //cout<<cur<<" "<<dis<<endl;
-            vis[tr][tc]=false;
+            grid[tr][tc] = 0;
         }
         
         return res;
+    }
+};
+
+//2023-09-10
+//time  : O(4!)
+//space : O(3*3)
+class Solution {     
+public:
+    int minimumMoves(vector<vector<int>>& grid) 
+    {
+        vector<vector<int>> begin;
+        vector<vector<int>> end;   
+        for(int r=0; r<3; ++r)
+        {
+            for(int c=0; c<3; ++c)
+            {
+                if(grid[r][c] == 0) end.push_back({r, c});
+                else if(grid[r][c] >= 2) 
+                {
+                    for(int i=1; i<grid[r][c]; ++i)
+                    {
+                        begin.push_back({r, c});
+                    }
+                }
+            }
+        }
+        if(begin.size() == 0) return 0;
+        
+        
+        sort(end.begin(), end.end());
+        int ans=INT_MAX;
+        do
+        {
+            int cnt=0;
+            for(int i=0; i<end.size(); ++i)
+            {
+                cnt += abs(begin[i][0]-end[i][0]) + abs(begin[i][1]-end[i][1]);
+            }
+            
+            ans=min(ans, cnt);
+        } while(next_permutation(end.begin(), end.end()));
+        
+        return ans;
     }
 };
