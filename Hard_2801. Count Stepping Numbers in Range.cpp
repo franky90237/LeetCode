@@ -84,3 +84,93 @@ public:
         return res;
     }
 };
+
+//2023-09-14
+//time  : O(n*10*10)
+//spcae : O(n*10)
+class Solution 
+{
+private:
+    int modulo=1e9+7;
+    vector<vector<int>> dp;
+    
+public:
+    int countSteppingNumbers(string low, string high) 
+    {
+        //dp[len][num] : starting at num with length len
+        //dp[i][j] = dp[i-1][x] where abs(j-x) is 1
+        dp.resize(high.size()+1, vector<int>(10, 0));      
+        //dp[1][0]=0;
+        for(int digit=0; digit<=9; ++digit) dp[1][digit]=1;        
+        for(int len=2; len<=high.size(); ++len)
+        {
+            for(int curDigit=0; curDigit<=9; ++curDigit)
+            {
+                for(int preDigit=0; preDigit<=9; ++preDigit)
+                {
+                    if(abs(curDigit-preDigit) == 1) dp[len][curDigit] = (dp[len][curDigit] + dp[len-1][preDigit]) % modulo;
+                }
+                
+                //cout<<dp[len][curDigit]<<" ";
+            }
+            
+            //cout<<endl;
+        }
+        
+        //cout<<query(high)<<" "<< query(low)<<endl;
+        int ans = query(high) - query(low) + isSteppingNumber(low);
+        ans = (ans + modulo) % modulo;
+        
+        return ans;
+    }
+    
+    int query(string& num)
+    {
+        int maxLen=num.size();
+        reverse(num.begin(), num.end());
+        //cout<<num<<" : ";
+        int res=0;
+        
+        //len is smaller than num
+        for(int len=1; len<maxLen; ++len)
+        {
+            for(int digit=1; digit<=9; ++digit)
+            {
+                res = (res + dp[len][digit]) % modulo;
+            }
+        }
+        //cout<<res<<" ";
+        
+        //len is equal to num, but highest digit is less than num
+        for(int digit=1; digit<num[maxLen-1]-'0'; ++digit)
+        {
+            res = (res + dp[maxLen][digit]) % modulo;
+        }
+        //cout<<res<<" ";
+        
+        //len is equal to num, and higher digit is equal to num
+        for(int len=maxLen-1; len>=1; --len)
+        {
+            for(int curDigit=0; curDigit<num[len-1]-'0'; ++curDigit)
+            {
+                int preDigit=num[len]-'0';
+                if(abs(curDigit-preDigit) == 1) res = (res + dp[len][curDigit]) % modulo;
+            }
+            
+            if(abs(num[len]-num[len-1]) != 1) break;
+        }
+        
+        //cout<<res<<" "<<endl;
+        return res + isSteppingNumber(num);
+    }
+    
+    bool isSteppingNumber(string& num)
+    {
+        for(int i=1; i<num.size(); ++i)
+        {
+            if(abs(num[i]-num[i-1]) != 1) return false;
+        }
+        
+        return true;
+    }
+};
