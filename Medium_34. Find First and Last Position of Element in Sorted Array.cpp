@@ -36,3 +36,55 @@ public:
         return ans;
     }
 };
+
+//2023-09-14
+//time  : O(nlog(n))
+//space : O(1)
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target)
+    {
+        int i1=bsL(nums, target);
+        int i2=bsR(nums, target);
+        return {i1, i2};
+    }
+    
+    int bsL(vector<int>& nums, int target)
+    {
+        int l=0;
+        int r=nums.size()-1;
+        int ans=r+1;
+        while(l <= r)
+        {
+            int m=l+(r-l)/2;
+            if(nums[m] >= target)
+            {
+                ans=m;
+                r=m-1;
+            }
+            else l=m+1;
+        }
+        
+        return (ans<nums.size() && nums[ans]==target) ? ans : -1;
+    }
+    
+
+    int bsR(vector<int>& nums, int target)
+    {
+        int l=0;
+        int r=nums.size()-1;
+        int ans=r+1;
+        while(l <= r)
+        {
+            int m=l+(r-l)/2;
+            if(nums[m] <= target)
+            {
+                ans=m;
+                l=m+1;
+            }
+            else r=m-1;
+        }
+        
+        return (ans<nums.size() && nums[ans]==target) ? ans : -1;
+    }
+};
