@@ -54,3 +54,43 @@ public:
         return true;
     }
 };
+
+//2023-09-19
+//time  : O(nlog(1e9))
+//space : O(1)
+class Solution {
+public:
+    int minEatingSpeed(vector<int>& piles, int h) 
+    {
+        int low=1;
+        int high=1e9;
+        int ans=1;
+        while(low <= high)
+        {
+            int mid=low+(high-low)/2;
+            //cout<<low<<" "<<mid<<" "<<high<<endl;
+            if(check(piles, h, mid))
+            {
+                ans=mid;
+                high=mid-1;
+            }
+            else
+            {
+                low=mid+1;
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool check(vector<int>& piles, int h, int val)
+    {
+        long cnt=0;
+        for(int pile: piles)
+        {
+            cnt += (long)pile/val + (pile%val!=0);
+        }
+                
+        return cnt<=h;
+    }
+};
