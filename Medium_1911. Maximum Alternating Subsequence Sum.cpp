@@ -56,3 +56,28 @@ public:
         return dp[0][plus];
     }    
 };
+
+//2023-09-23
+//time  : O(n)
+//spcae : O(1)
+class Solution {    
+    
+public:
+    long long maxAlternatingSum(vector<int>& nums) 
+    {
+        int n=nums.size();        
+        long long plus=nums[n-1];
+        long long minus=0;
+        
+        for(int i=n-2; i>=0; --i)
+        {
+            //cout<<i<<endl;            
+            long long newPlus=max(nums[i]+minus, plus);
+            long long newMinus=max(-nums[i]+plus, minus);
+            plus=newPlus;
+            minus=newMinus;         
+        }
+                
+        return plus;
+    }    
+};
