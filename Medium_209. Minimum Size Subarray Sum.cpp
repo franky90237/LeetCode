@@ -138,3 +138,29 @@ public:
         return ans==n+1 ? 0 : ans;
     }
 };
+
+//2023-10-01
+//time  : O(n)
+//spcae : O(1)
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) 
+    {
+        int n=nums.size();
+        int ans=INT_MAX;
+        int left=0;
+        int sum=0;
+        for(int right=0; right<n; ++right)
+        {
+            sum += nums[right];
+            while(left <= right && sum >= target)
+            {
+                ans=min(ans, right-left+1);
+                sum -= nums[left];
+                ++left;
+            }            
+        }
+        
+        return ans==INT_MAX ? 0 : ans;
+    }
+};
