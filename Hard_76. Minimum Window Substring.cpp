@@ -345,3 +345,56 @@ public:
         return true;
     }
 };
+
+//2023-10-03
+//time  : O(n*58)
+//space : O(58)
+class Solution {
+public:
+    string minWindow(string s, string t) 
+    {
+        //cout<<(int)('z'-'A')<<endl;
+        int diffChar=0;
+        vector<int> target(58, 0);
+        for(auto c: t)
+        {
+            if(target[c-'A'] == 0) ++diffChar;
+            ++target[c-'A'];
+        }
+        
+        vector<int> source(58, 0);
+        int n=s.size();
+        int left=0;
+        int cnt=0;
+        int ansL=0;
+        int ansR=n;
+        for(int right=0; right<n; ++right)
+        {
+            //cout<<left<<" "<<right<<" : "<<ansL<<" "<<ansR<<endl;
+            char c=s[right];
+            if(target[c-'A'] == 0) continue;
+                        
+            ++source[c-'A'];
+            if(source[c-'A'] == target[c-'A']) ++cnt;
+            while(cnt == diffChar)
+            {
+                if(right-left+1 < ansR-ansL+1)
+                {
+                    ansL=left;
+                    ansR=right;                    
+                }
+                
+                if(source[s[left]-'A'] > 0) 
+                {
+                    --source[s[left]-'A'];
+                    if(source[s[left]-'A'] < target[s[left]-'A']) --cnt;
+                }
+                
+                ++left;
+            }                                          
+        }
+        
+        if(ansR == n) return "";
+        return s.substr(ansL, ansR-ansL+1);
+    }      
+};
