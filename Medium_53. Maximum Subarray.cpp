@@ -98,3 +98,41 @@ public:
         return ans;
     }
 };
+
+//2023-10-06
+//time  : O(nlog(n))
+//space : O(log(n))
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) 
+    {
+        return maxSubArray(nums, 0, nums.size()-1);
+    }
+    
+    int maxSubArray(vector<int>& nums, int left, int right)
+    {
+        if(left > right) return INT_MIN;
+        if(left == right) return nums[left];
+        
+        int mid=left+(right-left)/2;
+        
+        int sum=0;
+        int maxLeftSum=INT_MIN;
+        for(int i=mid; i>=left; --i)
+        {
+            sum += nums[i];
+            maxLeftSum=max(maxLeftSum, sum);
+        }
+        
+        sum=0;
+        int maxRightSum=INT_MIN;
+        for(int i=mid+1; i<=right; ++i)
+        {            
+            sum += nums[i];
+            maxRightSum=max(maxRightSum, sum);
+        }
+        
+        return max(maxLeftSum + maxRightSum, 
+                   max(maxSubArray(nums, left, mid), maxSubArray(nums, mid+1, right)));
+    }
+};
