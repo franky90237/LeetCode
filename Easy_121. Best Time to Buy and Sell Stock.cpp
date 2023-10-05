@@ -171,3 +171,23 @@ public:
         return profit;
     }
 };
+
+//2023-10-04
+//time  : O(n)
+//spcae : O(1)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) 
+    {
+        int n=prices.size();
+        int ans=0;
+        int minBuy=prices[0];
+        for(int i=1; i<n; ++i)
+        {
+            ans=max(ans, prices[i]-minBuy);
+            minBuy=min(minBuy, prices[i]);
+        }
+        
+        return ans;
+    }
+};
