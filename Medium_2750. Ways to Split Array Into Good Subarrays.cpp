@@ -176,3 +176,61 @@ public:
         return dp[0];
     }
 };
+
+//2023-10-13
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int numberOfGoodSubarraySplits(vector<int>& nums) 
+    {
+        int modulo=1e9+7;
+        int n=nums.size();
+        
+        vector<int> firstOne(n+1, n);
+        vector<int> secondOne(n+1, n);
+        for(int i=n-1; i>=0; --i)
+        {
+            if(nums[i] == 1)
+            {
+                firstOne[i]=i;
+                secondOne[i]=firstOne[i+1];
+            }
+            else
+            {
+                firstOne[i]=firstOne[i+1];
+                secondOne[i]=secondOne[i+1];
+            }
+        }
+        
+        vector<int> ans(n, 0);
+        vector<long long> suffixSum(n+2, 0);
+        
+        int cur=n-1;
+        while(cur>=0 && nums[cur] != 1)
+        {            
+            --cur;           
+        }
+        
+        for(; cur>=0; --cur)
+        {
+            int nextOne=firstOne[cur];
+            int nextNextOne=secondOne[cur];
+            //cout<<cur<<" | "<<nextOne<<" "<<nextNextOne<<endl;
+            if(nextNextOne == n)
+            {
+                ans[cur]=1;
+                suffixSum[cur] = ans[cur] + suffixSum[cur+1];
+                continue;
+            }
+            
+            ans[cur] = (suffixSum[nextOne+1]-suffixSum[nextNextOne+1]+modulo) % modulo;
+            suffixSum[cur] = ans[cur] + suffixSum[cur+1];
+        }
+        
+        //for(auto i: suffixSum) cout<<i<<" "; cout<<endl;
+        //for(auto i: ans) cout<<i<<" "; cout<<endl;
+        
+        return ans[0];
+    }
+};
