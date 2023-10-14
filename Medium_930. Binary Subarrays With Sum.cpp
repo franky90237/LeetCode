@@ -64,3 +64,32 @@ public:
         return cnt;
     }
 };
+
+//2023-10-14
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int numSubarraysWithSum(vector<int>& nums, int goal) 
+    {
+        int n=nums.size();
+        unordered_map<int, int> preSum;
+        preSum[0]=1;
+        
+        int sum=0;
+        int ans=0;
+        for(int i=0; i<n; ++i)
+        {
+            sum += nums[i];
+            int target=sum-goal;
+            if(preSum.find(target) != preSum.end())
+            {
+                ans += preSum[target];
+            }
+            
+            ++preSum[sum];
+        }
+        
+        return ans;
+    }
+};
