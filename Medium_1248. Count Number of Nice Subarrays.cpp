@@ -65,3 +65,38 @@ public:
         return ans;
     }
 };
+
+//2023-10-15
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int numberOfSubarrays(vector<int>& nums, int k) 
+    {
+        std::transform(nums.begin(), nums.end(), nums.begin(), [](int num)-> int
+        {
+            return num = (num%2 == 1);
+        });
+        
+        //for(auto i: nums) cout<<i<<" "; cout<<endl;
+        
+        int n=nums.size();
+        int ans=0;
+        int sum=0;
+        unordered_map<int, int> prefixSum;
+        prefixSum[0]=1;
+        for(int i=0; i<n; ++i)
+        {
+            sum += nums[i];
+            int target=sum-k;
+            if(prefixSum.count(target) > 0)
+            {
+                ans += prefixSum[target];
+            }
+            
+            ++prefixSum[sum];
+        }
+        
+        return ans;
+    }
+};
