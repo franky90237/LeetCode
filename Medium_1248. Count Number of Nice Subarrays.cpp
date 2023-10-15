@@ -100,3 +100,44 @@ public:
         return ans;
     }
 };
+
+//2023-10-15
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int numberOfSubarrays(vector<int>& nums, int k) 
+    {
+        std::transform(nums.begin(), nums.end(), nums.begin(), [](int num)-> int
+        {
+            return num = (num%2 == 1);
+        });
+        
+        //for(auto i: nums) cout<<i<<" "; cout<<endl;
+        
+        int n=nums.size();
+        int ans=0;
+        int sum=0;
+        int cntSubarray=0;
+        int left=0;
+        for(int right=0; right<n; ++right)
+        {
+            sum += nums[right];                        
+            
+            if(sum == k)
+            {
+                cntSubarray=0;
+                while(sum == k)
+                {
+                    ++cntSubarray;
+                    sum -= nums[left];
+                    ++left;
+                }                                
+            }
+            
+            ans += cntSubarray;
+        }
+        
+        return ans;
+    }
+};
