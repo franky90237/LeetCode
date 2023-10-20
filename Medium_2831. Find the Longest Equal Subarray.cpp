@@ -41,3 +41,32 @@ public:
         return ans;
     }
 };
+
+//2023-10-20
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int longestEqualSubarray(vector<int>& nums, int k) 
+    {
+        int n=nums.size();
+        unordered_map<int, int> cnt;
+        
+        int ans=0;
+        int left=0;
+        for(int right=0; right<n; ++right)
+        {
+            ++cnt[nums[right]];
+            ans=max(ans, cnt[nums[right]]);
+            
+            int len=right-left+1;
+            if(len-ans > k)
+            {
+                --cnt[nums[left]];
+                ++left;
+            }                        
+        }
+        
+        return ans;
+    }
+};
