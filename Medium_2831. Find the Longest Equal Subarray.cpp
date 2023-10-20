@@ -122,3 +122,37 @@ public:
         ++cntCnt[preCnt-1];
     }
 };
+
+//2023-10-20
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int longestEqualSubarray(vector<int>& nums, int k) 
+    {
+        int n=nums.size();
+        unordered_map<int, vector<int>> idx;
+        for(int i=0; i<n; ++i)
+        {
+            idx[nums[i]].push_back(i);
+        }
+        
+        int ans=0;
+        for(auto it: idx)
+        {
+            vector<int>& arr=it.second;
+            int left=0;
+            for(int right=0; right<arr.size(); ++right)
+            {
+                while((arr[right]-arr[left] - (right-left)) > k)
+                {                    
+                    ++left;
+                }
+                
+                ans = max(ans, right-left+1);
+            }
+        }
+        
+        return ans;
+    }
+};
