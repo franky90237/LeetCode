@@ -301,3 +301,39 @@ public:
         return ans;
     }    
 };
+
+//2023-10-21
+//time  : O(n)
+//space : O(26)
+class Solution {
+public:
+    int characterReplacement(string s, int k) 
+    {
+        int n=s.size();
+        vector<int> cnt(26, 0);
+        
+        int maxChar=0;
+        int left=0;
+        for(int right=0; right<n; ++right)
+        {
+            int len=right-left+1;
+            
+            ++cnt[s[right]-'A'];
+            if(cnt[s[right]-'A'] > maxChar && len - cnt[s[right]-'A'] <= k)
+            {
+                maxChar = cnt[s[right]-'A'];
+            }
+            //maxChar = max(maxChar, cnt[s[right]-'A']);
+                        
+            if(len - maxChar > k)
+            {
+                --cnt[s[left]-'A'];
+                ++left;                
+            }
+            
+            //cout<<left<<" "<<right<<endl;
+        }
+                
+        return n-left;
+    }    
+};
