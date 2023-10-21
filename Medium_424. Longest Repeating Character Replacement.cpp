@@ -270,3 +270,34 @@ public:
         return ans;
     }
 };
+
+//2023-10-21
+//time  : O(26*n)
+//space : O(26)
+class Solution {
+public:
+    int characterReplacement(string s, int k) 
+    {
+        int n=s.size();
+        vector<int> cnt(26, 0);
+        
+        int ans=0;
+        int left=0;
+        for(int right=0; right<n; ++right)
+        {
+            ++cnt[s[right]-'A'];
+            
+            int len=right-left+1;
+            while(len - *max_element(cnt.begin(), cnt.end()) > k)
+            {
+                --cnt[s[left]-'A'];
+                ++left;
+                len=right-left+1;
+            }
+            
+            ans=max(ans, len);
+        }
+        
+        return ans;
+    }    
+};
