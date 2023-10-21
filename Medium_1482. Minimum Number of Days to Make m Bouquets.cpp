@@ -100,3 +100,53 @@ public:
         return true;
     }
 };
+
+//2023-10-21
+//time  : O(nlog(1e9))
+//space : O(1)
+class Solution {
+public:
+    int minDays(vector<int>& bloomDay, int m, int k) 
+    {
+        int left=1;
+        int right=1e9;
+        int ans=-1;
+        while(left <= right)
+        {
+            int mid=left+(right-left)/2;
+            if(check(bloomDay, mid, m, k))
+            {
+                ans=mid;
+                right=mid-1;
+            }
+            else
+            {
+                left=mid+1;
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool check(vector<int>& nums, int base, int m, int k)
+    {
+        int n=nums.size();
+        int cnt=0;
+        for(int i=0; i<n; ++i)
+        {
+            if(nums[i] > base) continue;
+            int cur=i;
+            for(; cur<n; ++cur)
+            {
+                if(nums[cur] > base) break;
+            }
+            
+            int len=cur-i;
+            cnt += len/k;
+            
+            i=cur;
+        }
+        
+        return cnt>=m;
+    }
+};
