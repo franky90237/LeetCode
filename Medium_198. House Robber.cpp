@@ -136,3 +136,31 @@ public:
         return dp[0];
     }       
 };
+
+//2023-10-29
+//time  : O(n)
+//space : O(n)
+class Solution 
+{
+private:
+    vector<int> dp;
+    
+public:
+    int rob(vector<int>& nums) 
+    {
+        int n=nums.size();
+        dp.resize(n, -1);
+        return dfs(nums, n-1);
+    }
+    
+    int dfs(vector<int>& nums, int idx)
+    {
+        if(idx < 0) return 0;
+        if(dp[idx] != -1) return dp[idx];
+        
+        int steal=dfs(nums, idx-2) + nums[idx];
+        int notSteal=dfs(nums, idx-1);
+        dp[idx]=max(steal, notSteal);
+        return dp[idx];
+    }
+};
