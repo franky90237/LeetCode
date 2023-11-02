@@ -191,3 +191,42 @@ public:
         return dp[n][target+sum];
     }
 };
+
+//2023-11-03
+//time  : O(n*sum)
+//space : O(sum)
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int target) 
+    {
+        int n=nums.size();
+        int sum=accumulate(nums.begin(), nums.end(), 0);
+        if(sum < abs(target)) return 0;
+        
+        vector<vector<int>> dp(2, vector<int>(2*sum+1, 0));
+        dp[0%2][0+sum]=1;
+        
+        for(int i=0; i<n; ++i)
+        {
+            //cout<<i<<endl;
+            for(int s=-sum; s<=sum; ++s)
+            {                
+                dp[(i+1)%2][s+sum]=0;
+                if(abs(s-nums[i]) <= sum) dp[(i+1)%2][s+sum]+=dp[i%2][s-nums[i]+sum];
+                if(abs(s+nums[i]) <= sum) dp[(i+1)%2][s+sum]+=dp[i%2][s+nums[i]+sum];
+            }
+            
+            /*
+            for(int k=0; k<2; ++k) 
+            {
+                for(int s=0; s<=2*sum; ++s) cout<<dp[k][s]<<" ";
+                cout<<endl;
+            }
+            */
+            
+            //cout<<endl;
+        }
+        
+        return dp[(n)%2][target+sum];
+    }
+};
