@@ -161,3 +161,33 @@ public:
         }
     }
 };
+
+//2023-11-03
+//time  : O(n*sum)
+//space : O(n*sum)
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int target) 
+    {
+        int n=nums.size();
+        int sum=accumulate(nums.begin(), nums.end(), 0);
+        if(sum < abs(target)) return 0;
+        
+        vector<vector<int>> dp(n+1, vector<int>(2*sum+1, 0));
+        dp[0][0+sum]=1;
+        
+        for(int i=0; i<n; ++i)
+        {
+            //cout<<i<<endl;
+            for(int s=-sum; s<=sum; ++s)
+            {
+                //cout<<s<<" ";
+                if(abs(s-nums[i]) <= sum) dp[i+1][s+sum]+=dp[i][s-nums[i]+sum];
+                if(abs(s+nums[i]) <= sum) dp[i+1][s+sum]+=dp[i][s+nums[i]+sum];
+            }
+            //cout<<endl;
+        }
+        
+        return dp[n][target+sum];
+    }
+};
