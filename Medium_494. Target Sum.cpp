@@ -230,3 +230,52 @@ public:
         return dp[(n)%2][target+sum];
     }
 };
+
+//2023-11-03
+//time  : O(n*sum)
+//space : O(n*sum)
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int target) 
+    {
+        /*
+        
+        sum(pos) - sum(neg) = target
+        sum(pos) = target + sum(neg)
+        2*sum(pos) = target + sum(neg) + sum(pos)
+        2*sum(pos) = target + sum(nums)
+        sum(pos) = (target + sum(nums))/2
+        
+        */
+        int original=target;
+        int sum=accumulate(nums.begin(), nums.end(), 0);
+        target += sum;
+        if(target % 2 == 1 || sum < abs(original)) return 0;
+        target /= 2;
+        
+        /*
+        
+        subset sum equals to target        
+        dp[i][s] = dp[i-1][s] + dp[i-1][s-nums[i]]
+        
+        */
+        
+        int n=nums.size();
+        vector<vector<int>> dp(n+1, vector<int>(sum+1, 0));
+        dp[0][0]=1;
+        
+        for(int i=0; i<n; ++i)
+        {
+            for(int s=0; s<=sum; ++s)
+            {                
+                dp[i+1][s] += dp[i][s];
+                if(s-nums[i] >= 0) dp[i+1][s] += + dp[i][s-nums[i]];
+                
+                //cout<<dp[i][s]<<" ";
+            }            
+            //cout<<endl;
+        }                
+        
+        return dp[n][target];
+    }
+};
