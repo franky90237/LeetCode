@@ -130,3 +130,58 @@ public:
         return false;
     }
 };
+
+//2023-11-06
+//time  : O(n+e)
+//space : O(n+e)
+class Solution 
+{
+private:
+    vector<unordered_set<int>> graph;    
+    vector<vector<long long>> dp;
+    
+public:
+    long long maximumScoreAfterOperations(vector<vector<int>>& edges, vector<int>& values) 
+    {
+        int n=values.size();
+        
+        graph.resize(n);                
+        for(auto edge: edges)
+        {
+            int a=edge[0];
+            int b=edge[1];
+            graph[a].insert(b);
+            graph[b].insert(a);
+        }
+        
+        dp.resize(n, vector<long long>(2, -1));
+        return dfs(values, -1, 0, false);
+    }
+    
+    long long dfs(vector<int>& values, int parent, int cur, bool isHealthy)
+    {
+        if(isLeaf(parent, cur))
+        {
+            return isHealthy ? values[cur] : 0;
+        }
+        if(dp[cur][isHealthy] != -1) return dp[cur][isHealthy];
+        
+        long long taken=values[cur];
+        long long notTaken=0;
+        for(auto& next: graph[cur])
+        {
+            if(next == parent) continue;
+            taken += dfs(values, cur, next, isHealthy);
+            if(!isHealthy) notTaken += dfs(values, cur, next, true);
+        }
+        
+        dp[cur][isHealthy] = max(taken, notTaken);
+        return dp[cur][isHealthy];
+    }
+    
+    bool isLeaf(int parent, int cur)
+    {
+        if(graph[cur].size() == 1 && *(graph[cur].begin()) == parent) return true;
+        return false;
+    }
+};
