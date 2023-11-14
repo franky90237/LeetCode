@@ -203,7 +203,7 @@ public:
     } 
 };
 
-//2022-08-14a
+//2022-08-14
 //binary_search
 //time  : O(nlog(n))
 //space : O(n)
@@ -269,4 +269,29 @@ public:
     }
 };
 
-
+//2023-11-14
+//time  : O(n*n)
+//space : O(n)
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) 
+    {
+        int n=nums.size();
+        vector<int> dp(n, 1);
+        int ans=1;
+        for(int i=1; i<n; ++i)
+        {
+            for(int k=0; k<i; ++k)
+            {
+                if(nums[k] < nums[i])
+                {
+                    dp[i]=max(dp[i], 1+dp[k]);
+                }
+            }
+            
+            ans=max(ans, dp[i]);
+        }
+        
+        return ans;
+    }
+};
