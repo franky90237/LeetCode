@@ -75,3 +75,42 @@ public:
         return dp[0][0];
     }    
 };
+
+//2023-11-16
+//time  : O(m*n)
+//space : O(2*max(m, n))
+class Solution {    
+public:
+    int minDistance(string word1, string word2) 
+    {
+        int m=word1.size();
+        int n=word2.size();
+        int size=max(m, n);
+        vector<vector<int>> dp(2, vector<int>(size+1));
+        
+        dp[m%2][n]=0;
+        for(int y=0; y<n; ++y) dp[m%2][y]=n-y;
+        //for(int x=0; x<m; ++x) dp[x%2][n]=m-x;
+            
+        for(int x=m-1; x>=0; --x)
+        {            
+            dp[x%2][n]=m-x;
+            for(int y=n-1; y>=0; --y)
+            {
+                if(word1[x] == word2[y])
+                {
+                    dp[x%2][y] = dp[(x+1)%2][y+1];                    
+                }
+                else
+                {
+                    int ins=1+dp[x%2][y+1];
+                    int del=1+dp[(x+1)%2][y];
+                    int rep=1+dp[(x+1)%2][y+1];
+                    dp[x%2][y] = min(ins, min(del, rep));
+                }
+            }
+        }
+        
+        return dp[0][0];
+    }    
+};
