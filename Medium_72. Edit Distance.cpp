@@ -1,3 +1,6 @@
+//2023-11-16
+//time  : O(m*n)
+//space : O(m*n)
 class Solution 
 {
 private:
@@ -34,4 +37,41 @@ public:
         dp[x][y] = min(ins, min(del, rep));
         return dp[x][y];
     }
+};
+
+//2023-11-16
+//time  : O(m*n)
+//space : O(m*n)
+class Solution {    
+public:
+    int minDistance(string word1, string word2) 
+    {
+        int m=word1.size();
+        int n=word2.size();
+        vector<vector<int>> dp(m+1, vector<int>(n+1));
+        
+        dp[m][n]=0;
+        for(int y=0; y<n; ++y) dp[m][y]=n-y;
+        for(int x=0; x<m; ++x) dp[x][n]=m-x;
+            
+        for(int x=m-1; x>=0; --x)
+        {
+            for(int y=n-1; y>=0; --y)
+            {
+                if(word1[x] == word2[y])
+                {
+                    dp[x][y] = dp[x+1][y+1];                    
+                }
+                else
+                {
+                    int ins=1+dp[x][y+1];
+                    int del=1+dp[x+1][y];
+                    int rep=1+dp[x+1][y+1];
+                    dp[x][y] = min(ins, min(del, rep));
+                }
+            }
+        }
+        
+        return dp[0][0];
+    }    
 };
