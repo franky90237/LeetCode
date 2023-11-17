@@ -106,7 +106,7 @@ public:
 };
 
 //2022-07-13
-//time  : O(height of the tree)
+//time  : O(n)
 //space : O(height of the tree)
 class Solution {
 public:
@@ -149,3 +149,49 @@ public:
         return dfs(root->left,smaller,root) && dfs(root->right,root,bigger);
     }
 };
+
+//2023-11-17
+//time  : O(n)
+//space : O(log(n))
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) 
+    {       
+        return solve(root)[0];
+    }
+    
+    vector<int> solve(TreeNode* root)
+    {    
+        if(!root->left && !root->right)
+        {            
+            return {true, root->val, root->val};
+        }
+                        
+        vector<int> left{true, root->val, root->val};
+        if(root->left) left=solve(root->left);
+        
+        vector<int> right{true, root->val, root->val};
+        if(root->right) right=solve(root->right);
+        
+        //cout<<root->val<<" | "<<left[1]<<" "<<left[2]<<" | "<<right[1]<<" "<<right[2]<<endl;
+        
+        if(!left[0] || !right[0]) return {false, 0, 0};
+        if((root->val <= left[1] && root->left) || (root->val >= right[2] && root->right)) return {false, 0, 0};
+        
+        return {true, right[1], left[2]};
+    }
+};
+
+/*
+[2,1,3]
+[10,5,null,1,4,null,null,3,6]
+[10,2,null,1,4,null,null,3,15]
+[5,14,null,1]
+[0,null,1]
+[5,4,6,null,null,3,7]
+[5,3,null,1]
+[0,null,1]
+[2,2,2]
+[34,-6,null,-21]
+[120,70,140,50,100,130,160,20,55,75,110,119,135,150,200]
+*/
