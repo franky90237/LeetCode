@@ -152,7 +152,7 @@ public:
 
 //2023-11-17
 //time  : O(n)
-//space : O(log(n))
+//space : O(h)
 class Solution {
 public:
     bool isValidBST(TreeNode* root) 
@@ -195,3 +195,36 @@ public:
 [34,-6,null,-21]
 [120,70,140,50,100,130,160,20,55,75,110,119,135,150,200]
 */
+
+//2023-11-17
+//time  : O(n)
+//space : O(h)
+class Solution 
+{
+private:
+    bool ans;
+    long pre;
+    
+public:
+    bool isValidBST(TreeNode* root) 
+    {
+        pre=LONG_MIN;
+        ans=true;
+        inorder(root);
+        return ans;
+    }
+    
+    void inorder(TreeNode* root)
+    {
+        if(!root || !ans) return;
+        
+        inorder(root->left);
+        if(root->val <= pre)
+        {
+            ans=false;
+            return;
+        }
+        pre=root->val;
+        inorder(root->right);
+    }
+};
