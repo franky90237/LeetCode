@@ -126,3 +126,95 @@ public:
         return max_xor;
     }
 };
+
+//2023-11-18
+//time  : O(31*n)
+//space : O(31*n)
+class trieNode
+{
+public:
+    int val;
+    int num;
+    map<int, trieNode*> next;
+    
+    trieNode()
+    {
+        
+    }
+    
+    trieNode(int _val)
+    {
+        val=_val;        
+    }
+};
+
+class Trie
+{
+private:
+    trieNode* root;
+    
+public:
+    Trie(vector<int>& nums)
+    {
+        root = new trieNode();
+        for(int num: nums)
+        {
+            insert(num, 31);
+        }
+    }
+    
+    void insert(int num, int bit)
+    {
+        trieNode* cur = root;
+        for(int i=31; i>=0; --i)
+        {
+            int bitVal = (num>>i)&1;
+            if(cur->next.find(bitVal) == cur->next.end())
+            {
+                trieNode* tmp = new trieNode(bitVal);
+                cur->next[bitVal]=tmp;
+            }
+            
+            cur=cur->next[bitVal];
+        }
+        
+        cur->num=num;
+    }
+    
+    int search(int num)
+    {
+        trieNode* cur = root;
+        for(int i=31; i>=0; --i)
+        {
+            int bitVal = (num>>i)&1;            
+            if(cur->next.find(!bitVal) == cur->next.end())
+            {
+                cur=cur->next[bitVal];
+            }
+            else
+            {
+                cur=cur->next[!bitVal];
+            }
+        }
+        
+        return cur->num;
+    }
+};
+
+class Solution {
+public:
+    int findMaximumXOR(vector<int>& nums) 
+    {
+        Trie trie(nums);
+        
+        int ans=0;
+        for(int num: nums)
+        {
+            int res = trie.search(num);
+            //cout<<num<<" "<<res<<endl;
+            ans = max(ans, num^res);
+        }
+        
+        return ans;
+    }
+};
