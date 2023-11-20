@@ -46,3 +46,40 @@ public:
         return res;
     }
 };
+
+//2023-11-20
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) 
+    {
+        ListNode dummy;
+        dummy.next=head;
+        
+        ListNode* pre=&dummy;
+        ListNode* cur=head;
+        int idx=1;
+        while(idx < left)
+        {
+            pre=cur;
+            cur=cur->next;
+            ++idx;
+        }
+        
+        ListNode* beforeLeft=pre;        
+        while(idx <= right)
+        {
+            ListNode* nxt=cur->next;
+            cur->next=pre;
+            pre=cur;
+            cur=nxt;
+            
+            ++idx;
+        }
+        
+        beforeLeft->next->next=cur;
+        beforeLeft->next=pre;
+        return dummy.next;
+    }
+};
