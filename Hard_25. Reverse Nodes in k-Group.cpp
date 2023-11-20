@@ -82,3 +82,50 @@ public:
         return pre;
     }
 };
+
+//2023-11-20
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) 
+    {
+        int len=0;
+        ListNode* cur=head;
+        while(cur)
+        {
+            cur=cur->next;
+            ++len;
+        }
+        
+        ListNode dummy;
+        dummy.next=head;
+        ListNode* pre=&dummy;
+        cur=head;
+        for(int i=0; i<len/k; ++i)
+        {
+            ListNode* tail = reverseList(cur, k);
+            pre->next=tail;
+            pre=cur;
+            cur=cur->next;
+        }
+        
+        return dummy.next;
+    }
+    
+    ListNode* reverseList(ListNode* head, int k)
+    {
+        ListNode* pre=NULL;
+        ListNode* cur=head;
+        for(int cnt=0; cnt<k; ++cnt)
+        {
+            ListNode* nxt=cur->next;
+            cur->next=pre;
+            pre=cur;
+            cur=nxt;
+        }
+        
+        head->next=cur;        
+        return pre;
+    }
+};
