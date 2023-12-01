@@ -67,3 +67,37 @@ public:
         }
     }
 };
+
+//2023-12-01
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) 
+    {
+        int n=nums.size();
+        int smaller=n-2;
+        for(; smaller>=0; --smaller)
+        {
+            if(nums[smaller] < nums[smaller+1]) break;
+        }
+        
+        int left=smaller+1;
+        int right=n-1;
+        while(left < right)
+        {
+            swap(nums[left], nums[right]);
+            ++left;
+            --right;
+        }
+        
+        if(smaller >= 0)
+        {
+            auto it=upper_bound(nums.begin()+smaller+1, nums.end(), nums[smaller]);        
+            
+            int bigger=it-nums.begin();
+            swap(nums[smaller], nums[bigger]);
+            //cout<<smaller<<" "<<bigger<<endl;
+        }
+    }
+};
