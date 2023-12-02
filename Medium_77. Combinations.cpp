@@ -63,3 +63,41 @@ public:
             printf("%d ", arr[i][j]);
     }
 };*/
+
+//2023-12-02
+//time  : O(C(n, k))
+//space : O(n)
+class Solution 
+{
+private:
+    vector<vector<int>> ans;
+    vector<int> cur;
+    
+public:
+    vector<vector<int>> combine(int n, int k) 
+    {
+        solve(n, k, 1);
+        return ans;
+    }
+    
+    void solve(int maxVal, int k, int curVal)
+    {
+        if(k == 0)
+        {
+            ans.push_back(cur);
+            return;
+        }
+        
+        if(curVal > maxVal)
+        {
+            return;
+        }
+        
+        for(int nxtVal=curVal; nxtVal<=maxVal; ++nxtVal)
+        {
+            cur.push_back(nxtVal);
+            solve(maxVal, k-1, nxtVal+1);
+            cur.pop_back();
+        }
+    }
+};
