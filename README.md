@@ -11,3 +11,4 @@ Hard  2949. Count Beautiful Substrings II <br>
 # observing
 Medium  2952. Minimum Number of Coins to be Added <br>
 Medium  1864. Minimum Number of Swaps to Make the Binary String Alternating <br>
+Medium  2249. Count Lattice Points Inside a Circle <br>
