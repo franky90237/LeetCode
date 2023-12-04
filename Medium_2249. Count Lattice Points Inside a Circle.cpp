@@ -123,3 +123,33 @@ public:
         return ans;           
     }
 };
+
+//2023-12-04
+//time  : O(n*radius*radius)
+//space : O(n*radius*radius)
+class Solution {
+public:
+    int countLatticePoints(vector<vector<int>>& circles) 
+    {
+        int n=circles.size();
+        set<pair<int, int>> points;
+        for(auto& circle: circles)
+        {
+            int x=circle[0];
+            int y=circle[1];
+            int len=circle[2];            
+            for(int r=y-len; r<=y+len; ++r)
+            {
+                for(int c=x-len; c<=x+len; ++c)
+                {                   
+                    int sum = (c-x)*(c-x) + (r-y)*(r-y);
+                    if(sum <= len*len)
+                    {
+                        points.insert({c, r});
+                    }
+                }
+            }
+        }
+
+        return points.size();
+    }
