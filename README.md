@@ -13,3 +13,6 @@ Hard  2949. Count Beautiful Substrings II <br>
 Medium 2952. Minimum Number of Coins to be Added <br>
 Medium 1864. Minimum Number of Swaps to Make the Binary String Alternating <br>
 Medium 2249. Count Lattice Points Inside a Circle <br>
+
+# graph
+Medium 2316. Count Unreachable Pairs of Nodes in an Undirected Graph <br>
