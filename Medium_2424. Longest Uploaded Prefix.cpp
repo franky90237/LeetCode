@@ -74,3 +74,35 @@ public:
         return uf.getSize(1);
     }
 };
+
+//203-12-08
+//time  : O(n)
+//space : O(n)
+class LUPrefix 
+{
+private:
+    unique_ptr<bool[]> used;
+    int cur=1;
+
+public:
+    LUPrefix(int n)
+    {
+        used=make_unique<bool[]>(n+2);        
+    }
+    
+    void upload(int video) 
+    {
+        used[video]=true;
+    }
+    
+    int longest() 
+    {
+        if(!used[1]) return 0;
+        while(used[cur])
+        {
+            ++cur;
+        }
+
+        return cur-1;
+    }
+};
