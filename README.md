@@ -17,3 +17,6 @@ Medium 2522. Partition String Into Substrings With Values at Most K <br>
 
 # graph
 Medium 2316. Count Unreachable Pairs of Nodes in an Undirected Graph <br>
+
+# logic
+Medium 809. Expressive Words <br>
