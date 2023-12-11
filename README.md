@@ -7,7 +7,8 @@ Medium 2925. Maximum Score After Applying Operations on a Tree <br>
 Medium 926. Flip String to Monotone Increasing <br>
 
 # math
-Hard  2949. Count Beautiful Substrings II <br>
+Hard   2949. Count Beautiful Substrings II <br>
+Medium 2961. Double Modular Exponentiation <br>
 
 # observing
 Medium 2952. Minimum Number of Coins to be Added <br>
