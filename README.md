@@ -1,6 +1,9 @@
 # LeetCode
 my LeetCode solution
 
+# sliding window
+Medium 2962. Count Subarrays Where Max Element Appears at Least K Times.cpp <br>
+
 # dp
 Hard   2920. Maximum Points After Collecting Coins From All Nodes <br>
 Medium 2925. Maximum Score After Applying Operations on a Tree <br>
