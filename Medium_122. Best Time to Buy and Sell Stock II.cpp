@@ -220,3 +220,25 @@ public:
         return dp[idx][hold];
     }
 };
+
+//2023-12-20
+//time  : O(n)
+//space : O(n)
+class Solution {
+private:
+    vector<vector<int>> dp;
+    
+public:
+    int maxProfit(vector<int>& prices) 
+    {
+        int n=prices.size();
+        dp.resize(n+1, vector<int>(2, 0));
+        for(int i=n-1; i>=0; --i)
+        {
+            dp[i][true]=max(dp[i+1][true], dp[i+1][false]+prices[i]);
+            dp[i][false]=max(dp[i+1][false], dp[i+1][true]-prices[i]);
+        }
+        
+        return dp[0][false];
+    }
+};
