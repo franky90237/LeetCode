@@ -18,9 +18,13 @@ Medium 2952. Minimum Number of Coins to be Added <br>
 Medium 1864. Minimum Number of Swaps to Make the Binary String Alternating <br>
 Medium 2249. Count Lattice Points Inside a Circle <br>
 Medium 2522. Partition String Into Substrings With Values at Most K <br>
+Medium 2975. Maximum Square Area by Removing Fences From a Field <br>
 
 # graph
 Medium 2316. Count Unreachable Pairs of Nodes in an Undirected Graph <br>
+Medium 2976. Minimum Cost to Convert String I <br>
 
 # logic
 Medium 809. Expressive Words <br>
+Medium 1801. Number of Orders in the Backlog <br>
+
