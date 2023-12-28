@@ -1,6 +1,6 @@
 //2023-12-24
-//time  : O(n+26*26*26)
-//space : O(26*26*26)
+//time  : O(n+v*v*v)
+//space : O(v*v*v)
 class Solution 
 {
 private:
@@ -71,8 +71,8 @@ public:
 };
 
 //2023-12-28
-//time  : O(26*26*26)
-//space : O(26*26)
+//time  : O(n+v*v*v)
+//space : O(v*v)
 class Solution 
 {
 private:
@@ -116,6 +116,71 @@ public:
             int a=source[i]-'a';
             int b=target[i]-'a';
             if(minCost[a][b] == inf) return -1;            
+            ans += minCost[a][b];
+        }
+        
+        return ans;
+    }
+};
+
+//2023-12-28
+//time  : O(n+v*vlogv*e)
+//space : O(v*v)
+class Solution 
+{
+private:
+    int inf=1e8;
+    vector<vector<int>> graph;
+    vector<vector<long long>> minCost;    
+    
+public:
+    long long minimumCost(string source, string target, vector<char>& original, vector<char>& changed, vector<int>& cost) 
+    {
+        minCost.resize(26, vector<long long>(26, inf));
+        graph.resize(26, vector<int>(26, inf)); 
+        for(int i=0; i<26; ++i)
+        {
+            minCost[i][i]=0;
+            graph[i][i]=0;
+        }
+        
+        for(int i=0; i<original.size(); ++i)
+        {
+            char a=original[i]-'a';
+            char b=changed[i]-'a';
+            graph[a][b]=min(graph[a][b], cost[i]);
+        }
+        
+        for(int begin=0; begin<26; ++begin)
+        {
+            priority_queue<vector<long long>, vector<vector<long long>>, greater<vector<long long>>> minHeap;
+            minHeap.push({0, begin});
+            
+            while(!minHeap.empty())
+            {
+                long long curCost=minHeap.top()[0];                
+                char end=minHeap.top()[1];
+                //cout<<(char)(begin+'a')<<" "<<(char)(end+'a')<<" | "<<minCost[begin][end]<<" "<<curCost<<endl;
+                minCost[begin][end]=min(minCost[begin][end], curCost);
+                minHeap.pop();
+                
+                for(int next=0; next<26; ++next)
+                {
+                    if(minCost[begin][next] > curCost+graph[end][next])
+                    {
+                        minHeap.push({curCost+graph[end][next], next});
+                    }
+                }
+            }
+        }
+        
+        long long ans=0;
+        for(int i=0; i<source.size(); ++i)
+        {
+            int a=source[i]-'a';
+            int b=target[i]-'a';
+            if(minCost[a][b] == inf) return -1;   
+            //cout<<minCost[a][b]<<endl;
             ans += minCost[a][b];
         }
         
