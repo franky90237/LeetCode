@@ -69,3 +69,56 @@ public:
         return ans;
     }       
 };
+
+//2023-12-28
+//time  : O(26*26*26)
+//space : O(26*26)
+class Solution 
+{
+private:
+    int inf=1e8;
+    vector<vector<long long>> minCost;    
+    
+public:
+    long long minimumCost(string source, string target, vector<char>& original, vector<char>& changed, vector<int>& cost) 
+    {
+        minCost.resize(26, vector<long long>(26, inf));
+        for(int i=0; i<26; ++i)
+        {
+            minCost[i][i]=0;
+        }
+        
+        for(int i=0; i<original.size(); ++i)
+        {
+            char a=original[i]-'a';
+            char b=changed[i]-'a';
+            minCost[a][b]=min(minCost[a][b], (long long)cost[i]);
+        }
+        
+        for(int k=0; k<26; ++k)
+        {
+            for(int i=0; i<26; ++i)
+            {
+                for(int j=0; j<26; ++j)
+                {
+                    if(minCost[i][j] > minCost[i][k] + minCost[k][j])
+                    {
+                        minCost[i][j] = minCost[i][k] + minCost[k][j];
+                    }
+                }
+            }
+        }
+        //cout<<"done! \n";
+        
+        long long ans=0;
+        for(int i=0; i<source.size(); ++i)
+        {
+            int a=source[i]-'a';
+            int b=target[i]-'a';
+            if(minCost[a][b] == inf) return -1;            
+            ans += minCost[a][b];
+        }
+        
+        return ans;
+    }
+};
