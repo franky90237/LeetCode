@@ -23,6 +23,7 @@ Medium 2975. Maximum Square Area by Removing Fences From a Field <br>
 # graph
 Medium 2316. Count Unreachable Pairs of Nodes in an Undirected Graph <br>
 Medium 2976. Minimum Cost to Convert String I <br>
+Hard   2977. Minimum Cost to Convert String II <br>
 
 # logic
 Medium 809. Expressive Words <br>
