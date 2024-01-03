@@ -122,3 +122,60 @@ public:
         }
     }
 };
+
+//2024-01-03
+//time  : O(nlog(n))
+//space : O(log(n))
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) 
+    {
+        qSort(nums, 0 , nums.size()-1);
+        return nums;
+    }
+    
+    void qSort(vector<int>& nums, int left, int right)
+    {        
+        if(left >= right) return;    
+        
+        int cut=partition(nums, left, right);
+        //cout<<left<<" "<<cut<<" "<<right<<endl;
+        //for(int num : nums) cout<<num<<" "; cout<<endl;
+        
+        qSort(nums, left, cut-1);
+        qSort(nums, cut+1, right);
+    }
+    
+    int partition(vector<int>& nums, int left, int right)
+    {
+        int mid=left+(right-left)/2;
+        
+        bool isSame=true;
+        int base=nums[left];
+        for(int i=left+1; i<=right; ++i)
+        {
+            if(nums[i] != base)
+            {
+                isSame=false;
+                break;
+            }
+        }
+        
+        if(isSame) return mid;
+        
+        swap(nums[mid], nums[right]);
+        
+        int cut=left;
+        for(int i=left; i<right; ++i)
+        {
+            if(nums[i] < nums[right])
+            {
+                swap(nums[cut], nums[i]);
+                ++cut;                
+            }
+        }
+        
+        swap(nums[cut], nums[right]);        
+        return cut;
+    }
+};
