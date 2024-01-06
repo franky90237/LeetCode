@@ -29,3 +29,5 @@ Hard   2977. Minimum Cost to Convert String II <br>
 Medium 809. Expressive Words <br>
 Medium 1801. Number of Orders in the Backlog <br>
 
+# observing + logic + implement
+Hard   2983. Palindrome Rearrangement Queries <br>
