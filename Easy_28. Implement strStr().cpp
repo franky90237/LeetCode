@@ -64,3 +64,63 @@ public:
         return -1;        
     }
 };
+
+//2024-01-15
+//time  : O(n+m)
+//spcae : O(m)
+class Solution {
+public:
+    int strStr(string haystack, string needle) 
+    {
+        vector<int> LPS = getLPS(needle);
+        //for(int i : LPS) cout<<i<<" "; cout<<endl;
+        //int LPS[] = {0,0,0,0,0,0,0,0,0};
+        
+        int i=0;
+        int j=0;
+        while(i < haystack.size() && j < needle.size())
+        {
+            //cout<<i<<" "<<j<<endl;
+            if(haystack[i] == needle[j])
+            {
+                ++i;
+                ++j;
+            }
+            else
+            {
+                if(j == 0) ++i;                
+                else j = LPS[j-1];
+            }
+        }
+        
+        if(j == needle.size()) return i-needle.size();
+        return -1;
+    }
+    
+    vector<int> getLPS(string& s)
+    {
+        int n=s.size();
+        
+        vector<int> LPS(n, 0);
+        int i=0;
+        int j=1;
+        
+        while(j < s.size())
+        {
+            //cout<<i<<" "<<j<<endl;
+            if(s[i] == s[j])
+            {
+                LPS[j]=i+1;
+                ++i;
+                ++j;                
+            }
+            else
+            {
+                if(i == 0) ++j;                
+                else i = LPS[i-1];
+            }
+        }
+        
+        return LPS;
+    }
+};
