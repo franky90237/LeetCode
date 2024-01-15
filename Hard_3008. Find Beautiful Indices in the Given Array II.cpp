@@ -104,3 +104,106 @@ public:
         cout<<endl;
     }
 };
+
+//2024-01-15
+//time  : O(n+x+n+y+nlog(n))
+//space : O(n)
+class Solution {   
+public:
+    vector<int> beautifulIndices(string s, string a, string b, int k)
+    {
+        vector<int> idxA;
+        getIdx(s, a, idxA);        
+        if(idxA.empty()) return {};
+        
+        vector<int> idxB;
+        getIdx(s, b, idxB);
+        if(idxB.empty()) return {};        
+                
+        //print(idxA);
+        //print(idxB);       
+        
+        vector<int> ans;
+        for(int i=0; i<idxA.size(); ++i)
+        {
+            //cout<<i<<" "<<idxA[i]<<endl;
+            
+            auto it = lower_bound(idxB.begin(), idxB.end(), idxA[i]);
+            if(it == idxB.end() && it != idxB.begin()) --it;
+            
+            int diff=abs(idxA[i]-*it);
+            if(diff <= k) 
+            {
+                ans.push_back(idxA[i]);
+                continue;
+            }
+            
+            if(it != idxB.begin())
+            {
+                --it;
+                diff=abs(idxA[i]-*it);
+                if(diff <= k) ans.push_back(idxA[i]);
+            }  
+        }
+        
+        return ans;
+    }
+        
+    void getIdx(string& source, string& target, vector<int>& idx)
+    {
+        vector<int> LPS = getLPS(target);
+        
+        int i=0;
+        int j=0;
+        while(i < source.size())
+        {
+            if(source[i] == target[j])
+            {
+                ++i;
+                ++j;
+                
+                if(j == target.size())
+                {
+                    idx.push_back(i-target.size());
+                }
+            }
+            else
+            {
+                if(j == 0) ++i;
+                else j = LPS[j-1];
+            }            
+        }
+    }    
+    
+    vector<int> getLPS(string& s)
+    {
+        vector<int> LPS(s.size(), 0);
+        
+        int i=0;
+        int j=1;
+        while(j < s.size())
+        {
+            //cout<<i<<" "<<j<<endl;
+            if(s[i] == s[j])
+            {
+                LPS[j]=i+1;
+                ++i;
+                ++j;
+            }
+            else
+            {
+                if(i == 0) ++j;
+                else i=LPS[i-1];
+            }
+        }
+        
+        return LPS;
+    }
+    
+    template<typename T>
+    void print(vector<T>& arr)
+    {
+        for(int i : arr) cout<<i<<" ";
+        cout<<endl;
+    }
+};
