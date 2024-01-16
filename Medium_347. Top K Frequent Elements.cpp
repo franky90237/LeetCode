@@ -80,3 +80,55 @@ public:
         return res;
     }
 };
+
+//2024-01-16
+//time  : O(nlogk)
+//space : O(n)
+class item
+{
+public:        
+    int val;
+    int cnt;
+    
+    item() = default;
+    
+    item(int _val, int _cnt) : val(_val), cnt(_cnt) 
+    {
+        
+    }
+};
+
+class Solution 
+{
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) 
+    {
+        unordered_map<int, int> numCnt;
+        for(int num : nums) ++numCnt[num];
+        
+        auto myComp = [](const item& a, const item& b)
+        {
+            return a.cnt > b.cnt;
+        };
+        
+        priority_queue<item, vector<item>, decltype(myComp)> minHeap;        
+                
+        for (auto& it : numCnt)
+        {
+            int val=it.first;
+            int cnt=it.second;
+            minHeap.push(item(val, cnt));
+            if (minHeap.size() > k) minHeap.pop();
+        }
+
+        vector<int> ans;
+        while (!minHeap.empty())
+        {
+            //cout << minHeap.top().val << " ";
+            ans.push_back(minHeap.top().val);
+            minHeap.pop();
+        }
+        
+        return ans;
+    }
+};
