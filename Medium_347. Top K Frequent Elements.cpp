@@ -132,3 +132,37 @@ public:
         return ans;
     }
 };
+
+//2024-01-16
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) 
+    {
+        unordered_map<int, int> numCnt;
+        for(int num : nums) ++numCnt[num];
+        
+        int n=nums.size();
+        vector<vector<int>> bucket(n+1);
+        for(auto& it : numCnt)
+        {
+            int num=it.first;
+            int cnt=it.second;
+            bucket[cnt].push_back(num);
+        }
+        
+        vector<int> ans;
+        for(int i=n; k>0; --i)
+        {
+            while(!bucket[i].empty() && k > 0)
+            {
+                ans.push_back(bucket[i].back());
+                bucket[i].pop_back();
+                --k;
+            }            
+        }
+        
+        return ans;
+    }
+};
