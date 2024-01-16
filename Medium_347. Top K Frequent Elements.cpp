@@ -166,3 +166,73 @@ public:
         return ans;
     }
 };
+
+//2024-01-16
+//time  : O(log(n))
+//space : O(n)
+class item
+{
+public:        
+    int val;
+    int cnt;
+    
+    item() = default;
+    
+    item(int _val, int _cnt) : val(_val), cnt(_cnt) 
+    {
+        
+    }
+};
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) 
+    {
+        unordered_map<int, int> numCnt;
+        for (int num : nums) ++numCnt[num];
+        
+        vector<item> input;
+        for(auto [val, cnt] : numCnt)
+        {
+            input.push_back(item(val, cnt));
+        }
+        
+        int targetPos = input.size() - k;
+        int pos = -1;
+        int left = 0;
+        int right = input.size() - 1;
+        do
+        {
+            pos = quickSelect(input, left, right);
+            if (pos < targetPos) left = pos + 1;
+            else right = pos - 1;
+        } while (pos != targetPos);
+        
+        vector<int> ans;
+        for (int i = pos; i < input.size(); ++i)
+        {
+            ans.push_back(input[i].val);
+        }
+        
+        return ans;        
+    }
+    
+    int quickSelect(vector<item>& input, int left, int right)
+    {	
+        int mid = left + (right - left) / 2;
+        swap(input[mid], input[right]);
+
+        int swapIdx = left;
+        for (; left <= right - 1; ++left)
+        {
+            if (input[left].cnt < input[right].cnt)
+            {
+                swap(input[swapIdx], input[left]);
+                ++swapIdx;
+            }
+        }
+        
+        swap(input[swapIdx], input[right]);
+        return swapIdx;
+    }
+};
