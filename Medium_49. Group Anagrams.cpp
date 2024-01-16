@@ -59,3 +59,38 @@ public:
         return res;
     }
 };
+
+//2024-01-16
+//time  : O(n*mlog(m))
+//space : O(n*m)
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) 
+    {
+    	vector<string> copy = strs;
+        for (string& s : copy) sort(s.begin(), s.end());
+
+        unordered_map<string, vector<int>> groups;
+        for (int i=0; i<copy.size(); ++i) 
+        {
+            groups[copy[i]].push_back(i);
+        }
+        
+        vector<vector<string>> ans(groups.size());
+        int i=0;
+        for (auto& it : groups)
+        {
+            vector<int>& group = it.second;
+            for (int idx : group)
+            {
+                ans[i].push_back(strs[idx]);
+                //cout << strs[idx] << " ";
+            }
+            //cout << endl;
+            
+            ++i;
+        }
+        
+        return ans;
+    }
+};
