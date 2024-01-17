@@ -288,3 +288,78 @@ public:
         return uf.get_longest_length();
     }
 };
+
+//2024-01-18
+//time  : O(n)
+//space : O(n)
+class UF
+{
+private:
+	unordered_map<int, int> parent;
+	unordered_map<int, int> size;
+
+public:
+	UF() = default;
+
+	UF(vector<int>& arr)
+	{
+		for (int val : arr)
+		{
+			parent[val] = val;
+			size[val] = 1;
+		}
+	}
+
+	void combine(int a, int b)
+	{
+		if (parent.find(a) == parent.end()) return;
+		if (parent.find(b) == parent.end()) return;
+
+		int rootA = find(a);
+		int rootB = find(b);
+		if (rootA == rootB) return;
+
+		if (size[rootA] < size[rootB])
+		{
+			parent[rootA] = rootB;
+			size[rootB] += size[rootA];
+		}
+		else
+		{
+			parent[rootB] = rootA;
+			size[rootA] += size[rootB];
+		}
+	}
+	
+	int find(int a)
+	{
+		//if (parent.find(a) == parent.end()) return -1;
+		if (parent[a] == a) return a;
+
+		return parent[a] = find(parent[a]);
+	}
+
+	int getSize(int a)
+	{
+		return size[find(a)];
+	}
+};
+
+class Solution 
+{
+public:
+    int longestConsecutive(vector<int>& nums) 
+    {
+        UF uf(nums);
+        int ans = 0;
+        for (int val : nums)
+        {
+            uf.combine(val, val - 1);
+            uf.combine(val, val + 1);
+            //cout << val << " " << uf.getSize(val) << endl;
+            ans = max(ans, uf.getSize(val));
+        }
+
+        return ans;
+    }
+};
