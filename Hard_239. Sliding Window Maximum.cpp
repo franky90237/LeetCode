@@ -406,3 +406,37 @@ public:
         return ans;
     }
 };
+
+//2024-01-18
+//time  : O(nlog(k))
+//space : O(n+k)
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) 
+    {
+        int n = nums.size();
+
+        map<int, int> table;
+        vector<int> res;
+
+        for (int i = 0; i < k; ++i)
+        {
+            ++table[nums[i]];
+        }
+
+        res.push_back((table.rbegin())->first);
+
+        int left = 0;
+        for (int right = k; right < n; ++right)
+        {
+            --table[nums[left]];
+            ++table[nums[right]];
+            if (table[nums[left]] == 0) table.erase(nums[left]);
+
+            res.push_back((table.rbegin())->first);
+            ++left;
+        }
+        
+        return res;      
+    }
+};
