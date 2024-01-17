@@ -337,3 +337,42 @@ public:
         return n-left;
     }    
 };
+
+//2024-01-18
+//time  : O(26*n)
+//space : O(26)
+class Solution {
+public:
+    int characterReplacement(string s, int k) 
+    {
+        vector<int> charCnt(26, 0);
+        int ans = 0;
+        int left = 0;
+        for (int right = 0; right < s.size(); ++right)
+        {
+            ++charCnt[s[right]-'A'];
+            while(getRestCnt(charCnt) > k)
+            {
+                --charCnt[s[left]-'A'];
+                ++left;
+            }
+
+            ans = max(ans, right - left + 1);
+        }
+        
+        return ans;
+    }
+    
+    int getRestCnt(vector<int>& charCnt)
+    {
+        int maxCnt = 0;
+        int allCnt = 0;
+        for (int cnt : charCnt)
+        {
+            allCnt += cnt;
+            maxCnt = max(maxCnt, cnt);
+        }
+
+        return allCnt - maxCnt;
+    }    
+};
