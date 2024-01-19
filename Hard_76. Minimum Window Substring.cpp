@@ -398,3 +398,54 @@ public:
         return s.substr(ansL, ansR-ansL+1);
     }      
 };
+
+//2024-01-20
+//time  : O(60*n)
+//space : O(60)
+class Solution {
+public:
+    string minWindow(string s, string t) 
+    {
+        if(s.size() < t.size()) return "";
+        
+        int charLen = 'z' - 'A' + 1;
+        vector<int> mapT(charLen, 0);
+        for(char c : t) ++mapT[c-'A'];
+        
+        vector<int> mapS(charLen, 0);
+        int idx[2] = {0, (int)s.size()};
+        int left=0;
+        for(int right=0; right<s.size(); ++right)
+        {
+            ++mapS[s[right]-'A'];
+            
+            while(cover(mapS, mapT))
+            {
+                int ansLen=idx[1]-idx[0]+1;
+                int curLen=right-left+1;
+                if(curLen < ansLen)
+                {
+                    idx[0]=left;
+                    idx[1]=right;
+                }
+                
+                --mapS[s[left]-'A'];
+                ++left;
+            }
+        }
+        
+        if(idx[1] == s.size()) return "";
+        return s.substr(idx[0], idx[1]-idx[0]+1);
+    }
+    
+    bool cover(vector<int>& a, vector<int>& b)
+    {
+        for(int i=0; i<a.size(); ++i)
+        {
+            if(b[i] == 0) continue;
+            if(a[i] < b[i]) return false;
+        }
+        
+        return true;
+    }
+};
