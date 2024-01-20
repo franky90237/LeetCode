@@ -71,3 +71,30 @@ public:
         return result;
     }    
 };
+
+//2024-01-20
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) 
+    {
+        int n=temperatures.size();
+        vector<int> res(n);
+        res[n-1]=0;
+        for(int i=n-2; i>=0; --i)
+        {
+            if(temperatures[i] < temperatures[i+1]) res[i]=1;
+            else
+            {
+                int len = res[i+1] + 1;
+                while(res[i+len] != 0 && temperatures[i] >= temperatures[i+len]) len += res[i+len];
+                
+                if(temperatures[i] >= temperatures[i+len]) res[i] = 0;
+                else res[i] = len;
+            }
+        }
+        
+        return res;
+    }
+};
