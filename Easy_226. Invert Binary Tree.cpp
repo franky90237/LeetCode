@@ -125,7 +125,7 @@ public:
 //2022-09-23
 //recursive dfs preorder
 //time  : O(n)
-//space : O(!)
+//space : O(n)
 class Solution {
 public:
     TreeNode* invertTree(TreeNode* root)
@@ -138,6 +138,45 @@ public:
         
         invertTree(root->left);
         invertTree(root->right);
+        
+        return root;
+    }
+};
+
+//2024-01-20
+//time  : O(n)
+//spcae : O(n)
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) 
+    {
+        if(!root) return NULL;
+        
+        deque<vector<TreeNode*>> level;
+        level.push_back({root, root});
+        
+        while(!level.empty())
+        {
+            int size=level.size();
+            
+            for(int i=1; i<size; i+=2)
+            {
+                TreeNode* parent=level[i-1][1];
+                parent->left=level[i][0];
+                parent->right=level[i-1][0];
+            }
+            
+            for(int i=0; i<size; ++i)
+            {
+                TreeNode* parent=level.front()[1];                
+                TreeNode* cur=level.front()[0];
+                level.pop_front();
+                if(!cur || (!cur->left && !cur->right)) continue;
+                
+                level.push_back({cur->left, cur});
+                level.push_back({cur->right, cur});
+            }
+        }
         
         return root;
     }
