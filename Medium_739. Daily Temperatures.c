@@ -98,3 +98,30 @@ public:
         return res;
     }
 };
+
+//2024-01-20
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) 
+    {
+        int n=temperatures.size();
+        vector<int> res(n);
+        res[n-1]=0;
+        for(int i=n-2; i>=0; --i)
+        {
+            if(temperatures[i] < temperatures[i+1]) res[i]=1;
+            else
+            {
+                int next = i+1;
+                while(res[next] != 0 && temperatures[i] >= temperatures[next]) next += res[next];
+                
+                if(temperatures[i] >= temperatures[next]) res[i] = 0;
+                else res[i] = next-i;
+            }
+        }
+        
+        return res;
+    }
+};
