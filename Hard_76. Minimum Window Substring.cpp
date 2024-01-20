@@ -449,3 +449,47 @@ public:
         return true;
     }
 };
+
+//2024-01-20
+//time  : O(60 + n)
+//space : O(60)
+class Solution {
+public:
+    string minWindow(string s, string t) 
+    {
+        if(s.size() < t.size()) return "";
+        
+        int charLen = 'z' - 'A' + 1;
+        vector<int> mapT(charLen, 0);
+        for(char c : t) ++mapT[c-'A'];
+        
+        vector<int> mapS(charLen, 0);
+        int idx[2] = {0, (int)s.size()};
+        int matchCnt = 0;
+        int left = 0;
+        for(int right = 0; right < s.size(); ++right)
+        {
+            ++mapS[s[right]-'A'];
+            if(mapS[s[right]-'A'] <= mapT[s[right]-'A']) ++matchCnt;
+            
+            while(matchCnt == t.size())
+            {
+                int ansLen=idx[1]-idx[0]+1;
+                int curLen=right-left+1;
+                if(curLen < ansLen)
+                {
+                    idx[0]=left;
+                    idx[1]=right;
+                }
+                
+                --mapS[s[left]-'A'];                
+                if(mapS[s[left]-'A'] < mapT[s[left]-'A']) --matchCnt;
+                ++left;
+            }
+            
+        }
+        
+        if(idx[1] == s.size()) return "";
+        return s.substr(idx[0], idx[1] - idx[0] + 1);
+    }    
+};
