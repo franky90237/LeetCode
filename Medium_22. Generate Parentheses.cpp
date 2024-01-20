@@ -147,3 +147,45 @@ public:
         return ans[n];
     }    
 };
+
+//2024-01-20
+//time  : O(2^n)
+//space : O(n)
+class Solution 
+{
+private:
+    vector<string> res;
+    string cur;
+    
+public:
+    vector<string> generateParenthesis(int n) 
+    {
+        f(n, 0, 0);
+        return res;
+    }
+    
+    void f(int n, int left, int right)
+    {
+        if(!valid(n, left, right)) return;
+        if(left == n && right == n) 
+        {
+            res.emplace_back(cur);
+            return;
+        }
+        
+        cur.push_back('(');
+        f(n, left+1, right);
+        cur.pop_back();
+        
+        cur.push_back(')');
+        f(n, left, right+1);
+        cur.pop_back();
+    }
+    
+    bool valid(int n, int left, int right)
+    {
+        if(left < right) return false;
+        if(left > n || right > n) return false;
+        return true;
+    }        
+};
