@@ -168,3 +168,84 @@ public:
         return number_of_nodes(root->left) + 1 + number_of_nodes(root->right);
     }        
 };
+
+//2024-01-22
+//Follw up
+//time  : O(n)
+//space : O(n)
+class MyTreeNode
+{
+public:
+    int val;
+    int leftCnt=0;
+    int rightCnt=0;
+    MyTreeNode *left;
+    MyTreeNode *right;
+    MyTreeNode() : val(0), left(nullptr), right(nullptr) {}
+    MyTreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    MyTreeNode(int x, MyTreeNode *left, MyTreeNode *right) : val(x), left(left), right(right) {}    
+    
+    void insert(MyTreeNode* root, MyTreeNode* parent, TreeNode* node)
+    {
+        if(!node) return;
+        
+        if(!root)
+        {
+            if(node->val < parent->val) parent->left = new MyTreeNode(node->val);        
+            else parent->right = new MyTreeNode(node->val);            
+            return;
+        }
+                
+        if(node->val > root->val)
+        {
+            ++root->rightCnt;
+            insert(root->right, root, node);
+        }
+        else
+        {
+            ++root->leftCnt;
+            insert(root->left, root, node);
+        }
+    }
+    
+    void print(MyTreeNode* root)
+    {
+        if(!root) return;
+        
+        cout<<root->val<<" | "<<root->leftCnt<<" "<<root->rightCnt<<endl;
+        print(root->left);
+        print(root->right);
+    }
+};
+
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) 
+    {
+        MyTreeNode* myRoot = new MyTreeNode(root->val);
+        clone(root, myRoot);        
+        //myRoot->print(myRoot);
+        
+        return kthSmallest(myRoot, k);
+    }
+    
+    void clone(TreeNode* root, MyTreeNode* myRoot)
+    {
+        if(!root) return;
+        
+        myRoot->insert(myRoot, NULL, root->left);
+        myRoot->insert(myRoot, NULL, root->right);
+        
+        clone(root->left, myRoot);
+        clone(root->right, myRoot);
+    }
+    
+    int kthSmallest(MyTreeNode* root, int k) 
+    {
+        int leftNodes=root->leftCnt;
+        if(k == leftNodes+1) return root->val;
+        
+        if(k < leftNodes+1) return kthSmallest(root->left, k);
+        return kthSmallest(root->right, k-leftNodes-1);
+    }
+};
