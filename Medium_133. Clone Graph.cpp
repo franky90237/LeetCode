@@ -178,3 +178,28 @@ public:
         return clone_node;
     }
 };
+
+//2024-01-22
+//time  : O(v+e)
+//spcae : O(v)
+class Solution 
+{
+private:
+    unordered_map<int, Node*> table;
+    
+public:    
+    Node* cloneGraph(Node* node) 
+    {
+        if(!node) return NULL;
+        if(table.find(node->val) != table.end()) return table[node->val];    
+        
+        Node* cur=new Node(node->val);
+        table[node->val]=cur;
+        for(Node* next : node->neighbors)
+        {
+            cur->neighbors.push_back(cloneGraph(next));            
+        }
+        
+        return cur;
+    }
+};
