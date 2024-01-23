@@ -178,3 +178,136 @@ public:
         }
     }
 };
+
+//2024-01-23
+//time  : O(m*n)
+//spcae : O(m*n)
+class Solution {
+public:
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) 
+    {
+        int m=heights.size();
+        int n=heights[0].size();
+        
+        vector<vector<bool>> goP(m, vector<bool>(n, false));
+        vector<vector<bool>> goA(m, vector<bool>(n, false));
+        
+        for(int r=0; r<m; ++r)
+        {
+            dfs(heights, goP, heights[r][0], r, 0);
+            dfs(heights, goA, heights[r][n-1], r, n-1);
+        }
+        
+        for(int c=0; c<n; ++c)
+        {
+            dfs(heights, goP, heights[0][c], 0, c);
+            dfs(heights, goA, heights[m-1][c], m-1, c);
+        }
+        
+        vector<vector<int>> res;
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {                
+                if(goP[i][j] && goA[i][j])
+                {
+                    res.push_back({i, j});
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    void dfs(vector<vector<int>>& heights, vector<vector<bool>>& go, int pre, int i, int j)
+    {
+        int m=heights.size();
+        int n=heights[0].size();
+        
+        if(i < 0 || i >= m || j < 0 || j >= n || go[i][j] || pre > heights[i][j]) return ;
+        
+        go[i][j]=true;
+        
+        dfs(heights, go, heights[i][j], i+1, j);
+        dfs(heights, go, heights[i][j], i-1, j);
+        dfs(heights, go, heights[i][j], i, j+1);
+        dfs(heights, go, heights[i][j], i, j-1);
+    }
+};
+
+//2024-01-23
+//time  : O(m*n)
+//spcae : O(m*n)
+class Solution {
+public:
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) 
+    {
+        int m=heights.size();
+        int n=heights[0].size();
+        
+        vector<vector<bool>> goP(m, vector<bool>(n, false));
+        vector<vector<bool>> goA(m, vector<bool>(n, false));
+        
+        queue<vector<int>> qP;
+        queue<vector<int>> qA;
+        
+        for(int r=0; r<m; ++r)
+        {
+            goP[r][0]=true;
+            qP.push({r, 0});
+            
+            goA[r][n-1]=true;
+            qA.push({r, n-1});
+        }
+        
+        for(int c=0; c<n; ++c)
+        {
+            goP[0][c]=true;
+            qP.push({0, c});
+            
+            goA[m-1][c]=true;
+            qA.push({m-1, c});
+        }
+        
+        bfs(heights, goP, qP);
+        bfs(heights, goA, qA);
+        
+        vector<vector<int>> res;
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {                
+                if(goP[i][j] && goA[i][j])
+                {
+                    res.push_back({i, j});
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    void bfs(vector<vector<int>>& heights, vector<vector<bool>>& go, queue<vector<int>> q)
+    {
+        int m=heights.size();
+        int n=heights[0].size();
+        int dir[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+        
+        while(!q.empty())
+        {
+            int r=q.front()[0];
+            int c=q.front()[1];            
+            q.pop();
+            
+            for(int i=0; i<4; ++i)
+            {
+                int nr=r+dir[i][0];
+                int nc=c+dir[i][1];
+                
+                if(nr < 0 || nr >= m || nc < 0 || nc >= n || go[nr][nc] || heights[r][c] > heights[nr][nc]) continue;
+                go[nr][nc]=true;
+                q.push({nr, nc});
+            }
+        }
+    }
+};
