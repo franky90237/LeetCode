@@ -400,3 +400,49 @@ public:
         return false;
     }
 };
+
+//2024-01-24
+//time  : O(n+e)
+//space : O(n+e)
+class Solution {   
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) 
+    {        
+        vector<unordered_set<int>> g(numCourses);
+        vector<int> inDegree(numCourses, 0);
+        buildG(prerequisites, g, inDegree);              
+                
+        queue<int> q;
+        for(int i=0; i<numCourses; ++i)
+        {
+            if(inDegree[i] == 0) q.push(i);
+        }
+        
+        while(!q.empty())
+        {
+            int cur=q.front();
+            q.pop();
+            
+            for(int next : g[cur])
+            {
+                --inDegree[next];
+                if(inDegree[next] == 0) q.push(next);
+            }
+            
+            --numCourses;
+        }
+        
+        return numCourses == 0;
+    }
+    
+    void buildG(vector<vector<int>>& arr, vector<unordered_set<int>>& g, vector<int>& inDegree)
+    {
+        for (auto& e : arr)
+        {
+            int a = e[1];
+            int b = e[0];
+            ++inDegree[b];
+            g[a].insert(b);
+        }                
+    }
+};
