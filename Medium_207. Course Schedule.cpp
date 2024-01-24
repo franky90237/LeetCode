@@ -281,3 +281,66 @@ public:
         return false;
     }
 };
+
+//2024-01-24
+//time  : O(n+e)
+//space : O(n+e)
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) 
+    {        
+        vector<unordered_set<int>> g(numCourses);
+        buildG(prerequisites, g);              
+        
+        vector<bool> done(numCourses, false);
+        vector<bool> vis(numCourses, false);
+        for (int i = 0; i < numCourses; ++i)
+        {            
+            if (!done[i] && !traverse(g, done, vis, i))
+            {
+                return false;
+            }
+            //cout<<endl;
+        }
+        
+        return true;
+    }
+    
+    void buildG(vector<vector<int>>& arr, vector<unordered_set<int>>& g)
+    {
+        for (auto& e : arr)
+        {
+            int a = e[1];
+            int b = e[0];
+            g[a].insert(b);
+        }                
+    }    
+    
+    bool traverse(vector<unordered_set<int>>& g, vector<bool>& done, vector<bool>& vis, int cur)
+    {
+        //cout<<cur<<" : ";
+        //for(auto i : vis) cout<<i<<" "; cout<<endl;        
+        
+        if (vis[cur]) 
+        {            
+            vis[cur] = false;
+            return false;
+        }
+        if(done[cur]) return true;
+        
+        vis[cur] = true;
+        done[cur] = true;
+        
+        for (int next : g[cur])
+        {        
+            if (!traverse(g, done, vis, next)) 
+            {
+                vis[cur] = false;
+                return false;
+            }
+        }
+
+        vis[cur] = false;
+        return true;
+    }
+};
