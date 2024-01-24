@@ -344,3 +344,59 @@ public:
         return true;
     }
 };
+
+//2024-01-24
+//time  : O(n+e)
+//space : O(n+e)
+class Solution 
+{
+private:
+    enum status {NotVisited, hasCycle, noCycle};
+    
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) 
+    {        
+        vector<unordered_set<int>> g(numCourses);
+        buildG(prerequisites, g);              
+                
+        vector<int> vis(numCourses, NotVisited);
+        for (int i = 0; i < numCourses; ++i)
+        {            
+            if (checkHasCycle(g, vis, i))
+            {               
+                return false;
+            }            
+        }
+        
+        return true;
+    }
+    
+    void buildG(vector<vector<int>>& arr, vector<unordered_set<int>>& g)
+    {
+        for (auto& e : arr)
+        {
+            int a = e[1];
+            int b = e[0];
+            g[a].insert(b);
+        }                
+    }    
+    
+    bool checkHasCycle(vector<unordered_set<int>>& g, vector<int>& vis, int cur)
+    {
+        //cout<<cur<<" : ";
+        //for(auto i : vis) cout<<i<<" "; cout<<endl;
+        
+        if (vis[cur] == hasCycle) return true;
+        if (vis[cur] == noCycle) return false;
+        
+        vis[cur] = hasCycle;
+        
+        for (int next : g[cur])
+        {        
+            if (checkHasCycle(g, vis, next)) return true;
+        }
+
+        vis[cur] = noCycle;
+        return false;
+    }
+};
