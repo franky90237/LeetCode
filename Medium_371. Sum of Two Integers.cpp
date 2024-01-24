@@ -95,3 +95,27 @@ public:
         return ans;
     }
 };
+
+//2024-01-24
+//time  : O(32)
+//space : O(1)
+class Solution {
+public:
+    int getSum(int a, int b) 
+    {
+        int c = 0;
+        int res = 0;
+        for (int i = 0; i < 32; ++i)
+        {
+            int bitA = (a >> i) & 1;
+            int bitB = (b >> i) & 1;
+
+            int digit = bitA ^ bitB ^ c;
+            c = (bitA & bitB) | (bitB & c) | (bitA & c);
+
+            res |= (digit << i);
+        }
+        
+        return res;
+    }
+};
