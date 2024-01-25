@@ -100,3 +100,45 @@ public:
         return a[1]>=b[0];
     }
 };
+
+//2024-01-25
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) 
+    {
+        int n = intervals.size();
+
+        sort(intervals.begin(), intervals.end());
+
+        vector<vector<int>> res;		
+        res.push_back({ intervals[0][0], intervals[0][1] });
+                
+        for (int i = 1; i < n; ++i)
+        {
+            if(!overlap(res.back()[0], res.back()[1], intervals[i][0], intervals[i][1]))
+            {
+                res.push_back({ intervals[i][0], intervals[i][1] });
+                continue;
+            }
+                    
+            int last=res.size()-1;
+            do
+            {
+                res[last][1] = max(res[last][1], intervals[i][1]);
+                ++i;
+            } while (i < n  && overlap(res.back()[0], res.back()[1], intervals[i][0], intervals[i][1]));
+            
+            --i;
+        }                        
+        
+        return res;
+    }
+    
+    bool overlap(int a, int b, int c, int d)
+    {
+        if (b >= c) return true;
+        return false;
+    }
+};
