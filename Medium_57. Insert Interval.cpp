@@ -202,3 +202,54 @@ public:
         for(auto i : arr) cout<<"("<<i[0]<<","<<i[1]<<") "; cout<<endl;
     }
 };
+
+//2024-01-25
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) 
+    {
+        if(intervals.empty())
+        {
+            return {newInterval};
+        }
+        
+        int n = intervals.size();
+        vector<vector<int>> res;
+                
+        int i = 0;
+        for(; i < n && intervals[i][1] < newInterval[0]; ++i)
+        {
+            res.push_back(intervals[i]);
+        }
+                
+        for(; i < n; ++i)
+        {                        
+            if(!overlap(newInterval[0], newInterval[1], intervals[i][0], intervals[i][1])) break;
+            
+            newInterval[0] = min(newInterval[0], intervals[i][0]);
+            newInterval[1] = max(newInterval[1], intervals[i][1]);                     
+        }
+        
+        res.push_back(newInterval);
+        
+        for(; i < n; ++i)
+        {
+            res.push_back(intervals[i]);
+        }
+        
+        return res;
+    }
+    
+    bool overlap(int a, int b, int c, int d)
+    {
+        if ((a <= c && b >= c) || (c <= a && d >= a)) return true;
+        return false;
+    }
+    
+    void print(vector<vector<int>>& arr)
+    {
+        for(auto i : arr) cout<<"("<<i[0]<<","<<i[1]<<") "; cout<<endl;
+    }
+};
