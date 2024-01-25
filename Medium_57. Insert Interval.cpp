@@ -147,3 +147,58 @@ public:
         return b[0]<=a[1]; 
     }
 };
+
+//2024-01-25
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) 
+    {
+        if(intervals.empty())
+        {
+            return {newInterval};
+        }
+        
+        int n = intervals.size();
+        vector<vector<int>> res;
+                
+        auto it=lower_bound(intervals.begin(), intervals.end(), newInterval);
+        int cur=it-intervals.begin();
+        int pre=max(cur-1, 0);
+                
+        if(overlap(newInterval[0], newInterval[1], intervals[pre][0], intervals[pre][1])) cur=pre;
+        //cout<<cur<<endl;
+        
+        for(int i=0; i<cur; ++i) res.push_back(intervals[i]);
+        res.push_back(newInterval);
+        
+        for(int i=cur; i<n; ++i)
+        {
+            //print(res);
+            
+            if(overlap(res.back()[0], res.back()[1], intervals[i][0], intervals[i][1]))
+            {
+                res.back()[0] = min(res.back()[0], intervals[i][0]);
+                res.back()[1] = max(res.back()[1], intervals[i][1]);
+            }
+            else
+            {
+                res.push_back(intervals[i]);
+            }
+        }
+        
+        return res;
+    }
+    
+    bool overlap(int a, int b, int c, int d)
+    {
+        if ((a <= c && b >= c) || (c <= a && d >= a)) return true;
+        return false;
+    }
+    
+    void print(vector<vector<int>>& arr)
+    {
+        for(auto i : arr) cout<<"("<<i[0]<<","<<i[1]<<") "; cout<<endl;
+    }
+};
