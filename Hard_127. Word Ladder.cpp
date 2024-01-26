@@ -101,3 +101,82 @@ public:
         return 0;
     }
 };
+
+//2024-01-26
+//time  : O(n*n*m*26)
+//space : O(m*n)
+class Solution 
+{
+private:
+    unordered_set<string> table;
+    
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) 
+    {
+        for(auto& word : wordList) table.insert(word);
+        if(table.count(endWord) == 0) return 0;
+        
+        unordered_set<string> visBegin;
+        unordered_set<string> visEnd;
+        
+        visBegin.insert(beginWord);       
+        visEnd.insert(endWord);
+        
+        queue<string> qBegin;  
+        queue<string> qEnd;
+        
+        qBegin.push(beginWord);                
+        qEnd.push(endWord);        
+        
+        int cnt=1;
+        while(!qBegin.empty() && ! qEnd.empty())
+        {
+            if(qBegin.size() <= qEnd.size())
+            {
+                if(canFind(qBegin, visBegin, visEnd)) return cnt;
+            }
+            else
+            {
+                if(canFind(qEnd, visEnd, visBegin)) return cnt;                
+            }
+            
+            //cout<<endl;
+            ++cnt;
+        }
+        
+        return 0;
+    }
+    
+    bool canFind(queue<string>& q, unordered_set<string>& visBegin, unordered_set<string>& visEnd)
+    {
+        int size=q.size();
+        for(; size > 0; --size)
+        {
+            string cur=q.front();
+            q.pop();
+            //cout<<cur<<endl;
+            if(visEnd.count(cur) != 0) return true;
+            
+            for(int i=0; i<cur.size(); ++i) //O(m*26*m)
+            {
+                int original=cur[i];
+                
+                for(char c='a'; c<='z'; ++c)
+                {
+                    if(c == original) continue;
+
+                    cur[i]=c;
+                    if(visBegin.count(cur) == 0 && table.count(cur) != 0)
+                    {
+                        visBegin.insert(cur);
+                        q.push(cur);
+                    }                
+                }
+                
+                cur[i]=original;
+            }                                
+        }
+        
+        return false;
+    }
+};
