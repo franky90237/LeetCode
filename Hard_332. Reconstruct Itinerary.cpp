@@ -5,8 +5,7 @@ class Solution
 {
 private:
     unordered_map<string, vector<string>> g;
-    int pathLen;
-    vector<vector<string>> paths;
+    int pathLen;   
     vector<string> res;
     unordered_map<string, vector<bool>> vis;
     
@@ -74,6 +73,74 @@ public:
         {
             cout<<it.first<<" : ";
             for(auto& s : it.second) cout<<s<<" ";
+            cout<<endl;
+        }
+        */
+    }
+};
+
+//2024-01-26
+//time  : O(v*e)
+//space : O(v*e)
+class Solution 
+{
+private:
+    unordered_map<string, map<string, int>> g;
+    int pathLen;    
+    vector<string> res;
+    
+public:
+    vector<string> findItinerary(vector<vector<string>>& tickets) 
+    {
+        pathLen = 1 + tickets.size();
+        //cout<<pathLen<<endl;
+        
+        buildGraph(tickets);
+        
+        string begin="JFK";
+        dfs(begin);
+        
+        return res;
+    }
+    
+    bool dfs(string& cur)
+    {
+        //cout<<cur<<endl;
+        //cout<<res.size()<<" ";
+        res.emplace_back(cur);
+        
+        for(auto& it : g[cur])
+        {
+            string next=it.first;
+            int cnt=it.second;
+            
+            if(cnt == 0) continue;            
+            --it.second;                        
+            
+            bool isFind = dfs(next);
+            if(isFind) return true;
+            
+            ++it.second;                               
+        }
+        
+        if(res.size() == pathLen) return true;
+        
+        res.pop_back();
+        return false;
+    }
+    
+    void buildGraph(vector<vector<string>>& tickets)
+    {        
+        for(auto ticket : tickets)
+        {                 
+            ++g[ticket[0]][ticket[1]];
+        }        
+        
+        /*
+        for(auto it : g)
+        {
+            cout<<it.first<<" : ";
+            for(auto& item : it.second) cout<<"("<<item.frist<<","<<it.end<<") ";
             cout<<endl;
         }
         */
