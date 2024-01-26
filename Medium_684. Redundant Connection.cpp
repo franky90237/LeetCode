@@ -82,3 +82,168 @@ public:
         }
     }
 };
+
+//2024-01-26
+//time  : O(n*n)
+//space : O(n)
+class Solution 
+{
+private:
+    vector<unordered_set<int>> g;
+    vector<bool> vis;
+    
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) 
+    {
+        int n=edges.size();
+        g.resize(n+1);    
+        vis.resize(n+1, false);
+        
+        for(auto& edge : edges)
+        {
+            int a=edge[0];
+            int b=edge[1];
+            if(canReach(a, b))
+            {
+                return edge;
+            }
+            
+            g[a].insert(b);
+            g[b].insert(a);
+        }
+        
+        return {};
+    }
+    
+    bool canReach(int begin, int end)
+    {
+        if(vis[begin]) return false;
+        if(begin == end) return true;
+        
+        vis[begin]=true;
+        
+        for(int next : g[begin])
+        {
+            if(canReach(next, end)) 
+            {
+                vis[begin]=false;
+                return true;        
+            }
+        }
+        
+        vis[begin]=false;
+        return false;
+    }
+};
+
+//2024-01-26
+//time  : O(n*n)
+//space : O(n)
+class Solution 
+{
+private:
+    vector<unordered_set<int>> g;    
+    
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) 
+    {
+        int n=edges.size();
+        g.resize(n+1);        
+        
+        for(auto& edge : edges)
+        {
+            int a=edge[0];
+            int b=edge[1];
+            if(canReach(-1, a, b))
+            {
+                return edge;
+            }
+            
+            g[a].insert(b);
+            g[b].insert(a);
+        }
+        
+        return {};
+    }
+    
+    bool canReach(int pre, int begin, int end)
+    {        
+        if(begin == end) return true;                
+        
+        for(int next : g[begin])
+        {            
+            if(next != pre && canReach(begin, next, end)) return true;
+        }
+        
+        return false;
+    }
+};
+
+//2024-01-26
+//time  : O(n)
+//space : O(n)
+class UF
+{  
+private:
+    vector<int> parent;
+    vector<int> size;
+    
+public:
+    UF() = default;
+    
+    UF(int n)
+    {
+        parent.resize(n);
+        for(int i=0; i<n; ++i) parent[i]=i;
+        
+        size.resize(n, 1);
+    }
+    
+    bool combine(int a, int b)
+    {
+        int rootA=find(a);
+        int rootB=find(b);
+        if(rootA == rootB) return true;
+        
+        if(size[rootA] < size[rootB])
+        {
+            parent[rootA]=rootB;
+            size[rootB] += size[rootA];
+        }
+        else
+        {
+            parent[rootB]=rootA;
+            size[rootA] += size[rootB];            
+        }
+        
+        return false;
+    }
+    
+    int find(int a)
+    {
+        if(parent[a] == a) return a;
+        return parent[a]=find(parent[a]);
+    }
+};
+
+class Solution 
+{
+private:
+    vector<unordered_set<int>> g;    
+    
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) 
+    {
+        int n=edges.size();
+        UF uf(n+1);
+        
+        for(auto& edge : edges)
+        {
+            int a=edge[0];
+            int b=edge[1];
+            if(uf.combine(a, b)) return edge;
+        }
+        
+        return {};
+    }    
+};
