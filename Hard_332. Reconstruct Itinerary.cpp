@@ -146,3 +146,47 @@ public:
         */
     }
 };
+
+//2024-01-27
+//time  : O(elog(e))
+//space : O(v+e)
+class Solution 
+{
+private:
+    unordered_map<string, priority_queue<string, vector<string>, greater<string>>> g;
+    vector<string> res;
+    
+public:
+    vector<string> findItinerary(vector<vector<string>>& tickets) 
+    {        
+        buildGraph(tickets);
+        
+        string begin="JFK";
+        dfs(begin);
+        
+        reverse(res.begin(), res.end());
+        return res;
+    }
+    
+    void dfs(string& cur)
+    {
+        //cout<<cur<<endl;
+        
+        while(!g[cur].empty())
+        {
+            string next=g[cur].top();
+            g[cur].pop();
+            dfs(next);
+        }
+        
+        res.push_back(cur);
+    }
+    
+    void buildGraph(vector<vector<string>>& tickets)
+    {        
+        for(auto ticket : tickets)
+        {                 
+            g[ticket[0]].push(ticket[1]);
+        }              
+    }
+};
