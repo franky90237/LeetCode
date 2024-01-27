@@ -106,3 +106,51 @@ public:
         */
     }
 };
+
+//2024-01-27
+//time  : O(v*v*log(e))
+//space : O(v*v)
+class Solution {
+public:
+    int minCostConnectPoints(vector<vector<int>>& points) 
+    {
+        int n=points.size();        
+                
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> minHeap;        
+        for(int i=1; i<n; ++i) minHeap.push({getVal(points[0], points[i]), 0, i});        
+        
+        vector<bool> vis(n, false);
+        vis[0]=true;
+        
+        int edges=n-1;
+        int res=0;
+        while(edges > 0)
+        {
+            int val=minHeap.top()[0];
+            int p1=minHeap.top()[1];
+            int p2=minHeap.top()[2];
+            minHeap.pop();
+            
+            if(vis[p2]) continue;
+            vis[p2]=true;
+            
+            res += val;                  
+            
+            for(int i=0; i<n; ++i)
+            {
+                if(vis[i]) continue;
+                minHeap.push({getVal(points[p2], points[i]), p2, i});
+            }
+            
+            --edges;
+        }
+        
+        //cout<<endl;
+        return res;
+    }
+    
+    int  getVal(vector<int>& p1, vector<int>& p2)
+    {
+        return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1]);
+    }
+};
