@@ -122,3 +122,40 @@ public:
         return cnt;
     }
 };
+
+//2024-01-28
+//time  : O(n*n)
+//space : O(n*n)
+class Solution {
+public:
+    int countSubstrings(string s) 
+    {
+        int n=s.size();
+                
+        vector<vector<bool>> dp(n, vector<bool>(n, false));
+        int res=0;
+        for(int i=0; i<n; ++i) 
+        {
+            ++res;
+            dp[i][i] = true;
+            
+            if(i+1 < n) 
+            {
+                dp[i][i+1] = (s[i] == s[i+1]);
+                res += dp[i][i+1];
+            }
+        }
+        
+        for(int len=3; len<=n; ++len)
+        {
+            for(int left=0, right=left+len-1; right<n; ++left, ++right)
+            {
+                dp[left][right] = ((s[left] == s[right]) && dp[left+1][right-1]);
+                res += dp[left][right];
+                //cout<<left<<" "<<right<<" | "<<dp[left][right]<<endl;
+            }
+        }          
+        
+        return res;
+    }
+};
