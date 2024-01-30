@@ -103,3 +103,35 @@ public:
         }
     }
 };
+
+//2024-01-30
+//time  : O(n*e)
+//space : O(n)
+class Solution {    
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) 
+    {        
+        vector<int> dist(n+1, INT_MAX/2);
+        dist[k]=0;
+        
+        for(int i=1; i<=n-1; ++i)
+        {
+            for(auto time : times)
+            {
+                int source=time[0];
+                int target=time[1];
+                int weight=time[2];
+                
+                if(dist[target] > dist[source] + weight)
+                {
+                    dist[target] = dist[source] + weight;
+                }
+            }                        
+        }
+        
+        //for(int i : dist) cout<<i<<" "; cout<<endl;
+        int ans=-1;
+        for(int i=1; i<=n; ++i) ans=max(ans, dist[i]);        
+        return ans == INT_MAX/2 ? -1 : ans;
+    }      
+};
