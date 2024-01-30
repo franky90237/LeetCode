@@ -42,3 +42,64 @@ public:
         return ans;
     }          
 };
+
+//2024-01-30
+//time  : O(e + vlog(e))
+//space : O(v+e)
+class Solution 
+{
+private:
+    vector<vector<pair<int, int>>> g;
+    
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) 
+    {
+        buildGraph(times, n);
+        
+        vector<bool> vis(n+1, false);
+        
+        vector<int> dist(n+1, INT_MAX/2);
+        dist[k]=0;
+                
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+        q.push({0, k});
+        while(!q.empty())
+        {
+            int cur=q.top().second;
+            //int val=q.top().first;
+            q.pop();
+            vis[cur]=true;
+            --n;
+            
+            for(auto it : g[cur])
+            {
+                int next=it.first;
+                int weight=it.second;
+                if(vis[next]) continue;
+                
+                int newDist = dist[cur] + weight;
+                if(newDist < dist[next]) 
+                {
+                    dist[next]=newDist;
+                    q.push({newDist, next});
+                }
+             }
+        }
+        
+        //for(int i : dist) cout<<i<<" "; cout<<endl;
+        if(n > 0) return -1;
+        return *max_element(dist.begin()+1, dist.end());
+    }
+    
+    void buildGraph(vector<vector<int>>& times, int n)
+    {
+        g.resize(n+1);
+        for(auto& time : times)
+        {
+            int source=time[0];
+            int target=time[1];
+            int weight=time[2];
+            g[source].push_back({target, weight});
+        }
+    }
+};
