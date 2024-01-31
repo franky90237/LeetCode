@@ -176,3 +176,69 @@ public:
         return 1 <= num && num <= 26;
     }
 };
+
+//2024-01-31
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int numDecodings(string s) 
+    {
+        int n=s.size();
+        vector<int> dp(n+1, 0);
+        dp[n]=1;
+        dp[n-1] = (s[n-1] != '0');
+        
+        for(int i=n-2; i>=0; --i)
+        {
+            if(s[i] == '0') continue;
+            
+            string first=s.substr(i, 1);
+            if(stoi(first) <= 26) dp[i] += dp[i+1];
+            
+            string second=s.substr(i, 2);
+            if(stoi(second) <= 26) dp[i] += dp[i+2];            
+        }
+        
+        return dp[0];
+    }      
+};
+
+//2024-01-31
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int numDecodings(string s) 
+    {
+        int n=s.size();
+        vector<int> dp(n+1, 0);
+        dp[n]=1;
+        dp[n-1] = (s[n-1] != '0');
+        
+        int dp_i1=(s[n-1] != '0');
+        int dp_i2=1;
+        
+        for(int i=n-2; i>=0; --i)
+        {
+            if(s[i] == '0') 
+            {
+                dp_i2=dp_i1;
+                dp_i1=0;                
+                continue;
+            }
+            
+            int new_i1=0;            
+            string first=s.substr(i, 1);
+            if(stoi(first) <= 26) new_i1 += dp_i1;
+            
+            string second=s.substr(i, 2);
+            if(stoi(second) <= 26) new_i1 += dp_i2;
+            
+            dp_i2=dp_i1;
+            dp_i1=new_i1;
+        }
+        
+        return dp_i1;
+    }      
+};
