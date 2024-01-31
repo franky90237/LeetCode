@@ -104,3 +104,66 @@ public:
         return ans;
     }
 };
+
+//2024-01-31
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) 
+    {
+        return max(maxProductFromLeft(nums), maxProductFromRight(nums));
+    }
+    
+    int maxProductFromLeft(vector<int>& nums)
+    {
+        int n = nums.size();
+        int ans = INT_MIN;
+        int product = 1;
+        int cur = 1;
+        for(int i = 0; i < n; ++i)
+        {            
+            product *= nums[i];
+            cur *= nums[i];
+            ans=max(ans, max(product, cur));
+            
+            if(nums[i] < 0)
+            {
+                cur = 1;
+            }
+            else if(nums[i] == 0)
+            {
+                product = 1;
+                cur = 1;
+            }
+        }
+        
+        return ans;
+    }
+    
+    int maxProductFromRight(vector<int>& nums)
+    {
+        int n = nums.size();
+        int ans = INT_MIN;
+        int product = 1;
+        int cur = 1;
+        for(int i = n-1; i >= 0; --i)
+        {            
+            product *= nums[i];
+            cur *= nums[i];
+            ans=max(ans, max(product, cur));
+            
+            if(nums[i] < 0)
+            {
+                cur = 1;
+            }
+            else if(nums[i] == 0)
+            {
+                product = 1;
+                cur = 1;
+            }
+        }
+        
+        return ans;
+    }    
+};
