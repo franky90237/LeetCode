@@ -155,3 +155,81 @@ public:
         return dp[n];
     }
 };
+
+//2024-02-05
+//time  : O(n*n)
+//space : O(n + m*len)
+class Solution 
+{
+private:
+    unordered_set<string> table;
+    vector<int> dp;
+    
+public:
+    bool wordBreak(string s, vector<string>& wordDict) 
+    {
+        for(string& word : wordDict) table.insert(word);
+        
+        int n=s.size();
+        dp.resize(n, -1);
+        
+        return f(s, 0);
+    }
+    
+    bool f(string& s, int cur)
+    {
+        int n=s.size();
+        if(cur == n) return true;
+        if(dp[cur] != -1) return dp[cur];
+        
+        string word;
+        bool isFind=false;
+        for(int right=cur; right<n; ++right)
+        {
+            word.push_back(s[right]);
+            if(table.count(word) == 0) continue;
+            
+            isFind = f(s, right+1);
+            if(isFind) break;
+        }
+        
+        return dp[cur] = isFind;
+    }
+};
+
+//2024-02-05
+//time  : O(n*n)
+//space : O(n + m*len)
+class Solution 
+{
+private:
+    unordered_set<string> table;
+    vector<int> dp;
+    
+public:
+    bool wordBreak(string s, vector<string>& wordDict) 
+    {
+        for(string& word : wordDict) table.insert(word);
+        
+        int n=s.size();
+        dp.resize(n+1);
+        dp[n]=true;
+        
+        for(int i=n-1; i>=0; --i)
+        {
+            dp[i]=false;
+            
+            string word;
+            for(int right=i; right<n; ++right)
+            {
+                word.push_back(s[right]);
+                if(table.count(word) == 0) continue;
+                
+                dp[i] = dp[right+1];
+                if(dp[i]) break;
+            }
+        }
+        
+        return dp[0];
+    }    
+};
