@@ -233,3 +233,99 @@ public:
         return dp[0];
     }    
 };
+
+//2024-02-06
+//time  : O(n*n)
+//space : O(n + m*len)
+class TrieNode
+{
+public:
+    bool isWord;
+    vector<TrieNode*> child;
+    
+    TrieNode() : isWord(false)
+    {
+        child.resize(26, NULL);
+    }
+};
+
+class Trie
+{
+private:
+    TrieNode* root;
+    
+public:
+    Trie()
+    {
+        root = new TrieNode;
+    }
+    
+    void insert(string& s)
+    {
+        TrieNode* cur=root;
+        for(char c : s)
+        {
+            if(!cur->child[c-'a'])
+            {
+                cur->child[c-'a'] = new TrieNode;
+            }
+            
+            cur = cur->child[c-'a'];
+        }
+        
+        cur->isWord=true;
+    }
+    
+    bool search(TrieNode*& cur, char c)
+    {
+        cur = cur->child[c-'a'];
+        if(!cur || !cur->isWord) return false;
+        return true;
+    }
+    
+    TrieNode* getRoot()
+    {
+        return root;
+    }
+};
+
+class Solution 
+{
+private:
+    unordered_set<string> table;
+    vector<int> dp;
+    
+public:
+    bool wordBreak(string s, vector<string>& wordDict) 
+    {
+        Trie tr;
+        
+        for(string& word : wordDict) 
+        {
+            table.insert(word);
+            tr.insert(word);
+        }
+        
+        int n=s.size();
+        dp.resize(n+1);
+        dp[n]=true;
+        
+        for(int i=n-1; i>=0; --i)
+        {
+            dp[i]=false;
+                       
+            TrieNode* cur = tr.getRoot();
+            for(int right=i; right<n; ++right)
+            {
+                bool isWord = tr.search(cur, s[right]);
+                if(!cur) break;
+                if(!isWord) continue;
+                
+                dp[i] = dp[right+1];
+                if(dp[i]) break;
+            }
+        }
+        
+        return dp[0];
+    }    
+};
