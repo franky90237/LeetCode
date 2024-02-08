@@ -295,3 +295,96 @@ public:
         return ans;
     }
 };
+
+//2024-02-08
+//time  : O(nlog(n))
+//space : O(n)
+class SegmentTree
+{
+private:
+    vector<int> nodes;
+    int size;
+    
+public:
+    SegmentTree() = default;
+    
+    SegmentTree(int n)
+    {
+        size=n;
+        nodes.resize(5*n, 0);
+    }
+    
+    int query(int left, int right)
+    {
+        if(left > right) return 0;
+        return query(left, right, 0, size-1, 0);
+    }
+    
+    int query(int tL, int tR, int sL, int sR, int cur)
+    {
+        /*
+            tL tR sL sR
+            sL sR tL tR
+        */
+        //cout<<tL<<" "<<tR<<" | "<<sL<<" "<<sR<<" | "<<cur<<endl;
+        if(tL > sR || tR < sL) return INT_MIN;                
+        if(tL <= sL && sR <= tR) return nodes[cur];
+        
+        int mid=(sL+sR)/2;
+        int left=query(tL, tR, sL, mid, 2*cur+1);
+        int right=query(tL, tR, mid+1, sR, 2*cur+2);
+        return max(left, right);
+    }
+    
+    void update(int target, int val)
+    {
+        update(target, val, 0, size-1, 0);
+    }
+    
+    void update(int target, int val, int sL, int sR, int cur)
+    {
+        //cout<<target<< | "<<sL<<" "<<sR<<" | "<<cur<<endl;
+        if(sL == sR) 
+        {            
+            nodes[cur] = val;
+            return;
+        }    
+        
+        int mid = (sL+sR)/2;
+        if(target <= mid) update(target, val, sL, mid, 2*cur+1);
+        else update(target, val, mid+1, sR, 2*cur+2);        
+        nodes[cur] = max(nodes[2*cur+1], nodes[2*cur+2]);
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) 
+    {
+        int n=nums.size();
+        
+        vector<int> copyNums = nums;        
+        sort(copyNums.begin(), copyNums.end());
+        
+        unordered_multimap<int, int> table;
+        for(int i=0; i<n; ++i) table.insert({copyNums[i], i});
+        
+        SegmentTree st(n);        
+        
+        int res=1;
+        for(int i=0; i<n; ++i)
+        {
+            auto it = table.find(nums[i]);
+            int idx=it->second;
+            table.erase(it);
+            
+            int len=st.query(0, idx-1) + 1;
+            st.update(idx, len);            
+            
+            //cout<<nums[i]<<" | "<<len<<" "<<idx<<"\n\n";
+            res = max(res, len);
+        }
+        
+        return res;
+    }
+};
