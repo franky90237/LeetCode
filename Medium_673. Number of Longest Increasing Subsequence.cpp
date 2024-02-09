@@ -183,3 +183,86 @@ public:
         return arr.back() - arr[begin-1];
     }
 };
+
+//2024-02-09
+//time  : O(nlog(n))
+//sapce : O(n)
+class Solution {
+public:
+    int findNumberOfLIS(vector<int>& nums) 
+    {
+        int n=nums.size();
+        
+        vector<vector<int>> arr;
+        vector<vector<int>> cnt;
+        
+        arr.push_back({nums[0]});
+        cnt.push_back({0, 1});
+        
+        for(int i=1; i<n; ++i)
+        {
+            int idxArr = binarySearch(0, arr.size()-1, nums[i], [&](int mid, int target)
+                                      {
+                                          return target <= arr[mid].back();
+                                      });
+            if(nums[i] > arr[idxArr].back()) ++idxArr;
+                
+            int curCnt = 1;
+            if(idxArr - 1 >= 0)
+            {
+                int idxArrArr = binarySearch(0, arr[idxArr-1].size()-1, nums[i], [&](int mid, int target)
+                                             {
+                                                 return target > arr[idxArr-1][mid];
+                                             });
+                curCnt = cnt[idxArr-1].back() - cnt[idxArr-1][idxArrArr];
+            }
+            
+            if(idxArr == arr.size())
+            {
+                arr.push_back({nums[i]});
+                cnt.push_back({0, curCnt});
+            }
+            else
+            {
+                arr[idxArr].push_back(nums[i]);
+                cnt[idxArr].push_back(curCnt + cnt[idxArr].back());
+            }
+        }
+        
+        /*
+        for(int i=0; i<arr.size(); ++i)
+        {
+            cout<<"[";
+            for(int a : arr[i]) cout<<a<<" ";
+            cout<<"] ";
+        } cout<<endl;
+                        
+        for(int i=0; i<cnt.size(); ++i)
+        {
+            cout<<"[";
+            for(int a : cnt[i]) cout<<a<<" ";
+            cout<<"] ";
+        } cout<<endl;
+        */     
+        
+        return cnt.back().back();
+    }
+    
+    int binarySearch(int low, int high, int target, function<bool(int, int)> check)
+    {        
+        while(low < high)
+        {
+            int mid=low+(high-low)/2;
+            if(check(mid, target))
+            {
+                high = mid;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+        
+        return low;
+    }    
+};
