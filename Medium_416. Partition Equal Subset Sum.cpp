@@ -159,3 +159,37 @@ public:
         return dp[n][sum];        
     }
 };
+
+//2024-02-10
+//time  : O(n*sum)
+//space : O(n*sum)
+class Solution 
+{
+private:
+    vector<vector<int>> dp;
+    
+public:
+    bool canPartition(vector<int>& nums) 
+    {
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if(sum % 2 == 1) return false;
+        
+        int n=nums.size();
+        dp.resize(n, vector<int>(sum+1, -1));
+        return f(nums, 0, sum/2);
+    }
+    
+    bool f(vector<int>& nums, int i, int sum)
+    {
+        int n=nums.size();
+        if(sum == 0) return true;
+        if(sum < 0) return false;
+        if(i == n) return false;
+        if(dp[i][sum] != -1) return dp[i][sum];
+        
+        bool pick = f(nums, i+1, sum-nums[i]);
+        bool notPick = f(nums, i+1, sum);
+        
+        return dp[i][sum] = (pick || notPick);
+    }
+};
