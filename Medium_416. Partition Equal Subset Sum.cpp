@@ -193,3 +193,41 @@ public:
         return dp[i][sum] = (pick || notPick);
     }
 };
+
+//2024-02-10
+//time  : O(n*sum)
+//space : O(n*sum)
+class Solution {    
+public:
+    bool canPartition(vector<int>& nums) 
+    {
+        int sum = accumulate(nums.begin(), nums.end(), 0);        
+        if(sum % 2 == 1) return false;        
+        sum /= 2;
+        
+        int n=nums.size();
+        vector<vector<bool>> dp(n+1, vector<bool>(sum+1, false));
+        for(int i=0; i<=n; ++i) dp[i][0]=true;
+        
+        for(int i=n-1; i>=0; --i)
+        {
+            for(int curSum=1; curSum<=sum; ++curSum)
+            {
+                bool pick = (curSum-nums[i] >= 0) ? dp[i+1][curSum-nums[i]] : false;
+                bool notPick = dp[i+1][curSum];
+        
+                dp[i][curSum] = (pick || notPick);
+            }
+        }
+        
+        /*
+        for(int i=0; i<=n; ++i)
+        {
+            for(int curSum=0; curSum<=sum; ++curSum) cout<<dp[i][curSum]<<" ";
+            cout<<endl;
+        }
+        */
+        
+        return dp[0][sum];
+    }    
+};
