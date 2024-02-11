@@ -54,3 +54,33 @@ public:
         return res;
     }
 };
+
+//2024-02-11
+//time  : O(m*n)
+//space : O(m*n)
+class Solution 
+{
+private:
+    vector<vector<int>> dp;
+    
+public:
+    int uniquePaths(int m, int n) 
+    {
+        --m;
+        --n;
+        dp.resize(m+1, vector<int>(n+1, -1));
+        f(m, n);
+        
+        return f(m, n);
+    }
+    
+    int f(int m, int n)
+    {
+        if(m < 0 || n < 0) return 0;
+        if(m == 0 && n == 0) return 1;
+        if(dp[m][n] != -1) return dp[m][n];
+        
+        return dp[m][n] = (f(m-1, n) + f(m, n-1));
+        
+    }
+};
