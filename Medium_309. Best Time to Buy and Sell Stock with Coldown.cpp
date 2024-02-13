@@ -198,3 +198,35 @@ public:
         return dp[idx][hold];
     }
 };
+
+//2024-02-13
+//time  : O(n)
+//space : O(n)
+class Solution 
+{
+private:
+    vector<vector<int>> dp;
+    
+public:
+    int maxProfit(vector<int>& prices) 
+    {
+        int n=prices.size();
+        dp.resize(n, vector<int>(2, -1));
+        
+        return f(prices, 0, false);
+    }
+    
+    int f(vector<int>& prices, int i, bool isHold)
+    {
+        int n=prices.size();
+        if(i >= n) return 0;
+        if(dp[i][isHold] != -1) return dp[i][isHold];
+        
+        if(isHold) dp[i][isHold] = max(f(prices, i+2, false) + prices[i], 
+                              f(prices, i+1, true));
+        else dp[i][isHold] = max(f(prices, i+1, true) - prices[i], 
+                        f(prices, i+1, false));
+        
+        return dp[i][isHold];
+    }
+};
