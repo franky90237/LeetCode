@@ -250,3 +250,29 @@ public:
         return dp[0][false];
     }      
 };
+
+//2024-02-13
+//time  : O(n)
+//space : O(1)
+class Solution {        
+public:
+    int maxProfit(vector<int>& prices) 
+    {
+        int n=prices.size();        
+        
+        int hold_1 = 0;
+        int notHold_1 = 0, notHold_2 = 0;
+        
+        for(int i=n-1; i>=0; --i)
+        {
+            int new_hold_1 = max(prices[i] + notHold_2, hold_1);
+            int new_notHold_1 = max(-prices[i] + hold_1, notHold_1);
+            
+            hold_1 = new_hold_1;
+            notHold_2 = notHold_1;
+            notHold_1 = new_notHold_1;                        
+        }
+        
+        return notHold_1;
+    }      
+};
