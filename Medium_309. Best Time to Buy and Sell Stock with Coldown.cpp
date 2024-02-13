@@ -230,3 +230,23 @@ public:
         return dp[i][isHold];
     }
 };
+
+//2024-02-13
+//time  : O(n)
+//space : O(n)
+class Solution {        
+public:
+    int maxProfit(vector<int>& prices) 
+    {
+        int n=prices.size();
+        vector<vector<int>> dp(n+2, vector<int>(2, 0));
+        
+        for(int i=n-1; i>=0; --i)
+        {
+            dp[i][true] = max(dp[i+2][false] + prices[i], dp[i+1][true]);
+            dp[i][false] = max(dp[i+1][true] - prices[i], dp[i+1][false]);
+        }
+        
+        return dp[0][false];
+    }      
+};
