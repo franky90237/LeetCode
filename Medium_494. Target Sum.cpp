@@ -279,3 +279,30 @@ public:
         return dp[n][target];
     }
 };
+
+//2024-02-14
+//time  : O(n * target)
+//space : O(n * (target+sum(nums)))
+class Solution 
+{
+private:
+    vector<unordered_map<int, int>> dp;
+    
+public:
+    int findTargetSumWays(vector<int>& nums, int target) 
+    {
+        int n=nums.size();
+        dp.resize(n);
+        return f(nums, target, 0);
+    }
+    
+    int f(vector<int>& nums, int target, int i)
+    {
+        //cout<<i<<" "<<target<<endl;
+        int n=nums.size();
+        if(i == n) return (target == 0);
+        if(dp[i].find(target) != dp[i].end()) return dp[i][target];
+        
+        return dp[i][target] = f(nums, target-nums[i], i+1) + f(nums, target+nums[i], i+1);
+    }
+};
