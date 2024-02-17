@@ -195,3 +195,88 @@ public:
         return res;
     }
 };
+
+//2024-02-17
+//time  : O(v*v)
+//sapce : O(v*v)
+class UF
+{
+private:
+    vector<int> parent;
+    vector<int> size;
+
+public:
+    UF(int n)
+    {
+        parent.resize(n);
+        for (int i = 0; i < n; ++i) parent[i] = i;
+
+        size.resize(n, 1);
+    }
+
+    bool combine(int a, int b)
+    {
+        //cout << a << " " << b << endl;
+        int rootA = find(a);
+        int rootB = find(b);
+        if (rootA == rootB) return false;
+
+        if (size[rootA] < size[rootB])
+        {
+            parent[rootA] = rootB;
+            size[rootB] += size[rootA];
+        }
+        else
+        {
+            parent[rootB] = rootA;
+            size[rootA] += size[rootB];
+        }
+
+        return true;
+    }
+
+    int find(int a)
+    {
+        if (parent[a] == a) return a;
+
+        return parent[a] = find(parent[a]);
+    }
+};
+
+class Solution {
+public:
+    int minCostConnectPoints(vector<vector<int>>& points) 
+    {
+        int n = points.size();
+
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = i + 1; j < n; ++j)
+            {
+                int cost = abs(points[i][0] - points[j][0]) + abs(points[i][1] - points[j][1]);
+                pq.push({ cost, i, j });
+            }
+        }    
+
+        UF uf(n);
+        int cnt = 0;
+        int res = 0;
+        while (cnt < n - 1)
+        {
+            int cost = pq.top()[0];
+            int a = pq.top()[1];
+            int b = pq.top()[2];
+            pq.pop();
+            if (!uf.combine(a, b)) continue;
+
+            res += cost;
+            //cout << a << " " << b << " | " << cost << " " << endl;
+
+            ++cnt;
+        }
+        
+        return res;
+    }
+};
