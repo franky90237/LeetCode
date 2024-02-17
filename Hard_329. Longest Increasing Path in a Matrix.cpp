@@ -114,3 +114,77 @@ public:
         return dp[r][c] = maxCnt + 1;
     }
 };
+
+//2024-02-17
+//time  : O(m*n)
+//space : O(m*n)
+class Solution 
+{
+private:
+    vector<vector<int>> g;
+    vector<int> degree;
+    
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) 
+    {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int total = m*n;
+        buildGraph(matrix);
+        
+        queue<int> q;
+        for(int i = 0; i < total; ++i)
+        {
+            if(degree[i] == 0) q.push(i);
+        }
+        
+        int res = 0;
+        while(!q.empty())
+        {
+            int size=q.size();
+            for(int i = 0; i < size; ++i)
+            {
+                int cur=q.front();
+                q.pop();
+                
+                for(int next : g[cur])
+                {
+                    --degree[next];
+                    if(degree[next] == 0)
+                    {
+                        q.push(next);
+                    }
+                }
+            }
+            
+            ++res;
+        }
+        
+        return res;
+    }
+    
+    void buildGraph(vector<vector<int>>& matrix) 
+    {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        g.resize(m*n);
+        degree.resize(m*n, 0);
+        for(int r = 0; r < m; ++r)
+        {
+            for(int c = 0; c < n; ++c)
+            {
+                for(int i = 0; i < 4; ++i)
+                {
+                    int nr = r +dir[i][0];
+                    int nc = c +dir[i][1];
+                    if(nr < 0 || nr >= m || nc < 0 || nc >= n || matrix[r][c] >= matrix[nr][nc]) continue;
+                    
+                    g[r * n + c].push_back(nr * n + nc);
+                    ++degree[nr * n + nc];
+                }
+            }
+        }
+    }
+};
