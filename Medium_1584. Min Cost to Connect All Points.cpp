@@ -154,3 +154,44 @@ public:
         return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1]);
     }
 };
+
+//2024-02-17
+//time  : O(elog(e))
+//sapce : O(e)
+class Solution {
+public:
+    int minCostConnectPoints(vector<vector<int>>& points) 
+    {
+        int n = points.size();
+
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+
+        int cnt = 0;
+        int res = 0;
+        vector<bool> vis(n, false);		
+        pq.push({ 0, 0 });
+        while (cnt < n)
+        {		
+            int cur = pq.top()[1];
+            int minCost = pq.top()[0];
+            pq.pop();
+
+            if (vis[cur]) continue;
+            vis[cur] = true;
+
+            res += minCost;
+            //cout << "(" << cur << " " << minCost << ") ";
+
+            for (int i = 0; i < n; ++i)
+            {
+                if (vis[i]) continue;			
+                int cost = abs(points[cur][0] - points[i][0]) + abs(points[cur][1] - points[i][1]);		
+                pq.push({ cost, i });
+            }
+
+            ++cnt;
+        }
+        
+        return res;
+    }
+};
