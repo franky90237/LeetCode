@@ -144,3 +144,57 @@ public:
         return res;
     }
 };
+
+//2024-02-17
+//time  : O(v + e)
+//space : O(v + e)
+class Solution 
+{
+private:
+    vector<unordered_set<int>> g;
+    vector<int> degree;
+    
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) 
+    {
+        if(numCourses == 1) return {0};
+        
+        createGraph(prerequisites, numCourses);
+        
+        queue<int> q;
+        for (int i = 0; i < numCourses; ++i)
+        {
+            if (degree[i] == 0)
+            {                
+                q.push(i);
+            }
+        }	
+
+        vector<int> res;
+        while (!q.empty())
+        {
+            int cur = q.front();
+            q.pop();
+            res.push_back(cur);
+
+            for (int next : g[cur])
+            {                
+                --degree[next];
+                if (degree[next] == 0) q.push(next);
+            }
+        }
+        
+        return (res.size() < numCourses) ? vector<int>() : res;
+    }
+    
+    void createGraph(vector<vector<int>>& arr, int n)
+    {
+        degree.resize(n);
+        g.resize(n);
+        for (auto e : arr)
+        {
+            g[e[1]].insert(e[0]);
+            ++degree[e[0]];
+        }
+    }    
+};
