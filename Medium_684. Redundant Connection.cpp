@@ -333,3 +333,85 @@ public:
         }
     }
 };
+
+//2024-02-18
+//time  : O(v)
+//space : O(v + e + v + v)
+#define notVisited 0
+#define beingVisited 1
+#define done 2
+
+class Solution 
+{
+private:
+    vector<vector<int>> g;
+    vector<int> vis;
+    vector<int> nodes;    
+    
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) 
+    {
+        buildGraph(edges);
+        
+        int n = edges.size();
+        vis.resize(n+1, notVisited);
+        for(int i=1; i<=n; ++i)
+        {            
+            if(hasCycle(0, i)) 
+            {
+                int begin=nodes.back();
+                nodes.clear();
+                for(int& state : vis)
+                {
+                    if(state == beingVisited) state = notVisited;
+                }
+                hasCycle(0, begin);
+                break;
+            }
+        }
+        
+        //for(auto& it : nodes) cout<<it<<" "; cout<<endl;        
+        
+        unordered_set<int> cycleNodes(nodes.begin(), nodes.end());
+        for(int i=n-1; i>=0; --i)
+        {
+            int a = edges[i][0];
+            int b = edges[i][1];
+            if(cycleNodes.count(a) && cycleNodes.count(b)) return {a, b};
+        }
+        
+        return {};
+    }
+    
+    bool hasCycle(int pre, int i)
+    {
+        if(vis[i] == done) return false;
+        if(vis[i] == beingVisited) return true;
+        vis[i] = beingVisited;
+        nodes.push_back(i);
+        
+        for(int next : g[i])
+        {
+            if(next == pre) continue;
+            if(hasCycle(i, next)) return true;
+        }
+        
+        vis[i] = done;
+        nodes.pop_back();
+        return false;
+    }
+    
+    void buildGraph(vector<vector<int>>& edges)
+    {
+        int n=edges.size();
+        g.resize(n+1);
+        for(auto edge : edges)
+        {
+            int a=edge[0];
+            int b=edge[1];
+            
+            g[a].push_back(b);
+            g[b].push_back(a);
+        }
+    }
+};
