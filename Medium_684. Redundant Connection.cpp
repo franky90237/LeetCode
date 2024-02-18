@@ -247,3 +247,89 @@ public:
         return {};
     }    
 };
+
+//2024-02-18
+//time  : O(e)
+//space : O(v + e + v)
+class UF
+{  
+private:
+    vector<int> parent;
+    vector<int> size;
+    
+public:
+    UF(int n)
+    {
+        parent.resize(n);
+        for(int i=0; i<n; ++i) parent[i] = i;
+        
+        size.resize(n, 1);
+    }
+    
+    bool combine(int a, int b)
+    {
+        int parentA = find(a);
+        int parentB = find(b);
+        if(parentA == parentB) return false;
+        
+        if(size[parentA] < size[parentB])
+        {
+            parent[parentA] = parentB;
+            size[parentB] += size[parentA];
+        }
+        else
+        {
+            parent[parentB] = parentA;
+            size[parentA] += size[parentB];            
+        }
+        
+        return true;
+    }
+    
+    int find(int a)
+    {
+        if(parent[a] == a) return a;
+        
+        parent[a] = find(parent[a]);
+        return parent[a];
+    }
+    
+};
+
+class Solution 
+{
+private:
+    vector<vector<int>> g;
+    
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) 
+    {
+        buildGraph(edges);
+        
+        UF uf(edges.size()+1);
+        
+        for(auto edge : edges)
+        {
+            int a=edge[0];
+            int b=edge[1];
+            
+            if(!uf.combine(a, b)) return {a, b};
+        }
+        
+        return {};
+    }
+    
+    void buildGraph(vector<vector<int>>& edges)
+    {
+        int n=edges.size();
+        g.resize(n+1);
+        for(auto edge : edges)
+        {
+            int a=edge[0];
+            int b=edge[1];
+            
+            g[a].push_back(b);
+            g[b].push_back(a);
+        }
+    }
+};
