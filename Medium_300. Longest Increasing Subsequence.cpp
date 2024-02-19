@@ -388,3 +388,199 @@ public:
         return res;
     }
 };
+
+//2024-02-19
+//time  : O(nlog(n))
+//sapce : O(n)
+class SegmentTree
+{
+private:
+    vector<int> nodes;
+    
+public:
+    SegmentTree(int n)
+    {
+        nodes.resize(4*n, 0);
+    }
+    
+    int query(int tL, int tR, int cL, int cR, int i)
+    {
+        /*  
+              tL---tR
+            cL----------cR                        
+        */
+        if(tL > tR) return 0;
+        if(tL <= cL && cR <= tR) return nodes[i];
+        
+        int mid = cL + (cR-cL)/2;
+        if(tR <= mid) 
+        {
+            return query(tL, tR, cL, mid, i*2 + 1);
+        }
+        else if(tL > mid) 
+        {
+            return query(tL, tR, mid+1, cR, i*2 + 2);
+        }
+        else
+        {
+            int left = query(tL, tR, cL, mid, i*2 + 1);
+            int right = query(tL, tR, mid+1, cR, i*2 + 2);
+            return max(left, right);
+        }
+    }
+    
+    void update(int target, int val, int cL, int cR, int i)
+    {
+        //cout<<cL<<" "<<cR<<" | "<<i<<endl;
+        if(cL == cR) 
+        {
+            nodes[i] = val;
+            return;
+        }
+        
+        int mid = cL + (cR-cL)/2;
+        if(target <= mid) update(target, val, cL, mid, i*2 + 1);
+        else update(target, val, mid+1, cR, i*2 + 2);
+        
+        nodes[i] = max(nodes[i*2 + 1], nodes[i*2 + 2]);
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) 
+    {
+        int n=nums.size();
+        vector<vector<int>> format;
+        for(int i=0; i<n; ++i)
+        {
+            format.push_back({nums[i], i});
+        }
+        
+        sort(format.begin(), format.end());
+        
+        unordered_map<int, int> mapping;
+        for(int i=0; i<n; ++i)
+        {
+            //int idxOriginal = format[i][1];
+            int num = format[i][0];
+            mapping[num] = i;
+        }
+        
+        SegmentTree st(n);
+        //cout<<"SegmetTree \n";
+        
+        int res = 0;
+        for(int i=0; i<n; ++i)
+        {
+            int idxNew = mapping[nums[i]];
+            int len = st.query(0, idxNew-1, 0, n-1, 0) + 1;
+            res = max(res, len);
+            
+            st.update(idxNew, len, 0, n-1, 0);
+            //cout<<i<<" "<<idxNew<<" | "<<res<<endl;
+        }
+        
+        return res;
+    }
+};
+
+//2024-02-19
+//time  : O(nlog(n))
+//sapce : O(n)
+class SegmentTree
+{
+private:
+    vector<int> nodes;
+    
+public:
+    SegmentTree(int n)
+    {
+        nodes.resize(4*n, 0);
+    }
+    
+    int query(int tL, int tR, int cL, int cR, int i)
+    {
+        /*  
+              tL---tR
+            cL----------cR                        
+        */
+        if(tL > tR) return 0;
+        if(!Overlap(tL, tR, cL, cR)) return 0;
+        if(tL <= cL && cR <= tR) return nodes[i];
+        
+        int mid = cL + (cR-cL)/2;
+        int left = query(tL, tR, cL, mid, i*2 + 1);
+        int right = query(tL, tR, mid+1, cR, i*2 + 2);
+        return max(left, right);        
+    }
+    
+    void update(int target, int val, int cL, int cR, int i)
+    {
+        //cout<<cL<<" "<<cR<<" | "<<i<<endl;
+        if(cL == cR) 
+        {
+            nodes[i] = val;
+            return;
+        }
+        
+        int mid = cL + (cR-cL)/2;
+        if(target <= mid) update(target, val, cL, mid, i*2 + 1);
+        else update(target, val, mid+1, cR, i*2 + 2);
+        
+        nodes[i] = max(nodes[i*2 + 1], nodes[i*2 + 2]);
+    }
+    
+    bool Overlap(int a, int b, int c, int d)
+    {
+        /*
+            a----b
+              c-----d
+              
+            c----d
+              a-----b
+        */
+        if(a <= c && c <= b) return true;
+        if(c <= a && a <= d) return true;
+        return false;
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) 
+    {
+        int n=nums.size();
+        vector<vector<int>> format;
+        for(int i=0; i<n; ++i)
+        {
+            format.push_back({nums[i], i});
+        }
+        
+        sort(format.begin(), format.end());
+        
+        unordered_map<int, int> mapping;
+        for(int i=0; i<n; ++i)
+        {
+            //int idxOriginal = format[i][1];
+            int num = format[i][0];
+            mapping[num] = i;
+        }
+        
+        SegmentTree st(n);
+        //cout<<"SegmetTree \n";
+        
+        int res = 0;
+        for(int i=0; i<n; ++i)
+        {
+            int idxNew = mapping[nums[i]];
+            int len = st.query(0, idxNew-1, 0, n-1, 0) + 1;
+            res = max(res, len);
+            
+            st.update(idxNew, len, 0, n-1, 0);
+            //cout<<i<<" "<<idxNew<<" | "<<res<<endl;
+        }
+        
+        return res;
+    }
+};
