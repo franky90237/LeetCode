@@ -142,3 +142,40 @@ public:
         return false;
     }
 };
+
+//2024-02-20
+//time  : O(nlog(n))
+//space : O(n)
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) 
+    {
+        int n = intervals.size();
+        
+        sort(intervals.begin(), intervals.end());
+        
+        vector<vector<int>> res;
+        res.push_back(intervals[0]);
+        for (int i = 1; i < n; ++i)
+        {
+            if (overlap(res.back()[0], res.back()[1], intervals[i][0], intervals[i][1]))
+            {
+                res.back()[0] = min(res.back()[0], intervals[i][0]);
+                res.back()[1] = max(res.back()[1], intervals[i][1]);
+            }
+            else
+            {
+                res.push_back(intervals[i]);
+            }
+        }
+        
+        return res;
+    }
+    
+    bool overlap(int a, int b, int c, int d)
+    {
+        if (a <= c && c <= b) return true;
+        if (c <= a && a <= d) return true;
+        return false;
+    }    
+};
