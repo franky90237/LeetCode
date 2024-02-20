@@ -35,3 +35,44 @@ public:
         return (tasks.size()>res) ? tasks.size() : res;
     }
 };
+
+//2024-02-20
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) 
+    {
+        vector<int> freqs(26, 0);
+        for (char c : tasks) ++freqs[c - 'A'];
+
+        priority_queue<int> maxHeap;
+        for (int freq : freqs)
+        {
+            if(freq > 0) maxHeap.push(freq);
+        }
+                
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> waiting;
+        int time = 0;
+        while (!(maxHeap.empty() && waiting.empty()))
+        {
+            //cout << maxHeap.size() << " " << waiting.size() << endl;
+            while (!waiting.empty() && waiting.top()[0] <= time)
+            {
+                int freq = waiting.top()[1];
+                waiting.pop();
+                maxHeap.push(freq);
+            }
+
+            if (!maxHeap.empty())
+            {
+                int freq = maxHeap.top() - 1;
+                maxHeap.pop();
+
+                if (freq > 0) waiting.push({ time + n + 1, freq });
+            }
+
+            ++time;
+        }
+        
+        return time;
+    }
+};
