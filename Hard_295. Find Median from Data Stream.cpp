@@ -128,3 +128,51 @@ public:
         return (maxHeap.top() + minHeap.top()) / 2.0;
     }
 };
+
+//2024-02-20
+//time  : O(nlog(n))
+//space : O(n)
+class MedianFinder 
+{
+private:
+    priority_queue<int> low;
+    priority_queue<int, vector<int>, greater<int>> high;
+    
+public:
+    MedianFinder() 
+    {
+        
+    }
+    
+    void addNum(int num) 
+    {
+        low.push(num);
+        if (low.size() > high.size())
+        {
+            high.push(low.top());
+            low.pop();
+        }
+
+        while (!low.empty() && !high.empty() && !balance())
+        {
+            int tmpLow = low.top();
+            int tmpHigh = high.top();
+            low.pop();
+            high.pop();
+
+            low.push(tmpHigh);
+            high.push(tmpLow);
+        }
+    }
+    
+    double findMedian() 
+    {
+        if (low.size() == high.size()) return (low.top() + high.top()) / 2.0;
+	    return high.top();
+    }
+    
+    bool balance()
+    {
+        return low.top() <= high.top();
+    }
+};
