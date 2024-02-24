@@ -217,3 +217,76 @@ public:
         return accumulate(stack.begin(),stack.end(),0);
     }    
 };
+
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int calculate(string s) 
+    {
+        int n=s.size();
+        
+        char op = '+';
+        int num = 0;
+        stack<int> st;
+        
+        for(int i=0; i<n; ++i)
+        {
+            if(s[i] == ' ') continue;            
+            else if(isdigit(s[i]))
+            {
+                num = 10*num + (s[i]-'0');
+            }
+            else
+            {
+                update(st, op, num);
+                op = s[i];
+                num = 0;
+            }
+        }
+        
+        update(st, op, num);
+        
+        int res = 0;
+        while(!st.empty()) 
+        {
+            res += st.top();
+            st.pop();
+        }
+        
+        return res;
+    }
+    
+    void update(stack<int>& st, char op, int num)
+    {
+        switch(op)
+        {
+            case '+':
+                st.push(num);
+                break;
+            
+            case '-':
+                st.push(-num);
+                break;
+            
+            case '*':
+            {
+                int pre = st.top();
+                st.pop();
+                st.push(pre * num);                                
+                break;
+            }
+                
+            case '/':
+            {
+                int pre = st.top();
+                st.pop();                
+                st.push(pre / num);              
+                break;
+            }
+            
+            default:
+                break;
+        }
+    }
+};
