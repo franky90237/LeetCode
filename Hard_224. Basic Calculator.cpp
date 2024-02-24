@@ -155,3 +155,80 @@ public:
         }
     }
 };
+
+//2024-02-24
+//time  : O(n)
+//space : O(n)
+class Solution {
+public:
+    int calculate(string s) 
+    {
+        return calculate(s, 0)[0];
+    }
+    
+    vector<int> calculate(string& s, int i)
+    {
+        int n=s.size();
+        
+        char op = '+';
+        int num = 0;
+        stack<int> st;
+        
+        for(; i<n; ++i)
+        {
+            if(s[i] == ' ') continue;            
+            else if(isdigit(s[i]))
+            {
+                num = 10*num + (s[i]-'0');
+            }
+            else if(s[i] == '(')
+            {
+                vector<int> res = calculate(s, i+1);
+                update(st, op, res[0]);
+                i = res[1];
+            }
+            else if(s[i] == ')')
+            {
+                break;
+            }
+            else
+            {
+                update(st, op, num);
+                op = s[i];
+                num = 0;
+            }
+        }
+        
+        update(st, op, num);
+        return {getSum(st), i};        
+    }
+    
+    int getSum(stack<int>& st)
+    {
+        int res = 0;
+        while(!st.empty()) 
+        {
+            res += st.top();
+            st.pop();
+        }
+        
+        return res;        
+    }
+    
+    void update(stack<int>& st, char op, int num)
+    {
+        switch(op)
+        {
+            case '+':
+                st.push(num);
+                break;
+            
+            case '-':
+                st.push(-num);
+                break;                      
+            
+            default:
+                break;
+        }
+    }
+};
