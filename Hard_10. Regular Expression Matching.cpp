@@ -371,3 +371,54 @@ public:
         return dp[s.size()][p.size()];
     }
 };
+
+//2024-02-28
+//time  : O(m*n)
+//space : O(m*n)
+class Solution 
+{
+private:
+    vector<vector<int>> dp;
+    
+public:
+    bool isMatch(string a, string b) 
+    {
+        int m = a.size();
+        int n = b.size();
+        dp.resize(m, vector<int>(n, -1));
+        return check(a, b, 0, 0);
+    }
+    
+    bool check(string& a, string& b, int i, int j)
+    {
+        //cout << i << " " << j << " | " << endl;
+        int m = a.size();
+        int n = b.size();
+
+        if (i == m && j >= n) return true;
+        if (j >= n) return false;
+        if (i == m)
+        {
+            int len = n - j;
+            if (len % 2 == 1) return false;
+
+            for (int cur = j + 1; cur < n; cur += 2) if (b[cur] != '*') return false;
+            return true;
+        }
+        if(dp[i][j] != -1) return dp[i][j];
+
+        bool isMatch = false;
+        if ((a[i] == b[j] || b[j] == '.') && ((j == n - 1) || (j + 1 < n && b[j + 1] != '*')))
+        {
+            isMatch = check(a, b, i + 1, j + 1);
+        }	
+        else if (j + 1 < n && b[j + 1] == '*')
+        {
+            isMatch = check(a, b, i, j + 2);
+            if (a[i] == b[j] || b[j] == '.') isMatch |= check(a, b, i + 1, j + 2) || check(a, b, i + 1, j);
+        }
+
+        //cout << i << " " << j << " | " << isMatch << endl;
+        return dp[i][j] = isMatch;
+    }    
+};
