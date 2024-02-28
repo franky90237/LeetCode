@@ -422,3 +422,46 @@ public:
         return dp[i][j] = isMatch;
     }    
 };
+
+//2024-02-28
+//time  : O(m*n)
+//space : O(m*n)
+class Solution {   
+public:
+    bool isMatch(string a, string b) 
+    {
+        int m = a.size();
+        int n = b.size();
+        vector<vector<bool>> dp(m+1, vector<bool>(n+1, false));
+        dp[m][n] = true;        
+        for (int j = n - 1; j >= 0; --j)
+        {
+            int len = n - j;
+            if (len % 2 == 1) continue;
+            if(j + 1 < n && b[j + 1] != '*') break;
+            
+            dp[m][j] = true;            
+        }
+        
+        for (int i = m - 1; i >= 0; --i)
+        {
+            for (int j = n - 1; j >= 0; --j)
+            {
+                bool isMatch = false;
+                if (j + 1 < n && b[j + 1] == '*')
+                {
+                    isMatch = dp[i][j + 2];
+                    if (a[i] == b[j] || b[j] == '.') isMatch |= dp[i + 1][j + 2] || dp[i + 1][j];
+                }
+                else if (a[i] == b[j] || b[j] == '.')
+                {
+                    isMatch = dp[i + 1][j + 1];
+                }
+                
+                dp[i][j] = isMatch;
+            }
+        }
+        
+        return dp[0][0];
+    }       
+};
