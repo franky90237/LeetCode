@@ -1,4 +1,37 @@
 //2024-03-01
+//time  : O(n*m^3)
+//sapce : O(m)
+class Solution 
+{
+private:
+    int res = -1e9;
+    
+public:
+    int closestCost(vector<int>& baseCosts, vector<int>& toppingCosts, int target) 
+    {        
+        for (int i = 0; i < baseCosts.size(); ++i)
+        {
+            solve(toppingCosts, 0, baseCosts[i], target);            
+        }
+        
+        return res;
+    }
+    
+    void solve(vector<int>& top, int i, int cur, int target)
+    {
+        //cout << i << " : " << cur << endl;        
+        if(abs(target - cur) < abs(target-res) || (cur < res && abs(target - cur) == abs(target-res))) res = cur;    
+        
+        int n = top.size();
+        if (cur >= target || i >= n) return;                       
+
+        solve(top, i + 1, cur, target);
+        solve(top, i + 1, cur + top[i], target);
+        solve(top, i + 1, cur + 2 * top[i], target);       
+    }    
+};
+
+//2024-03-01
 //time  : O(m*maxSum)
 //sapce : O(m*maxSum)
 class Solution 
