@@ -85,3 +85,58 @@ public:
         return pq.top()[1];
     }    
 };
+
+//2024-03-02
+//time  : O(n*target)
+//space : O(n*target)
+class Solution {
+public:
+    int closestCost(vector<int>& baseCosts, vector<int>& toppingCosts, int target) 
+    {                        
+        int n = toppingCosts.size();    
+        vector<vector<int>> dp(n+1, vector<int>(target + 1, 1e9));        
+        for(int sum = 0; sum<=target; ++sum) dp[n][sum] = sum;
+                
+        for(int i = n - 1; i >= 0; --i)
+        {
+            for(int sum = target; sum >= 0; --sum)
+            {
+                int notTake = dp[i+1][sum];
+                int take1 = (sum + toppingCosts[i] >= target) ? sum + toppingCosts[i] : dp[i+1][sum + toppingCosts[i]];
+                int take2 = (sum + 2*toppingCosts[i] >= target) ? sum + 2*toppingCosts[i] : dp[i+1][sum + 2*toppingCosts[i]];
+                
+                if(close(notTake, dp[i][sum], target)) dp[i][sum] = notTake;
+                if(close(take1, dp[i][sum], target)) dp[i][sum] = take1;
+                if(close(take2, dp[i][sum], target)) dp[i][sum] = take2;
+            }
+        }
+        
+        int res = 1e9;
+        for(int base : baseCosts)
+        {
+            if(base >= target)
+            {
+                if(close(base, res, target)) res = base;
+                continue;
+            }
+            
+            if(close(dp[0][base], res, target)) res = dp[0][base];
+        }
+        
+        /*        
+        for(int i = 0; i <= n; ++i)
+        {
+            for(int sum = 0; sum <= target; ++sum) cout<<dp[i][sum]<<" "; cout<<endl;                             
+        }
+        */
+        
+        return res;
+    }
+    
+    bool close(int a, int b, int target)
+    {
+        if(abs(target - a) < abs(target - b)) return true;
+        if(a < b && abs(target - a) == abs(target - b)) return true;
+        return false;
+    }
+};
