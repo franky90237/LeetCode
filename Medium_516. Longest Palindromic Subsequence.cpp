@@ -50,3 +50,33 @@ public:
         return dp[0][n-1];
     }     
 };
+
+//2024-03-02
+//time  : O(n*n)
+//space : O(n)
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) 
+    {
+        int n = s.size();        
+        vector<int> dp(n, 0);
+        
+        for(int i = n - 1; i >= 0; --i)
+        {
+            dp[i] = 1;
+            
+            int dp_iplus1_jminus1 = 0;
+            for(int j = i + 1; j < n; ++j)
+            {
+                int backup = dp[j];
+                
+                if(s[i] == s[j]) dp[j] = dp_iplus1_jminus1 + 2;
+                else dp[j] = max(dp[j], dp[j-1]);
+                
+                dp_iplus1_jminus1 = backup;
+            }
+        }
+        
+        return dp[n-1];
+    }     
+};
