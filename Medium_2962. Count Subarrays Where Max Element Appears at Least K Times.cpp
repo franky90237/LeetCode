@@ -52,3 +52,36 @@ public:
         return ans;
     }
 };
+
+//2024-04-08
+//time  : O(n)
+//space : O(1)
+class Solution {
+public:
+    long long countSubarrays(vector<int>& nums, int k) 
+    {       
+        int n=nums.size();
+        int maxNum=*max_element(nums.begin(), nums.end());
+        
+        long long res=0;
+        int left=-1;
+        int cnt=0;
+        for(int i=0; i<n; ++i)
+        {            
+            if(nums[i] == maxNum) ++cnt;
+            
+            while(cnt == k)
+            {
+                ++left;
+                if(nums[left] == maxNum) --cnt;
+            }
+            
+            if(cnt == k-1)
+            {            
+                res += left+1LL;
+            }
+        }
+        
+        return res;
+    }
+};
